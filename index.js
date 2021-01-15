@@ -30,7 +30,7 @@ const connection = mysql.createConnection({
 connection.connect()
 
 let tables
-connection.query('show tables', function (err, rows, fields) {
+connection.query('select * from pw_vineyard', function (err, rows, fields) {
     if (err) throw err
 
     tables = rows
@@ -39,7 +39,7 @@ connection.query('show tables', function (err, rows, fields) {
 connection.end()
 
 // defining an endpoint to return all ads
-app.get('/', (req, res) => {
+app.get('/load-places', (req, res) => {
     res.send(tables)
 })
 
