@@ -3,8 +3,27 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "nodemonConfig": {
+    "exec": "npm run dev",
+    "watch": [
+      "server/*",
+      "public/*"
+    ],
+    "ignore": [
+      "**/__tests__/**",
+      "*.test.js",
+      "*.spec.js"
+    ]
+  },
   "scripts": {
-    "server": "node ./server/bin/www"
+    "start": "npm run prod",
+    "build": "npm-run-all clean transpile",
+    "server": "node ./dist-server/bin/www",
+    "dev": "npm-run-all build server",
+    "prod": "npm-run-all build server",
+    "transpile": "babel ./server --out-dir dist-server",
+    "clean": "rimraf dist-server",
+    "watch:dev": "nodemon"
   },
   "repository": {
     "type": "git",
@@ -12,8 +31,30 @@
   },
   "author": "",
   "license": "ISC",
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
   "bugs": {
     "url": "https://github.com/KamilDwo/winnice_routing/issues"
   },
-  "homepage": "https://github.com/KamilDwo/winnice_routing#readme"
+  "homepage": "https://github.com/KamilDwo/winnice_routing#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.8.7",
+    "@babel/node": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "babel-cli": "^7.0.0-beta.3",
+    "babel-core": "^7.0.0-beta.3",
+    "babel-loader": "^8.0.0-beta.6",
+    "babel-preset-env": "^7.0.0-beta.3"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "helmet": "^4.3.1",
+    "morgan": "^1.10.0"
+  }
 }
