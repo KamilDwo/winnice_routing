@@ -39,7 +39,7 @@ connection.query('select * from pw_vineyard', function (err, rows, fields) {
 connection.end()
 
 // defining an endpoint to return all ads
-app.get('/load-places', (req, res) => {
+app.post('/load-places', (req, res) => {
     res.send(tables)
 })
 
