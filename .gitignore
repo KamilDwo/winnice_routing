@@ -6,6 +6,7 @@ node_modules/
 .idea/.gitignore
 .idea/modules.xml
 .idea/vcs.xml
+.env
 
 # User-specific stuff
 .idea/**/workspace.xml

@@ -4,6 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const mysql = require('mysql');
+const speakingurl = require('speakingurl');
 
 const app = express();
 app.use(helmet());
@@ -21,31 +22,44 @@ const connection = mysql.createConnection({
 
 
 app.post('/load-places', (req, res) => {
-    connection.query('select * from pw_vineyard', function (err, rows) {
+    connection.query('select' +
+        ' id,' +
+        ' name,' +
+        ' date_add as "dateAdd",' +
+        ' location,' +
+        ' province_id as "provinceId",' +
+        ' image_1 as "image1",' +
+        ' marker_id as "markerId"' +
+        ' from pw_vineyard', function (err, rows) {
         if (rows) {
             const vineyards = rows.map(obj => {
-                obj['dateAdd'] = obj['date_add'];
-                obj['dateAdd'] = obj['date_add'];
-                obj['image1'] = obj['image_1'];
-                obj['image2'] = obj['image_2'];
-                obj['image3'] = obj['image_3'];
-                obj['image4'] = obj['image_4'];
-                obj['vineyardDescription'] = obj['vineyard_description'];
-                obj['vineyardWinesList'] = obj['vineyard_wines_list'];
-                obj['isActive'] = obj['is_active'] === 2;
-                obj['markerId'] = obj['marker_id'];
+                const features = [];
                 const location = obj['location'].split(',');
+                const objUrl = `${obj['id']}-${speakingurl(obj['name'])})`;
+                obj['isActive'] = obj['isActive'] === 2;
+                obj['markerId'] = obj['marker_id'];
                 obj['location'] = [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))];
-                delete obj['date_add'];
-                delete obj['year_open'];
-                delete obj['is_active'];
-                delete obj['image_1'];
-                delete obj['image_2'];
-                delete obj['image_3'];
-                delete obj['image_4'];
-                delete obj['marker_id'];
-                delete obj['vineyard_description'];
-                delete obj['vineyard_wines_list'];
+                obj['url'] = objUrl;
+
+                if (obj['tastings'] === 2) {
+                    features.push('Tasting');
+                }
+                if (obj['sightseeing'] === 2) {
+                    features.push('Sightseeing');
+                }
+                if (obj['meals'] === 2) {
+                    features.push('Meals');
+                }
+                if (obj['events'] === 2) {
+                    features.push('Events');
+                }
+                if (obj['additional'] === 2) {
+                    features.push('Additional');
+                }
+                if (obj['accommodation'] === 2) {
+                    features.push('Accommodation');
+                }
+                obj[features] = features;
                 return obj;
             });
             res.send(vineyards);
