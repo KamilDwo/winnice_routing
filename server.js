@@ -157,6 +157,7 @@ app.post('/load-places', cors(corsOptions), (req, res) => {
 });
 
 
-app.listen(5000, function () {
-    console.log('CORS-enabled web server listening on port 80')
-})
+app.listen(5000, () => {
+    console.log('Listening to requests.');
+});
+
