@@ -21,12 +21,18 @@ const connection = mysql.createConnection({
 });
 connection.query('set names utf8');
 
-const corsOptions = {
-    origin: 'http://example.com',
-    optionsSuccessStatus: 200
-};
+const allowlist = ['http://localhost:3000/', 'https://winnice.heartit.pl/']
+const corsOptionsDelegate = function (req, callback) {
+    let corsOptions;
+    if (allowlist.indexOf(req.header('Origin')) !== -1) {
+        corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+    } else {
+        corsOptions = { origin: false } // disable CORS for this request
+    }
+    callback(null, corsOptions) // callback expects two parameters: error and options
+}
 
-app.post('/load-places/(:id)', cors(corsOptions), (req, res) => {
+app.post('/load-places/(:id)', cors(corsOptionsDelegate), (req, res) => {
     const id = req.params.id;
     connection.query('select' +
         ' id,' +
@@ -92,7 +98,7 @@ app.post('/load-places/(:id)', cors(corsOptions), (req, res) => {
     })
 });
 
-app.post('/load-places', cors(corsOptions), (req, res) => {
+app.post('/load-places', cors(corsOptionsDelegate), (req, res) => {
     connection.query('select' +
         ' id,' +
         ' name,' +
