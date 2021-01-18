@@ -160,8 +160,8 @@ app.post('/load-places', cors(corsOptionsDelegate), (req, res) => {
     });
 });
 
-
-app.listen(8100, () => {
-    console.log('Listening to requests.');
+const port = 8100;
+app.listen(port, () => {
+    console.log('Listening to requests. Port ' + port);
 });
 
