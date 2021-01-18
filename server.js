@@ -21,16 +21,16 @@ const connection = mysql.createConnection({
 });
 connection.query('set names utf8');
 
-const allowlist = ['http://localhost:3000/', 'https://winnice.heartit.pl/']
+const allowList = ['http://localhost:3000/', 'https://winnice.heartit.pl/'];
 const corsOptionsDelegate = function (req, callback) {
     let corsOptions;
-    if (allowlist.indexOf(req.header('Origin')) !== -1) {
-        corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+    if (allowList.indexOf(req.header('Origin')) !== -1) {
+        corsOptions = { origin: true } ;
     } else {
-        corsOptions = { origin: false } // disable CORS for this request
+        corsOptions = { origin: false } ;
     }
-    callback(null, corsOptions) // callback expects two parameters: error and options
-}
+    callback(null, corsOptions);
+};
 
 app.post('/load-places/(:id)', cors(corsOptionsDelegate), (req, res) => {
     const id = req.params.id;
@@ -55,8 +55,6 @@ app.post('/load-places/(:id)', cors(corsOptionsDelegate), (req, res) => {
 
         if (object && object[0]) {
             let obj = object[0];
-
-
             const features = [];
             const location = obj['location'].split(',');
             const objUrl = `${obj['id']}-${speakingurl(obj['name'], [])}`;
@@ -163,7 +161,7 @@ app.post('/load-places', cors(corsOptionsDelegate), (req, res) => {
 });
 
 
-app.listen(5000, () => {
+app.listen(8080, () => {
     console.log('Listening to requests.');
 });
 
