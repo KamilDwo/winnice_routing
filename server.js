@@ -161,7 +161,7 @@ app.post('/load-places', cors(corsOptionsDelegate), (req, res) => {
 });
 
 
-app.listen(3000, () => {
+app.listen(8100, () => {
     console.log('Listening to requests.');
 });
 
