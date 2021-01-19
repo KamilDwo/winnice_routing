@@ -96,6 +96,11 @@ app.post('/load-places/(:id)', cors(corsOptionsDelegate), (req, res) => {
     })
 });
 
+app.get('/', cors(corsOptionsDelegate), (req, res) => {
+    console.log('hello');
+    res.send({ text: 'hello' });
+});
+
 app.post('/load-places', cors(corsOptionsDelegate), (req, res) => {
     connection.query('select' +
         ' id,' +
@@ -160,7 +165,7 @@ app.post('/load-places', cors(corsOptionsDelegate), (req, res) => {
     });
 });
 
-const port = 8100;
+const port = 9000;
 app.listen(port, () => {
     console.log('Listening to requests. Port ' + port);
 });
