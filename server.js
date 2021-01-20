@@ -1,25 +1,18 @@
+'use strict';
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
-const mysql = require('mysql2');
 const speakingurl = require('speakingurl');
-
+const connection = require('./config/db');
 const app = express();
+
 app.use(helmet());
 app.use(bodyParser.json({defaultCharset: 'utf-8'}));
 app.use(cors());
 app.use(morgan('combined'));
-
-
-const connection = mysql.createConnection({
-    host: 'vilsone.home.pl',
-    user: '11565381_winnice',
-    password: '!w-SfX1JjPV8',
-    database: '11565381_winnice'
-});
-connection.query('set names utf8');
 
 const allowList = ['http://localhost:3000/', 'https://winnice.heartit.pl/'];
 const corsOptionsDelegate = function (req, callback) {
