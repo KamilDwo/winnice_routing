@@ -6,7 +6,7 @@ exports.findAll = function (req, res) {
     Vineyard.findAll(function (err, vineyard) {
         if (err)
             res.send(err);
-        res.send(vineyard);
+        res.json(vineyard);
     });
 };
 

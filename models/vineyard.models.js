@@ -1,6 +1,7 @@
 'use strict';
 
 const connection = require('../config/db.config');
+const speakingurl = require('speakingurl');
 
 const Vineyard = vineyard => {
     this.id = vineyard.id;
@@ -26,9 +27,18 @@ Vineyard.findAll = result => {
     connection.query(`SELECT ${defaultFields} FROM pw_vineyard`, function (err, res) {
         if (err) {
             console.log('error: ', err);
-            result(null, err);
+            result(err);
         } else {
-            result(null, res);
+            const parseItems = res.map(item => {
+                item.features = [];
+                const location = item['location'].split(',');
+                item.isActive = item.isActive === 2;
+                const objUrl = `${item['id']}-${speakingurl(item['name'], [])}`;
+                item.location = [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))];
+                item.url = objUrl;
+                return item;
+            });
+            result(parseItems);
         }
     });
 };
@@ -36,10 +46,17 @@ Vineyard.findAll = result => {
 Vineyard.findById = (id, result) => {
     connection.query(`SELECT ${defaultFields} FROM pw_vineyard WHERE id = ? LIMIT 1`, id, function (err, res) {
         if (err) {
-            console.log("error: ", err);
-            result(err, null);
+            console.log('error: ', err);
+            result(err);
         } else {
-            result(null, res);
+            const item = res[0];
+            item.features = [];
+            const location = item['location'].split(',');
+            item.isActive = item.isActive === 2;
+            const objUrl = `${item['id']}-${speakingurl(item['name'], [])}`;
+            item.location = [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))];
+            item.url = objUrl;
+            result(item);
         }
     });
 };
