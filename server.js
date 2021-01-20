@@ -6,7 +6,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const speakingurl = require('speakingurl');
-const query = require('./config/db');
+const connection = require('./config/db');
 const app = express();
 
 app.use(helmet());
@@ -27,7 +27,7 @@ const corsOptionsDelegate = function (req, callback) {
 
 app.post('/load-places/(:id)', cors(corsOptionsDelegate), (req, res) => {
     const id = req.params.id;
-    query('select' +
+    connection.query('select' +
         ' id,' +
         ' name,' +
         ' date_add as "dateAdd",' +
@@ -95,7 +95,7 @@ app.get('/', cors(corsOptionsDelegate), (req, res) => {
 });
 
 app.post('/load-places', cors(corsOptionsDelegate), (req, res) => {
-    query('select' +
+    connection.query('select' +
         ' id,' +
         ' name,' +
         ' date_add as "dateAdd",' +
@@ -158,7 +158,7 @@ app.post('/load-places', cors(corsOptionsDelegate), (req, res) => {
     });
 });
 
-const port = 9001;
+const port = 9000;
 app.listen(port, () => {
     console.log('Listening to requests. Port ' + port);
 });

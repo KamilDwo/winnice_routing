@@ -9,25 +9,11 @@ const connection = mysql.createConnection({
     database: '11565381_winnice'
 });
 
-connection.connect(function (err) {
+connection.connect(function(err) {
     if (err) throw err;
-
-    connection.query('set names utf8')
     console.log("Database Connected!");
 });
 
-const query = function (sql, callback) {
-    connection.getConnection(function (err, conn) {
-        if (err) {
-            callback(err, null);
-        } else {
-            conn.query(sql, function (err, results) {
-                callback(err, results);
-            });
-            conn.release();
-        }
-    });
-};
+connection.query('set names utf8');
 
-
-module.exports = query;
+module.exports = connection;
