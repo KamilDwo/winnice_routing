@@ -19,7 +19,7 @@ const newsRoutes = require('./routes/news.routes');
 app.use('/api/v1/vineyards', vineyardsRoutes);
 app.use('/api/v1/news', newsRoutes);
 
-const port = 9001;
+const port = 9000;
 app.listen(port, () => {
     console.log('Listening to requests. Port ' + port);
 });
