@@ -14,9 +14,12 @@ app.use(cors());
 app.use(morgan('combined'));
 
 const vineyardsRoutes = require('./routes/vineyard.routes');
-app.use('/api/v1/vineyards', vineyardsRoutes);
+const newsRoutes = require('./routes/news.routes');
 
-const port = 9000;
+app.use('/api/v1/vineyards', vineyardsRoutes);
+app.use('/api/v1/news', newsRoutes);
+
+const port = 9001;
 app.listen(port, () => {
     console.log('Listening to requests. Port ' + port);
 });
