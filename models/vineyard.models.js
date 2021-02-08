@@ -37,12 +37,11 @@ Vineyard.findAll = result => {
             const parseItems = res.map(item => {
                 item.features = [];
                 const location = item.location.split(',');
-                const paths = listToArray(item.paths, ',');
+                item.paths = listToArray(item.paths, ',');
                 item.isActive = item.isActive === 2;
                 const objUrl = `${item.id}-${speakingurl(item.name, [])}`;
                 item.location = [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))];
                 item.url = objUrl;
-                item.paths = paths;
                 return item;
             });
             result(parseItems);
@@ -58,10 +57,11 @@ Vineyard.findById = (id, result) => {
         } else {
             const item = res[0];
             item.features = [];
-            const location = item['location'].split(',');
+            const location = item.location.split(',');
             item.isActive = item.isActive === 2;
-            const objUrl = `${item['id']}-${speakingurl(item['name'], [])}`;
+            const objUrl = `${item.id}-${speakingurl(item.name, [])}`;
             item.location = [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))];
+            item.paths = listToArray(item.paths, ',');
             item.url = objUrl;
             result(item);
         }
