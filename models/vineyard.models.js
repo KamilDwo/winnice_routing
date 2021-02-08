@@ -51,7 +51,7 @@ Vineyard.findAll = result => {
 };
 
 Vineyard.findById = (id, result) => {
-    connection.query(`SELECT ${defaultFields} FROM pw_vineyard WHERE id = ? LIMIT 1`, id, function (err, res) {
+    connection.query(`SELECT ${defaultFields} FROM pw_vineyard LEFT JOIN pw_vineyard_paths ON pw_vineyard.id=pw_vineyard_paths.vineyard_id WHERE pw_vineyard.id = ? GROUP BY pw_vineyard.id LIMIT 1`, id, function (err, res) {
         if (err) {
             console.log('error: ', err);
             result(err);
