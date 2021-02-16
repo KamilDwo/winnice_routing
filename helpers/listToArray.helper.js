@@ -5,7 +5,7 @@ const listToArray = (fullString, separator) => {
 
     if (fullString !== undefined && fullString !== '' && fullString !==  null) {
         if (fullString.indexOf(separator) === -1) {
-            fullArray.push(parseInt(fullString));
+            fullArray.push(parseFloat(fullString));
         } else {
             fullArray = fullString.split(separator);
             fullArray = fullArray.map(arrayItem => parseInt(arrayItem));

@@ -64,34 +64,34 @@ News.findAll = (result, body) => {
                 const itemCategories = [];
                 item.isActive = item.isActive === 2;
                 if (item.category1) {
-                    itemCategories.push(item.category1);
+                    itemCategories.push(parseInt(item.category1));
                 }
                 if (item.category2) {
-                    itemCategories.push(item.category2);
+                    itemCategories.push(parseInt(item.category2));
                 }
                 if (item.category3) {
-                    itemCategories.push(item.category3);
+                    itemCategories.push(parseInt(item.category3));
                 }
                 if (item.category4) {
-                    itemCategories.push(item.category4);
+                    itemCategories.push(parseInt(item.category4));
                 }
                 if (item.category5) {
-                    itemCategories.push(item.category5);
+                    itemCategories.push(parseInt(item.category5));
                 }
                 if (item.category6) {
-                    itemCategories.push(item.category6);
+                    itemCategories.push(parseInt(item.category6));
                 }
                 if (item.category7) {
-                    itemCategories.push(item.category7);
+                    itemCategories.push(parseInt(item.category7));
                 }
                 if (item.category8) {
-                    itemCategories.push(item.category8);
+                    itemCategories.push(parseInt(item.category8));
                 }
                 if (item.category9) {
-                    itemCategories.push(item.category9);
+                    itemCategories.push(parseInt(item.category9));
                 }
                 if (item.category10) {
-                    itemCategories.push(item.category10);
+                    itemCategories.push(parseInt(item.category10));
                 }
                 item.provinces = listToArray(item.newsProvinces, ',');
                 delete item.category1;
