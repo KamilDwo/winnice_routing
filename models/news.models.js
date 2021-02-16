@@ -92,6 +92,16 @@ News.findAll = (result, body) => {
                 if (item.category10) {
                     itemCategories.push(item.category10);
                 }
+                delete item.category1;
+                delete item.category2;
+                delete item.category3;
+                delete item.category4;
+                delete item.category5;
+                delete item.category6;
+                delete item.category7;
+                delete item.category8;
+                delete item.category9;
+                delete item.category10;
                 item.categories = itemCategories;
                 return item;
             });
