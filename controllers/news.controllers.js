@@ -9,3 +9,12 @@ exports.findAll = function (req, res) {
         res.json(news);
     }, req.body);
 };
+
+exports.findAllCategories = function (req, res) {
+    News.findAllCategories(function (err, news) {
+        if (err)
+            res.send(err);
+        res.json(news);
+    }, req.body);
+};
+

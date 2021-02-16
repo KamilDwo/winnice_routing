@@ -8,7 +8,27 @@ const News = news => {
     this.message = news.message;
 };
 
-
+News.findAllCategories = (result, body) => {
+    let defaultFields = 'id,';
+    if (body && body.language === 'pl') {
+        defaultFields += ' name_pl as \'name\',';
+    }
+    else {
+        defaultFields += ' name_en as \'name\',';
+    }
+    connection.query(`SELECT ${defaultFields} FROM pw_news_categories`, function (err, res) {
+        if (err) {
+            console.log('error: ', err);
+            result(err);
+        } else {
+            const parseItems = res.map(item => {
+                item.isActive = item.isActive === 2;
+                return item;
+            });
+            result(parseItems);
+        }
+    });
+};
 
 News.findAll = (result, body) => {
     let defaultFields = 'id,' +

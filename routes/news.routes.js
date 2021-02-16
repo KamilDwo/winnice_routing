@@ -7,5 +7,6 @@ const cors = require('cors');
 const corsOptionsDelegate = require('../config/cors.config');
 
 router.post('/', cors(corsOptionsDelegate), newsController.findAll);
+router.post('/categories', cors(corsOptionsDelegate), newsController.findAll);
 
 module.exports = router;
