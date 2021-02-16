@@ -97,9 +97,8 @@ News.findAll = (result, body) => {
 
                 let newsProvincesParse = item.newsProvinces.replace('[', '');
                 newsProvincesParse.replace(']', '');
-                let newsProvincesParseArray = newsProvincesParse.split(',');
-
-                item.dupa = newsProvincesParseArray;
+  
+                item.dupa = newsProvincesParse;
                 delete item.category1;
                 delete item.category2;
                 delete item.category3;
