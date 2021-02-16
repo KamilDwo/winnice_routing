@@ -93,7 +93,7 @@ News.findAll = (result, body) => {
                 if (item.category10) {
                     itemCategories.push(parseInt(item.category10));
                 }
-                item.provinces = listToArray(item.newsProvinces, ',');
+                item.provinces = item.newsProvinces.split(',');
                 delete item.category1;
                 delete item.category2;
                 delete item.category3;
