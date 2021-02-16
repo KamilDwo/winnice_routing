@@ -60,17 +60,39 @@ News.findAll = (result, body) => {
             result(err);
         } else {
             const parseItems = res.map(item => {
+                const itemCategories = [];
                 item.isActive = item.isActive === 2;
-                item.category1 = !!item.category1;
-                item.category2 = !!item.category2;
-                item.category3 = !!item.category3;
-                item.category4 = !!item.category4;
-                item.category5 = !!item.category5;
-                item.category6 = !!item.category6;
-                item.category7 = !!item.category7;
-                item.category8 = !!item.category8;
-                item.category9 = !!item.category9;
-                item.category10 = !!item.category10;
+                if (item.category1) {
+                    itemCategories.push(item.category1);
+                }
+                if (item.category2) {
+                    itemCategories.push(item.category2);
+                }
+                if (item.category3) {
+                    itemCategories.push(item.category3);
+                }
+                if (item.category4) {
+                    itemCategories.push(item.category4);
+                }
+                if (item.category5) {
+                    itemCategories.push(item.category5);
+                }
+                if (item.category6) {
+                    itemCategories.push(item.category6);
+                }
+                if (item.category7) {
+                    itemCategories.push(item.category7);
+                }
+                if (item.category8) {
+                    itemCategories.push(item.category8);
+                }
+                if (item.category9) {
+                    itemCategories.push(item.category9);
+                }
+                if (item.category10) {
+                    itemCategories.push(item.category10);
+                }
+                item.categories = itemCategories;
                 return item;
             });
             result(parseItems);
