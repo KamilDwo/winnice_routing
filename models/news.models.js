@@ -1,6 +1,7 @@
 'use strict';
 
 const connection = require('../config/db.config');
+const listToArray = require('../helpers/listToArray.helper');
 
 const News = news => {
     this.id = news.id;
@@ -92,6 +93,7 @@ News.findAll = (result, body) => {
                 if (item.category10) {
                     itemCategories.push(item.category10);
                 }
+                item.provinces = listToArray(item.newsProvinces, ',');
                 delete item.category1;
                 delete item.category2;
                 delete item.category3;
@@ -102,6 +104,7 @@ News.findAll = (result, body) => {
                 delete item.category8;
                 delete item.category9;
                 delete item.category10;
+                delete item.newsProvinces;
                 item.categories = itemCategories;
                 return item;
             });
