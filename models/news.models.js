@@ -11,10 +11,10 @@ const News = news => {
 News.findAllCategories = (result, body) => {
     let defaultFields = 'id,';
     if (body && body.language === 'pl') {
-        defaultFields += ' name_pl as \'name\',';
+        defaultFields += ' name_pl as \'name\'';
     }
     else {
-        defaultFields += ' name_en as \'name\',';
+        defaultFields += ' name_en as \'name\'';
     }
     connection.query(`SELECT ${defaultFields} FROM pw_news_categories`, function (err, res) {
         if (err) {
