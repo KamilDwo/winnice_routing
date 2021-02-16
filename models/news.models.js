@@ -96,10 +96,10 @@ News.findAll = (result, body) => {
                 item.dupa = JSON.parse(item.newsProvinces);
 
                 const element = item.newsProvinces;
-                let newsProvincesParse = element.replace('[', '');
-     
 
-                item.dupa = newsProvincesParse;
+
+
+                item.dupa = element;
                 delete item.category1;
                 delete item.category2;
                 delete item.category3;
