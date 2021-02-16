@@ -93,7 +93,7 @@ News.findAll = (result, body) => {
                 if (item.category10) {
                     itemCategories.push(parseInt(item.category10));
                 }
-                item.provinces = JSON.parse(item.newsProvinces);
+                item.provinces = JSON.stringify(item.newsProvinces);
                 delete item.category1;
                 delete item.category2;
                 delete item.category3;
