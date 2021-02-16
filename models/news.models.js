@@ -94,6 +94,12 @@ News.findAll = (result, body) => {
                     itemCategories.push(parseInt(item.category10));
                 }
                 item.dupa = JSON.parse(item.newsProvinces);
+
+                let newsProvincesParse = item.newsProvinces.replace('[', '');
+                newsProvincesParse.replace(']', '');
+                let newsProvincesParseArray = newsProvincesParse.split(',');
+
+                item.dupa = newsProvincesParseArray;
                 delete item.category1;
                 delete item.category2;
                 delete item.category3;
