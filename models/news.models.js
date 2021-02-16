@@ -93,6 +93,7 @@ News.findAll = (result, body) => {
                 if (item.category10) {
                     itemCategories.push(parseInt(item.category10));
                 }
+                item.dupa = JSON.stringify(item.newsProvinces);
                 delete item.category1;
                 delete item.category2;
                 delete item.category3;
@@ -103,7 +104,7 @@ News.findAll = (result, body) => {
                 delete item.category8;
                 delete item.category9;
                 delete item.category10;
-                delete item.newsProvinces;
+                delete item.idProvince;
                 item.categories = itemCategories;
                 return item;
             });
