@@ -3,7 +3,7 @@
 const connection = require('../config/db.config');
 const speakingurl = require('speakingurl');
 const listToArray = require('../helpers/listToArray.helper');
-
+const featuresIndex = require('../helpers/featuresIndex.helper');
 
 const Vineyard = vineyard => {
     this.id = vineyard.id;
@@ -42,6 +42,27 @@ Vineyard.findAll = result => {
                 const objUrl = `${item.id}-${speakingurl(item.name, [])}`;
                 item.location = [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))];
                 item.url = objUrl;
+                if (item.accommodation === 2) {
+                    item.features.push(featuresIndex('accommodation'));
+                }
+                if (item.additional === 2) {
+                    item.features.push(featuresIndex('additional'));
+                }
+                if (item.events === 2) {
+                    item.features.push(featuresIndex('events'));
+                }
+                if (item.meals === 2) {
+                    item.features.push(featuresIndex('meals'));
+                }
+                if (item.sightseeing === 2) {
+                    item.features.push(featuresIndex('sightseeing'));
+                }
+                if (item.tastings === 2) {
+                    item.features.push(featuresIndex('tastings'));
+                }
+                if (item.sale === 2) {
+                    item.features.push(featuresIndex('sale'));
+                }
                 return item;
             });
             result(parseItems);
