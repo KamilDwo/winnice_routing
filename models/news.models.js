@@ -48,7 +48,7 @@ News.getInstagramPhotos = (result, body) => {
     })()*/
 };
 
-News.findAll = (result, body) => {
+News.findAll = (result, body, errorResponse) => {
     let defaultFields = 'id,' +
         ' date_add as \'dateAdd\',' +
         ' category_1 as \'category1\',' +
@@ -73,9 +73,9 @@ News.findAll = (result, body) => {
     }
     defaultFields += ' image_1 as \'image1\''
 
-    connection.query(`SELECT ${defaultFields} FROM pw_news23`, function (error, results, fields) {
+    connection.query(`SELECT ${defaultFields} FROM pw_news23`, function (error, results) {
         if (error) {
-            error(error)
+            errorResponse(error)
         } else {
             const parseItems = results.map(item => {
                 const itemCategories = []
