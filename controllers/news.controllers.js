@@ -1,20 +1,32 @@
-'use strict';
+'use strict'
 
-const News = require('../models/news.models');
+const {
+    findAll,
+    findAllCategories,
+    getInstagramPhotos
+} = require('../models/news.models')
 
 exports.findAll = function (req, res) {
-    News.findAll(function (err, news) {
+    findAll(function (err, news) {
         if (err)
-            res.send(err);
-        res.json(news);
-    }, req.body);
-};
+            res.send(err)
+        res.json(news)
+    }, req.body)
+}
 
 exports.findAllCategories = function (req, res) {
-    News.findAllCategories(function (err, news) {
+    findAllCategories(function (err, news) {
         if (err)
-            res.send(err);
-        res.json(news);
-    }, req.body);
-};
+            res.send(err)
+        res.json(news)
+    }, req.body)
+}
+
+exports.getInstagramPhotos = function (req, res) {
+    getInstagramPhotos(function (err, news) {
+        if (err)
+            res.send(err)
+        res.json(news)
+    }, req.body)
+}
 

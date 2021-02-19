@@ -17,12 +17,10 @@ app.use(morgan('combined'))
 const vineyardsRoutes = require('./routes/vineyard.routes')
 const newsRoutes = require('./routes/news.routes')
 const pathsRoutes = require('./routes/paths.routes')
-const instagramRoutes = require('./routes/instagram.routes')
 
 app.use('/api/v1/vineyards', vineyardsRoutes)
 app.use('/api/v1/news', newsRoutes)
 app.use('/api/v1/paths', pathsRoutes)
-app.use('/api/v1/instagram/getPhotos', instagramRoutes)
 
 
 app.listen(port, () => {
