@@ -75,7 +75,7 @@ News.findAll = (result, body) => {
 
     connection.query(`SELECT ${defaultFields} FROM pw_news23`, function (err, rows, fields) {
         if (err) {
-            throw err
+            throw new Error('BROKEN')
         } else {
             const parseItems = rows.map(item => {
                 const itemCategories = []
