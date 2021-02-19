@@ -4,13 +4,13 @@ const News = require('../models/news.models')
 
 exports.findAll = function (req, res) {
     News.findAll(function (err, news) {
-        console.log('mamy blad', err);
+        //console.log('mamy blad', err);
         if (err) {
             res.status(err.status || 500)
             res.end()
         }
         else {
-            console.log('nie ma bledu');
+            //console.log('nie ma bledu');
             res.json(news)
         }
     }, req.body)
