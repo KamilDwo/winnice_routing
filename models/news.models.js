@@ -73,66 +73,64 @@ News.findAll = (result, body) => {
     }
     defaultFields += ' image_1 as \'image1\''
 
-    connection.query(`SELECT ${defaultFields} FROM pw_news23`, function (err, rows, fields) {
-        if (err) {
-            throw new Error('BROKEN')
-        } else {
-            const parseItems = rows.map(item => {
-                const itemCategories = []
-                item.isActive = item.isActive === 2
-                if (item.category1) {
-                    itemCategories.push(parseInt(item.category1))
-                }
-                if (item.category2) {
-                    itemCategories.push(parseInt(item.category2))
-                }
-                if (item.category3) {
-                    itemCategories.push(parseInt(item.category3))
-                }
-                if (item.category4) {
-                    itemCategories.push(parseInt(item.category4))
-                }
-                if (item.category5) {
-                    itemCategories.push(parseInt(item.category5))
-                }
-                if (item.category6) {
-                    itemCategories.push(parseInt(item.category6))
-                }
-                if (item.category7) {
-                    itemCategories.push(parseInt(item.category7))
-                }
-                if (item.category8) {
-                    itemCategories.push(parseInt(item.category8))
-                }
-                if (item.category9) {
-                    itemCategories.push(parseInt(item.category9))
-                }
-                if (item.category10) {
-                    itemCategories.push(parseInt(item.category10))
-                }
+    connection.query(`SELECT ${defaultFields} FROM pw_news23`, function (error, results, fields) {
+        if (error) throw error;
 
-                const element = item.newsProvinces
-                let newsProvincesParse = element.replace('[', '')
-                let newsProvincesParse2 = newsProvincesParse.replace(']', '')
-                item.provinces = listToArray(newsProvincesParse2, ',')
+        const parseItems = results.map(item => {
+            const itemCategories = []
+            item.isActive = item.isActive === 2
+            if (item.category1) {
+                itemCategories.push(parseInt(item.category1))
+            }
+            if (item.category2) {
+                itemCategories.push(parseInt(item.category2))
+            }
+            if (item.category3) {
+                itemCategories.push(parseInt(item.category3))
+            }
+            if (item.category4) {
+                itemCategories.push(parseInt(item.category4))
+            }
+            if (item.category5) {
+                itemCategories.push(parseInt(item.category5))
+            }
+            if (item.category6) {
+                itemCategories.push(parseInt(item.category6))
+            }
+            if (item.category7) {
+                itemCategories.push(parseInt(item.category7))
+            }
+            if (item.category8) {
+                itemCategories.push(parseInt(item.category8))
+            }
+            if (item.category9) {
+                itemCategories.push(parseInt(item.category9))
+            }
+            if (item.category10) {
+                itemCategories.push(parseInt(item.category10))
+            }
 
-                delete item.newsProvinces
-                delete item.category1
-                delete item.category2
-                delete item.category3
-                delete item.category4
-                delete item.category5
-                delete item.category6
-                delete item.category7
-                delete item.category8
-                delete item.category9
-                delete item.category10
-                delete item.idProvince
-                item.categories = itemCategories
-                return item
-            })
-            result(parseItems)
-        }
+            const element = item.newsProvinces
+            let newsProvincesParse = element.replace('[', '')
+            let newsProvincesParse2 = newsProvincesParse.replace(']', '')
+            item.provinces = listToArray(newsProvincesParse2, ',')
+
+            delete item.newsProvinces
+            delete item.category1
+            delete item.category2
+            delete item.category3
+            delete item.category4
+            delete item.category5
+            delete item.category6
+            delete item.category7
+            delete item.category8
+            delete item.category9
+            delete item.category10
+            delete item.idProvince
+            item.categories = itemCategories
+            return item
+        })
+        result(parseItems)
     })
 }
 
