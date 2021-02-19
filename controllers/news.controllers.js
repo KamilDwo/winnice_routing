@@ -5,7 +5,7 @@ const News = require('../models/news.models')
 exports.findAll = function (req, res) {
     News.findAll(function (news, err) {
         if (err) {
-            res.status(err.status || 500)
+            res.status(500)
             res.end()
         }
         else {
@@ -17,7 +17,7 @@ exports.findAll = function (req, res) {
 exports.findAllCategories = function (req, res) {
     News.findAllCategories(function (news, err) {
         if (err) {
-            res.status(err.status || 500)
+            res.status(500)
             res.end()
         }
         else {
@@ -29,7 +29,7 @@ exports.findAllCategories = function (req, res) {
 exports.getInstagramPhotos = function (req, res) {
     News.getInstagramPhotos(function (news, err) {
         if (err) {
-            res.status(err.status || 500)
+            res.status(500)
             res.end()
         }
         else {

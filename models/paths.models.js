@@ -12,11 +12,11 @@ Paths.findAll = (result, body) => {
         ' is_active as \'isActive\',' +
         ' bounds'
 
-    connection.query(`SELECT ${defaultFields} FROM pw_paths`, function (err, res) {
-        if (err) {
-            result(err, null)
+    connection.query(`SELECT ${defaultFields} FROM pw_paths`, function (error, results) {
+        if (error) {
+            result(error, null)
         } else {
-            const parseItems = res.map(item => {
+            const parseItems = results.map(item => {
                 item.isActive = item.isActive === 2
                 item.bounds = item.bounds.split(',')
                 let itemBounds
@@ -24,7 +24,7 @@ Paths.findAll = (result, body) => {
                 item.bounds = itemBounds && itemBounds.length > 1 ? itemBounds : null
                 return item
             });
-            result(parseItems)
+            result(parseItems, null)
         }
     })
 }

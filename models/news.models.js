@@ -23,15 +23,15 @@ News.findAllCategories = (result, body) => {
         defaultFields += ' name_en as \'name\''
     }
 
-    connection.query(`SELECT ${defaultFields} FROM pw_news_categories`, function (err, res) {
-        if (err) {
-            result(err, null)
+    connection.query(`SELECT ${defaultFields} FROM pw_news_categories`, function (error, results) {
+        if (error) {
+            result(null, error)
         } else {
-            const parseItems = res.map(item => {
+            const parseItems = results.map(item => {
                 item.isActive = item.isActive === 2
                 return item
             })
-            result(parseItems)
+            result(parseItems, null)
         }
     })
 }
@@ -115,6 +115,7 @@ News.findAll = (result, body) => {
                 let newsProvincesParse = element.replace('[', '')
                 let newsProvincesParse2 = newsProvincesParse.replace(']', '')
                 item.provinces = listToArray(newsProvincesParse2, ',')
+                item.type = NewsTypes.PAGE
 
                 delete item.newsProvinces
                 delete item.category1

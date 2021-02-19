@@ -28,11 +28,11 @@ const defaultFields = 'pw_vineyard.id,' +
 
 
 Vineyard.findAll = result => {
-    connection.query(`SELECT ${defaultFields} FROM pw_vineyard LEFT JOIN pw_vineyard_paths ON pw_vineyard.id=pw_vineyard_paths.vineyard_id GROUP BY pw_vineyard.id`, function (err, res) {
-        if (err) {
-            result(err, null)
+    connection.query(`SELECT ${defaultFields} FROM pw_vineyard LEFT JOIN pw_vineyard_paths ON pw_vineyard.id=pw_vineyard_paths.vineyard_id GROUP BY pw_vineyard.id`, function (error, results) {
+        if (error) {
+            result(error, null)
         } else {
-            const parseItems = res.map(item => {
+            const parseItems = results.map(item => {
                 item.features = []
                 const location = item.location.split(',')
                 item.paths = listToArray(item.paths, ',')
@@ -63,17 +63,17 @@ Vineyard.findAll = result => {
                 }
                 return item
             });
-            result(parseItems)
+            result(parseItems, null)
         }
     });
 };
 
 Vineyard.findById = (id, result) => {
-    connection.query(`SELECT ${defaultFields} FROM pw_vineyard LEFT JOIN pw_vineyard_paths ON pw_vineyard.id=pw_vineyard_paths.vineyard_id WHERE pw_vineyard.id = ? GROUP BY pw_vineyard.id LIMIT 1`, id, function (err, res) {
-        if (err) {
-            result(err, null)
+    connection.query(`SELECT ${defaultFields} FROM pw_vineyard LEFT JOIN pw_vineyard_paths ON pw_vineyard.id=pw_vineyard_paths.vineyard_id WHERE pw_vineyard.id = ? GROUP BY pw_vineyard.id LIMIT 1`, id, function (error, results) {
+        if (error) {
+            result(error, null)
         } else {
-            const item = res[0]
+            const item = results[0]
             item.features = []
             const location = item.location.split(',')
             item.isActive = item.isActive === 2
@@ -81,7 +81,7 @@ Vineyard.findById = (id, result) => {
             item.location = [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))]
             item.paths = listToArray(item.paths, ',')
             item.url = objUrl
-            result(item)
+            result(item, null)
         }
     })
 }
