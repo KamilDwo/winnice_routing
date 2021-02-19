@@ -1,6 +1,8 @@
+'use strict'
+
 const NewsTypes = {
     'PAGE': 'Page',
     'INSTAGRAM': 'Instagram'
 }
 
-module.exports = NewsTypes;
+module.exports = NewsTypes

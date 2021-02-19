@@ -25,8 +25,7 @@ News.findAllCategories = (result, body) => {
 
     connection.query(`SELECT ${defaultFields} FROM pw_news_categories`, function (err, res) {
         if (err) {
-            console.log('error: ', err)
-            result(err)
+            result(err, null)
         } else {
             const parseItems = res.map(item => {
                 item.isActive = item.isActive === 2
@@ -76,8 +75,7 @@ News.findAll = (result, body) => {
 
     connection.query(`SELECT ${defaultFields} FROM pw_news2`, function (err, res) {
         if (err) {
-            console.log('error: ', err)
-            result(err)
+            result(err, null)
         } else {
             const parseItems = res.map(item => {
                 const itemCategories = []

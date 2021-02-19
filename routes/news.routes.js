@@ -1,13 +1,13 @@
-'use strict';
+'use strict'
 
-const express = require('express');
-const router = express.Router();
-const newsController = require('../controllers/news.controllers');
-const cors = require('cors');
-const corsOptionsDelegate = require('../config/cors.config');
+const express = require('express')
+const router = express.Router()
+const newsController = require('../controllers/news.controllers')
+const cors = require('cors')
+const corsOptionsDelegate = require('../config/cors.config')
 
-router.post('/', cors(corsOptionsDelegate), newsController.findAll);
-router.post('/categories', cors(corsOptionsDelegate), newsController.findAllCategories);
-router.post('/instagram', cors(corsOptionsDelegate), newsController.getInstagramPhotos);
+router.post('/', cors(corsOptionsDelegate), newsController.findAll)
+router.post('/categories', cors(corsOptionsDelegate), newsController.findAllCategories)
+router.post('/instagram', cors(corsOptionsDelegate), newsController.getInstagramPhotos)
 
-module.exports = router;
+module.exports = router
