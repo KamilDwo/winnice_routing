@@ -75,10 +75,8 @@ News.findAll = (result, body) => {
 
     connection.query(`SELECT ${defaultFields} FROM pw_news2`, function (err, res) {
         if (err) {
-            console.log('tutajk1');
             result(err, null)
         } else {
-            console.log('tutajk2');
             const parseItems = res.map(item => {
                 const itemCategories = []
                 item.isActive = item.isActive === 2
