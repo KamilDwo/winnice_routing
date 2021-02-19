@@ -1,5 +1,6 @@
 'use strict';
 
+require('dotenv').config()
 const Instagram = require('instagram-web-api')
 const { INSTAGRAM_USERNAME, INSTAGRAM_PASSWORD } = process.env
 
