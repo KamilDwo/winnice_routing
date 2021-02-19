@@ -19,7 +19,7 @@ exports.findAllCategories = function (req, res) {
 };
 
 exports.getInstagramPhotos = function (req, res) {
-    News.findAllCategories(function (err, news) {
+    News.getInstagramPhotos(function (err, news) {
         if (err)
             res.send(err);
         res.json(news);
