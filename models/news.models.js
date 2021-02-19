@@ -73,11 +73,11 @@ News.findAll = (result, body) => {
     }
     defaultFields += ' image_1 as \'image1\''
 
-    connection.query(`SELECT ${defaultFields} FROM pw_news23`, function (err, res) {
+    connection.query(`SELECT ${defaultFields} FROM pw_news23`, function (err, rows, fields) {
         if (err) {
-            err(err, null)
+            throw err
         } else {
-            const parseItems = res.map(item => {
+            const parseItems = rows.map(item => {
                 const itemCategories = []
                 item.isActive = item.isActive === 2
                 if (item.category1) {
