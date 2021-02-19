@@ -12,9 +12,7 @@ const Instagram = () => {}
 Instagram.getPhotosByUsername = (result, body) => {
     ;(async () => {
         await instagramClient.login()
-        console.log('klient: ', instagramClient);
-        const profile = await instagramClient.getProfile()
-        console.log('profile', profile);
+        const profile = await instagramClient.getPhotosByUsername({ username: 'kamil.dwo' })
         result(profile)
     })()
 };
