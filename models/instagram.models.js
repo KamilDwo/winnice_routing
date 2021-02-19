@@ -1,15 +1,20 @@
 'use strict'
 
-const client = require('../config/instagram.config')
+require('dotenv').config()
+const InstagramApi = require('instagram-web-api')
+const { INSTAGRAM_USERNAME, INSTAGRAM_PASSWORD } = process.env
+const instagramClient = new InstagramApi({ INSTAGRAM_USERNAME, INSTAGRAM_PASSWORD })
+
+
 
 const Instagram = () => {}
 
 Instagram.getPhotosByUsername = (result, body) => {
     ;(async () => {
-        await client.login()
-        console.log('klient: ', client);
-        const profile = await client.getProfile()
-        console.log(profile);
+        await instagramClient.login()
+        console.log('klient: ', instagramClient);
+        const profile = await instagramClient.getProfile()
+        console.log('profile', profile);
         result(profile)
     })()
 };
