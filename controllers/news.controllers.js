@@ -31,7 +31,7 @@ exports.findAllCategories = function (req, res) {
 exports.getInstagramPhotos = function (req, res) {
     News.getInstagramPhotos(function (news, err) {
         if (err) {
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            console.log('~~[MySQL error]~~ ', err);
             res.status(500)
             res.end()
         }
