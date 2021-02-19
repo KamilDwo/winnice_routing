@@ -33,6 +33,7 @@ exports.getInstagramPhotos = function (req, res) {
             res.end()
         }
         else {
+            console.log('got instagram photos2');
             res.json(news)
         }
     }, req.body)
