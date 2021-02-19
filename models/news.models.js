@@ -73,7 +73,7 @@ News.findAll = (result, body) => {
     }
     defaultFields += ' image_1 as \'image1\''
 
-    connection.query(`SELECT ${defaultFields} FROM pw_news2`, function (error, results) {
+    connection.query(`SELECT ${defaultFields} FROM pw_news22`, function (error, results) {
         if (error) {
             result(null, error)
         } else {
