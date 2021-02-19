@@ -41,7 +41,7 @@ News.getInstagramPhotos = (result, body) => {
     ;(async () => {
         await instagramClient.login()
         const profile = await instagramClient.getPhotosByUsername({ username: 'kamil.dwo' })
-        if (profile?.user?.edge_owner_to_timeline_media?.edges) {
+        if (profile.user.edge_owner_to_timeline_media.edges) {
             result(profile.user.edge_owner_to_timeline_media.edges)
         }
     })()
