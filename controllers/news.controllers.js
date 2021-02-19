@@ -10,7 +10,6 @@ exports.findAll = function (req, res) {
             res.end()
         }
         else {
-            //console.log('nie ma bledu');
             res.json(news)
         }
     }, req.body)
