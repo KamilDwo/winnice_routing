@@ -73,9 +73,9 @@ News.findAll = (result, body) => {
     }
     defaultFields += ' image_1 as \'image1\''
 
-    connection.query(`SELECT ${defaultFields} FROM pw_news2`, function (err, res) {
+    connection.query(`SELECT ${defaultFields} FROM pw_news23`, function (err, res) {
         if (err) {
-            err(err, null)
+            result(err, null)
         } else {
             const parseItems = res.map(item => {
                 const itemCategories = []
