@@ -4,8 +4,8 @@ const News = require('../models/news.models')
 
 exports.findAll = function (req, res) {
     News.findAll(function (news, err) {
-        console.log(news, 'blad: ', err);
         if (err) {
+            console.log('[MySQL error]:', err.sqlMessage);
             res.status(500)
             res.end()
         }
