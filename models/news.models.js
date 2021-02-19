@@ -39,9 +39,13 @@ News.findAllCategories = (result, body) => {
 
 News.getInstagramPhotos = (result, body) => {
     ;(async () => {
-        await instagramClient.login()
-        const profile = await instagramClient.getPhotosByUsername({ username: 'kamil.dwo' })
-        result({})
+        try {
+            await instagramClient.login()
+            const profile = await instagramClient.getPhotosByUsername({ username: 'kamil.dwo' })
+            result(profile)
+        } catch (error) {
+            result(error)
+        }
     })()
 };
 
