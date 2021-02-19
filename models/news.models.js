@@ -75,7 +75,7 @@ News.findAll = (result, body) => {
 
     connection.query(`SELECT ${defaultFields} FROM pw_news2`, function (error, results) {
         if (error) {
-            result(error, null)
+            result(null, error)
         } else {
             const parseItems = results.map(item => {
                 const itemCategories = []
