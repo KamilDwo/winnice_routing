@@ -8,6 +8,7 @@ Instagram.getPhotosByUsername = (result, body) => {
     ;(async () => {
         await client.login()
         const profile = await client.getProfile()
+        console.log(profile);
         result(profile)
     })()
 };
