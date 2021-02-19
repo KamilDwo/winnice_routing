@@ -40,7 +40,7 @@ News.getInstagramPhotos = (result, body) => {
     ;(async () => {
        // try {
             await instagramClient.login()
-            const profile = await instagramClient.getPhotosByUsername({ username: 'kamil.dwo' })
+            const profile = await instagramClient.getProfile()
             console.log('profil', profile);
             result(profile, null)
        // } catch (error) {
