@@ -115,7 +115,7 @@ News.findAll = (result, body) => {
                 let newsProvincesParse = element.replace('[', '')
                 let newsProvincesParse2 = newsProvincesParse.replace(']', '')
                 item.provinces = listToArray(newsProvincesParse2, ',')
-                item.type = NewsTypes.PAGE
+                 
 
                 delete item.newsProvinces
                 delete item.category1
