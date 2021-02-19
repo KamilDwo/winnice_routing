@@ -131,7 +131,7 @@ News.findAll = (result, body) => {
                 item.categories = itemCategories
                 return item
             })
-            result(parseItems)
+            result(parseItems, null)
         }
     })
 }
