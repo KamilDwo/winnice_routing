@@ -20,9 +20,14 @@ exports.findAllCategories = function (req, res) {
 
 exports.getInstagramPhotos = function (req, res) {
     News.getInstagramPhotos(function (err, news) {
-        if (err)
-            res.send(err);
-        res.json(news);
+        if (err) {
+            console.log('bledzik');
+            res.status(err.status || 500);
+            res.end();
+        }
+        else {
+            res.json(news);
+        }
     }, req.body);
 };
 
