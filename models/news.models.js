@@ -72,15 +72,6 @@ News.findAll = (result, body) => {
 
     let defaultFields2 = 'id,' +
         ' date_add as \'dateAdd\',' +
-        ' id,' +
-        ' id,' +
-        ' id,' +
-        ' id,' +
-        ' id,' +
-        ' id,' +
-        ' id,' +
-        ' id,' +
-        ' id,' +
         ' likes_count as \'likesCount\',' +
         ' comments_count as \'commentsCount\',' +
         ' is_active as \'isActive\',' +
@@ -101,10 +92,12 @@ News.findAll = (result, body) => {
         if (error) {
             result(null, error)
         } else {
-            console.log(results);
-            const parseItems = results.map(item => {
+            const parseItems = results[0].map(item => {
                 const itemCategories = []
                 item.isActive = item.isActive === 2
+                item.type = NewsTypes.PAGE
+                item.categories = itemCategories
+
                 if (item.category1) {
                     itemCategories.push(parseInt(item.category1))
                 }
@@ -143,22 +136,6 @@ News.findAll = (result, body) => {
                     item.provinces = listToArray(newsProvincesParse2, ',')
                     delete item.newsProvinces
                 }
-                /*  if (item.type) {
-                      switch (item.type) {
-                          case 1:
-                              item.type = NewsTypes.INSTAGRAM
-                              break
-                          case 2:
-                              item.type = NewsTypes.INSTAGRAM
-                              break
-                          case 3:
-                              item.type = NewsTypes.FACEBOOK
-                              break
-                      }
-                  }
-                  else {
-                      item.type = NewsTypes.PAGE
-                  }*/
 
                 delete item.category1
                 delete item.category2
@@ -171,10 +148,23 @@ News.findAll = (result, body) => {
                 delete item.category9
                 delete item.category10
                 delete item.idProvince
-                item.categories = itemCategories
                 return item
             })
-            result(parseItems, null)
+            const parseItems2 = results[1].map(item => {
+                switch (item.type) {
+                    case 1:
+                        item.type = NewsTypes.INSTAGRAM
+                        break
+                    case 2:
+                        item.type = NewsTypes.INSTAGRAM
+                        break
+                    case 3:
+                        item.type = NewsTypes.FACEBOOK
+                        break
+                }
+                return item;
+            })
+            result([...parseItems, ...parseItems2], null)
         }
     })
 }
