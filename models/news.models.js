@@ -87,7 +87,7 @@ News.findAll = (result, body) => {
     }
     defaultFields += ' image_1 as \'image1\''
 
-    let news = []
+    const news = []
     connection.query(`SELECT external_id FROM pw_news`, function (error, results) {
         if (error) {
             result(null, error)
@@ -96,7 +96,7 @@ News.findAll = (result, body) => {
         }
     })
     console.log(news);
-    let news2 = []
+    const news2 = []
     connection.query(`SELECT ${defaultFields} FROM pw_news2`, function (error, results) {
         if (error) {
             result(null, error)
