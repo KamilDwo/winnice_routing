@@ -85,7 +85,7 @@ News.findAll = (result, body) => {
         ' id,' +
         ' is_active as \'isActive\',' +
         ' id,' +
-        ' id,'
+        ' id'
 
     if (body && body.language === 'pl') {
         defaultFields += ' name_pl as \'name\', message_pl as \'message\','
