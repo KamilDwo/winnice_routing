@@ -69,7 +69,6 @@ News.findAll = (result, body) => {
         ' pw_news2.category_10 as \'category10\',' +
         ' pw_news2.is_active as \'isActive\',' +
         ' pw_news.external_id as \'externalId\',' +
-        ' pw_news.type,' +
         ' pw_news2.id_province as  \'idProvince\',' +
         ' pw_news2.news_provinces as \'newsProvinces\','
 
@@ -81,7 +80,7 @@ News.findAll = (result, body) => {
     }
     defaultFields += ' pw_news2.image_1 as \'image1\''
 
-    connection.query(`SELECT ${defaultFields} FROM pw_news2 CROSS JOIN pw_news`, function (error, results) {
+    connection.query(`SELECT ${defaultFields} FROM pw_news2 UNION SELECT * FROM pw_news`, function (error, results) {
         if (error) {
             result(null, error)
         } else {
@@ -123,7 +122,7 @@ News.findAll = (result, body) => {
                 let newsProvincesParse = element.replace('[', '')
                 let newsProvincesParse2 = newsProvincesParse.replace(']', '')
                 item.provinces = listToArray(newsProvincesParse2, ',')
-                
+
                 delete item.newsProvinces
                 delete item.category1
                 delete item.category2
