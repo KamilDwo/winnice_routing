@@ -137,9 +137,12 @@ News.findAll = (result, body) => {
                 }
 
                 const element = item.newsProvinces
-                let newsProvincesParse = element.replace('[', '')
-                let newsProvincesParse2 = newsProvincesParse.replace(']', '')
-                item.provinces = listToArray(newsProvincesParse2, ',')
+                if (element) {
+                    let newsProvincesParse = element.replace('[', '')
+                    let newsProvincesParse2 = newsProvincesParse.replace(']', '')
+                    item.provinces = listToArray(newsProvincesParse2, ',')
+                    delete item.newsProvinces
+                }
                 /*  if (item.type) {
                       switch (item.type) {
                           case 1:
@@ -156,7 +159,7 @@ News.findAll = (result, body) => {
                   else {
                       item.type = NewsTypes.PAGE
                   }*/
-                delete item.newsProvinces
+
                 delete item.category1
                 delete item.category2
                 delete item.category3
