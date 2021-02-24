@@ -68,7 +68,6 @@ News.findAll = (result, body) => {
         ' pw_news2.category_9 as \'category9\',' +
         ' pw_news2.category_10 as \'category10\',' +
         ' pw_news2.is_active as \'isActive\',' +
-        ' pw_news.external_id as \'externalId\',' +
         ' pw_news2.id_province as  \'idProvince\',' +
         ' pw_news2.news_provinces as \'newsProvinces\','
 
