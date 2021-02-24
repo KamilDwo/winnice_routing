@@ -1,8 +1,9 @@
 'use strict'
 
 const NewsTypes = {
-    'PAGE': 'Page',
-    'INSTAGRAM': 'Instagram'
+    'PAGE': 1,
+    'INSTAGRAM': 2,
+    'TWITTER': 3
 }
 
 module.exports = NewsTypes

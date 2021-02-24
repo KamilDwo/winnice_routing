@@ -88,7 +88,7 @@ News.findAll = (result, body) => {
         ' url,' +
         ' message,' +
         ' image_1 as \'image1\',' +
-        ' id'
+        ' type'
 
     if (body && body.language === 'pl') {
         defaultFields += ' name_pl as \'name\', message_pl as \'message\','
@@ -140,7 +140,19 @@ News.findAll = (result, body) => {
                 let newsProvincesParse = element.replace('[', '')
                 let newsProvincesParse2 = newsProvincesParse.replace(']', '')
                 item.provinces = listToArray(newsProvincesParse2, ',')
-
+                if (item.type) {
+                    switch (item.type) {
+                        case 2:
+                            item.type = NewsTypes.INSTAGRAM;
+                            break;
+                        case 3:
+                            item.type = NewsTypes.TWITTER;
+                            break;
+                    }
+                }
+                else {
+                    item.type = NewsTypes.PAGE
+                }
                 delete item.newsProvinces
                 delete item.category1
                 delete item.category2
