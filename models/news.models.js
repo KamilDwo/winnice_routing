@@ -88,7 +88,7 @@ News.findAll = (result, body) => {
     }
     defaultFields += ' pw_news2.image_1 as \'image1\''
 
-    connection.query(`SELECT ${defaultFields} FROM pw_news2 NATURAL JOIN pw_news`, function (error, results) {
+    connection.query(`SELECT ${defaultFields} FROM pw_news2 JOIN pw_news`, function (error, results) {
         if (error) {
             result(null, error)
         } else {
