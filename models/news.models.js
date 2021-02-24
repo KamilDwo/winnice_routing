@@ -37,20 +37,12 @@ News.findAllCategories = (result, body) => {
 }
 
 News.getInstagramPhotos = (result, body) => {
-    connection.query(`SELECT external_id as 'externalId' FROM pw_news`, function (error, results) {
-        if (error) {
-            result(null, error)
-        } else {
-            result(results, null)
-        }
-    })
-
 /*    ;(async () => {
         try {
             await instagramClient.login()
             const profile = await instagramClient.getPhotosByUsername({ username: 'kamil.dwo' })
             if (profile.user.edge_owner_to_timeline_media.edges) {
-
+                connection.query(`SELECT ${defaultFields} FROM pw_news2`, function (error, results) {})
                 const photos = profile.user.edge_owner_to_timeline_media.edges.map(photo => {
 
                 })
@@ -63,41 +55,32 @@ News.getInstagramPhotos = (result, body) => {
 };
 
 News.findAll = (result, body) => {
-    let defaultFields = 'id,' +
-        ' date_add as \'dateAdd\',' +
-        ' category_1 as \'category1\',' +
-        ' category_2 as \'category2\',' +
-        ' category_3 as \'category3\',' +
-        ' category_4 as \'category4\',' +
-        ' category_5 as \'category5\',' +
-        ' category_6 as \'category6\',' +
-        ' category_7 as \'category7\',' +
-        ' category_8 as \'category8\',' +
-        ' category_9 as \'category9\',' +
-        ' category_10 as \'category10\',' +
-        ' is_active as \'isActive\',' +
-        ' id_province as  \'idProvince\',' +
-        ' news_provinces as \'newsProvinces\','
+    let defaultFields = 'pw_news2.id,' +
+        ' pw_news2.date_add as \'dateAdd\',' +
+        ' pw_news2.category_1 as \'category1\',' +
+        ' pw_news2.category_2 as \'category2\',' +
+        ' pw_news2.category_3 as \'category3\',' +
+        ' pw_news2.category_4 as \'category4\',' +
+        ' pw_news2.category_5 as \'category5\',' +
+        ' pw_news2.category_6 as \'category6\',' +
+        ' pw_news2.category_7 as \'category7\',' +
+        ' pw_news2.category_8 as \'category8\',' +
+        ' pw_news2.category_9 as \'category9\',' +
+        ' pw_news2.category_10 as \'category10\',' +
+        ' pw_news2.is_active as \'isActive\',' +
+        ' pw_news.external_id as \'externalId\',' +
+        ' pw_news2.id_province as  \'idProvince\',' +
+        ' pw_news2.news_provinces as \'newsProvinces\','
 
     if (body && body.language === 'pl') {
-        defaultFields += ' name_pl as \'name\', message_pl as \'message\','
+        defaultFields += ' pw_news2.name_pl as \'name\', pw_news2.message_pl as \'message\','
     }
     else {
-        defaultFields += ' name_en as \'name\', message_en as \'message\','
+        defaultFields += ' pw_news2.name_en as \'name\', pw_news2.message_en as \'message\','
     }
-    defaultFields += ' image_1 as \'image1\''
+    defaultFields += ' pw_news2.image_1 as \'image1\''
 
-    const news = []
-    connection.query(`SELECT external_id FROM pw_news`, function (error, results) {
-        if (error) {
-            result(null, error)
-        } else {
-            news.push(results)
-        }
-    })
-    console.log(news);
-    const news2 = []
-    connection.query(`SELECT ${defaultFields} FROM pw_news2`, function (error, results) {
+    connection.query(`SELECT ${defaultFields} FROM pw_news2, pw_news`, function (error, results) {
         if (error) {
             result(null, error)
         } else {
@@ -156,11 +139,9 @@ News.findAll = (result, body) => {
                 item.categories = itemCategories
                 return item
             })
-            news2.push(parseItems);
+            result(parseItems, null)
         }
     })
-    // const array3 = [...news, ...news2];
-    result(news2, null)
 }
 
 module.exports = News
