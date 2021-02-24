@@ -142,12 +142,15 @@ News.findAll = (result, body) => {
                 item.provinces = listToArray(newsProvincesParse2, ',')
                 if (item.type) {
                     switch (item.type) {
+                        case 1:
+                            item.type = NewsTypes.INSTAGRAM
+                            break
                         case 2:
-                            item.type = NewsTypes.INSTAGRAM;
-                            break;
+                            item.type = NewsTypes.INSTAGRAM
+                            break
                         case 3:
-                            item.type = NewsTypes.TWITTER;
-                            break;
+                            item.type = NewsTypes.FACEBOOK
+                            break
                     }
                 }
                 else {
