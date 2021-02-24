@@ -87,16 +87,16 @@ News.findAll = (result, body) => {
     }
     defaultFields += ' image_1 as \'image1\''
 
-    let news
+    let news = []
     connection.query(`SELECT external_id FROM pw_news`, function (error, results) {
         if (error) {
             result(null, error)
         } else {
-            console.log(results);
-            news = results
+            news.push(results)
         }
     })
-    let news2
+    console.log(news);
+    let news2 = []
     connection.query(`SELECT ${defaultFields} FROM pw_news2`, function (error, results) {
         if (error) {
             result(null, error)
@@ -156,7 +156,7 @@ News.findAll = (result, body) => {
                 item.categories = itemCategories
                 return item
             })
-            news2 = parseItems;
+            news2.push(parseItems);
         }
     })
     // const array3 = [...news, ...news2];
