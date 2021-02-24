@@ -158,8 +158,8 @@ News.findAll = (result, body) => {
             news2 = parseItems;
         }
     })
-    const array3 = [...news, ...news2];
-    result(array3, null)
+    // const array3 = [...news, ...news2];
+    result(news2, null)
 }
 
 module.exports = News
