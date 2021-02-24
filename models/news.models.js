@@ -38,7 +38,11 @@ News.findAllCategories = (result, body) => {
 
 News.getInstagramPhotos = (result, body) => {
     connection.query(`SELECT external_id as 'externalId' FROM pw_news`, function (error, results) {
-        result(results, null)
+        if (error) {
+            result(null, error)
+        } else {
+            result(results, null)
+        }
     })
 
 /*    ;(async () => {
