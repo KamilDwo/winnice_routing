@@ -82,9 +82,12 @@ News.findAll = (result, body) => {
         ' id,' +
         ' id,' +
         ' id,' +
-        ' id,' +
+        ' likes_count as \'likesCount\',' +
+        ' comments_count as \'commentsCount\',' +
         ' is_active as \'isActive\',' +
-        ' id,' +
+        ' url,' +
+        ' message,' +
+        ' image_1 as \'image1\',' +
         ' id'
 
     if (body && body.language === 'pl') {
