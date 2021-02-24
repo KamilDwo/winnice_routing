@@ -55,31 +55,47 @@ News.getInstagramPhotos = (result, body) => {
 };
 
 News.findAll = (result, body) => {
-    let defaultFields = 'pw_news2.id,' +
-        ' pw_news2.date_add as \'dateAdd\',' +
-        ' pw_news2.category_1 as \'category1\',' +
-        ' pw_news2.category_2 as \'category2\',' +
-        ' pw_news2.category_3 as \'category3\',' +
-        ' pw_news2.category_4 as \'category4\',' +
-        ' pw_news2.category_5 as \'category5\',' +
-        ' pw_news2.category_6 as \'category6\',' +
-        ' pw_news2.category_7 as \'category7\',' +
-        ' pw_news2.category_8 as \'category8\',' +
-        ' pw_news2.category_9 as \'category9\',' +
-        ' pw_news2.category_10 as \'category10\',' +
-        ' pw_news2.is_active as \'isActive\',' +
-        ' pw_news2.id_province as  \'idProvince\',' +
-        ' pw_news2.news_provinces as \'newsProvinces\','
+    let defaultFields = 'id,' +
+        ' date_add as \'dateAdd\',' +
+        ' category_1 as \'category1\',' +
+        ' category_2 as \'category2\',' +
+        ' category_3 as \'category3\',' +
+        ' category_4 as \'category4\',' +
+        ' category_5 as \'category5\',' +
+        ' category_6 as \'category6\',' +
+        ' category_7 as \'category7\',' +
+        ' category_8 as \'category8\',' +
+        ' category_9 as \'category9\',' +
+        ' category_10 as \'category10\',' +
+        ' is_active as \'isActive\',' +
+        ' id_province as  \'idProvince\',' +
+        ' news_provinces as \'newsProvinces\','
+
+    let defaultFields2 = 'id,' +
+        ' date_add as \'dateAdd\',' +
+        ' id,' +
+        ' id,' +
+        ' id,' +
+        ' id,' +
+        ' id,' +
+        ' id,' +
+        ' id,' +
+        ' id,' +
+        ' id,' +
+        ' id,' +
+        ' is_active as \'isActive\',' +
+        ' id,' +
+        ' id,'
 
     if (body && body.language === 'pl') {
-        defaultFields += ' pw_news2.name_pl as \'name\', pw_news2.message_pl as \'message\','
+        defaultFields += ' name_pl as \'name\', message_pl as \'message\','
     }
     else {
-        defaultFields += ' pw_news2.name_en as \'name\', pw_news2.message_en as \'message\','
+        defaultFields += ' name_en as \'name\', message_en as \'message\','
     }
-    defaultFields += ' pw_news2.image_1 as \'image1\''
+    defaultFields += ' image_1 as \'image1\''
 
-    connection.query(`SELECT ${defaultFields} FROM pw_news2 UNION SELECT * FROM pw_news`, function (error, results) {
+    connection.query(`SELECT ${defaultFields} FROM pw_news2 UNION ALL SELECT ${defaultFields2} FROM pw_news`, function (error, results) {
         if (error) {
             result(null, error)
         } else {
