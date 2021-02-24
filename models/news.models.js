@@ -37,16 +37,25 @@ News.findAllCategories = (result, body) => {
 }
 
 News.getInstagramPhotos = (result, body) => {
-    ;(async () => {
+    connection.query(`SELECT external_id as 'externalId' FROM pw_news`, function (error, results) {
+        result(results, null)
+    })
+
+/*    ;(async () => {
         try {
             await instagramClient.login()
             const profile = await instagramClient.getPhotosByUsername({ username: 'kamil.dwo' })
-            console.log('profil', profile);
+            if (profile.user.edge_owner_to_timeline_media.edges) {
+
+                const photos = profile.user.edge_owner_to_timeline_media.edges.map(photo => {
+
+                })
+            }
             result(profile, null)
         } catch (error) {
             result(null, error)
         }
-    })()
+    })()*/
 };
 
 News.findAll = (result, body) => {
