@@ -5,8 +5,8 @@ const connection = require('../config/db.config')
 const listToArray = require('../helpers/listToArray.helper')
 const NewsTypes = require('../enums/news.enums')
 const InstagramApi = require('instagram-web-api')
-const { INSTAGRAM_USERNAME, INSTAGRAM_PASSWORD } = process.env
-const instagramClient = new InstagramApi({ username: INSTAGRAM_USERNAME, password: INSTAGRAM_PASSWORD })
+const {INSTAGRAM_USERNAME, INSTAGRAM_PASSWORD} = process.env
+const instagramClient = new InstagramApi({username: INSTAGRAM_USERNAME, password: INSTAGRAM_PASSWORD})
 
 const News = news => {
     this.id = news.id
@@ -18,8 +18,7 @@ News.findAllCategories = (result, body) => {
     let defaultFields = 'id,'
     if (body && body.language === 'pl') {
         defaultFields += ' name_pl as \'name\''
-    }
-    else {
+    } else {
         defaultFields += ' name_en as \'name\''
     }
 
@@ -37,21 +36,21 @@ News.findAllCategories = (result, body) => {
 }
 
 News.getInstagramPhotos = (result, body) => {
-/*    ;(async () => {
-        try {
-            await instagramClient.login()
-            const profile = await instagramClient.getPhotosByUsername({ username: 'kamil.dwo' })
-            if (profile.user.edge_owner_to_timeline_media.edges) {
-                connection.query(`SELECT ${defaultFields} FROM pw_news2`, function (error, results) {})
-                const photos = profile.user.edge_owner_to_timeline_media.edges.map(photo => {
+    /*    ;(async () => {
+            try {
+                await instagramClient.login()
+                const profile = await instagramClient.getPhotosByUsername({ username: 'kamil.dwo' })
+                if (profile.user.edge_owner_to_timeline_media.edges) {
+                    connection.query(`SELECT ${defaultFields} FROM pw_news2`, function (error, results) {})
+                    const photos = profile.user.edge_owner_to_timeline_media.edges.map(photo => {
 
-                })
+                    })
+                }
+                result(profile, null)
+            } catch (error) {
+                result(null, error)
             }
-            result(profile, null)
-        } catch (error) {
-            result(null, error)
-        }
-    })()*/
+        })()*/
 };
 
 News.findAll = (result, body) => {
@@ -92,16 +91,17 @@ News.findAll = (result, body) => {
 
     if (body && body.language === 'pl') {
         defaultFields += ' name_pl as \'name\', message_pl as \'message\','
-    }
-    else {
+    } else {
         defaultFields += ' name_en as \'name\', message_en as \'message\','
     }
     defaultFields += ' image_1 as \'image1\''
 
-    connection.query(`SELECT ${defaultFields} FROM pw_news2 UNION ALL SELECT ${defaultFields2} FROM pw_news`, function (error, results) {
+    const query = `SELECT ${defaultFields} FROM pw_news2; SELECT ${defaultFields2} FROM pw_news`;
+    connection.query(query, function (error, results) {
         if (error) {
             result(null, error)
         } else {
+            console.log(results);
             const parseItems = results.map(item => {
                 const itemCategories = []
                 item.isActive = item.isActive === 2
@@ -140,22 +140,22 @@ News.findAll = (result, body) => {
                 let newsProvincesParse = element.replace('[', '')
                 let newsProvincesParse2 = newsProvincesParse.replace(']', '')
                 item.provinces = listToArray(newsProvincesParse2, ',')
-              /*  if (item.type) {
-                    switch (item.type) {
-                        case 1:
-                            item.type = NewsTypes.INSTAGRAM
-                            break
-                        case 2:
-                            item.type = NewsTypes.INSTAGRAM
-                            break
-                        case 3:
-                            item.type = NewsTypes.FACEBOOK
-                            break
-                    }
-                }
-                else {
-                    item.type = NewsTypes.PAGE
-                }*/
+                /*  if (item.type) {
+                      switch (item.type) {
+                          case 1:
+                              item.type = NewsTypes.INSTAGRAM
+                              break
+                          case 2:
+                              item.type = NewsTypes.INSTAGRAM
+                              break
+                          case 3:
+                              item.type = NewsTypes.FACEBOOK
+                              break
+                      }
+                  }
+                  else {
+                      item.type = NewsTypes.PAGE
+                  }*/
                 delete item.newsProvinces
                 delete item.category1
                 delete item.category2
