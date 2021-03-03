@@ -274,7 +274,7 @@ News.getInstagramPhotos = (result, body) => {
                         commentsCount: photo.node.edge_media_to_comment.count,
                     };
                 })
-                connection.query(`SELECT external_id as 'externalId' FROM pw_news WHERE type=?`, NewsTypes.INSTAGRAM, function (error, results) {
+                connection.query(`SELECT external_id as 'externalId' FROM pw_news WHERE type=?`, 2, function (error, results) {
                     const response = {
                         result: results,
                         photos: photos,
