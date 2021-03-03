@@ -284,9 +284,7 @@ News.getInstagramPhotos = (result, body) => {
                         return !parseResults.includes(photo.externalId)
                     })
                     if (photosToAdd.length > 0) {
-                        console.log(photosToAdd);
                         let newPhotosToAdd = photosToAdd.map(photo => {
-                            console.log(photo);
                             photo.type = 2;
                             photo.dateAdd = moment(photo.dateAdd).format('YYYY-MM-DDThh:mm:ss.ms');
                             return [lastId += 1, ...Object.values(photo)]
@@ -410,7 +408,7 @@ News.findAll = (result, body) => {
             const parseItems2 = results[1].map(item => {
                 switch (item.type) {
                     case 1:
-                        item.type = NewsTypes.INSTAGRAM
+                        item.type = NewsTypes.FACEBOOK
                         break
                     case 2:
                         item.type = NewsTypes.INSTAGRAM
