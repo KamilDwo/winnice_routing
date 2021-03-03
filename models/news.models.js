@@ -275,10 +275,13 @@ News.getInstagramPhotos = (result, body) => {
                     };
                 })
                 connection.query(`SELECT external_id as 'externalId' FROM pw_news WHERE type=?`, NewsTypes.INSTAGRAM, function (error, results) {
-                    console.log(results, 'photoz: ', photos);
+                    const response = {
+                        result: results,
+                        photos: photos,
+                    }
+                    result(response, null)
                 })
             }
-            result(profile, null)
         } catch (error) {
             result(null, error)
         }
