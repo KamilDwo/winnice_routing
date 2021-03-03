@@ -36,7 +36,8 @@ exports.getInstagramPhotos = function (req, res) {
             res.end()
         }
         else {
-            res.json(news)
+            res.status(200)
+            res.end()
         }
     }, req.body)
 }

@@ -7,6 +7,7 @@ const NewsTypes = require('../enums/news.enums')
 const InstagramApi = require('instagram-web-api')
 const {INSTAGRAM_USERNAME, INSTAGRAM_PASSWORD} = process.env
 const instagramClient = new InstagramApi({username: INSTAGRAM_USERNAME, password: INSTAGRAM_PASSWORD})
+const moment = require('moment')
 
 const News = news => {
     this.id = news.id
@@ -274,12 +275,33 @@ News.getInstagramPhotos = (result, body) => {
                         commentsCount: photo.node.edge_media_to_comment.count,
                     };
                 })
-                connection.query(`SELECT external_id as 'externalId' FROM pw_news WHERE type=?`, 2, function (error, results) {
-                    const response = {
-                        result: Object.values(results.result),
-                        photos: photos,
+                connection.query(`SELECT external_id as 'externalId', id FROM pw_news`, function (error, results) {
+                    let lastId = results[results.length - 1].id
+                    const parseResults = results.map(result => {
+                        return result.externalId
+                    })
+                    const photosToAdd = photos.filter(photo => {
+                        return !parseResults.includes(photo.externalId)
+                    })
+                    if (photosToAdd.length > 0) {
+                        console.log(photosToAdd);
+                        let newPhotosToAdd = photosToAdd.map(photo => {
+                            console.log(photo);
+                            photo.type = 2;
+                            photo.dateAdd = moment(photo.dateAdd).format('YYYY-MM-DDThh:mm:ss.ms');
+                            return [lastId += 1, ...Object.values(photo)]
+                        })
+
+                        connection.query(`INSERT INTO pw_news (id, external_id, image_1, type, date_add, url, is_active, likes_count, comments_count) VALUES ?`, [newPhotosToAdd], function (error2, results2) {
+                            if (error2) {
+                                result(null, { error: {message: error2.sqlMessage }})
+                            } else {
+                                result(results2, null)
+                            }
+                        })
+                    } else {
+                        result(null, { error: {message: 'No data to add' }})
                     }
-                    result(response, null)
                 })
             }
         } catch (error) {
