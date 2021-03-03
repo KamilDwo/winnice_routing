@@ -159,7 +159,10 @@ News.findAll = (result, body) => {
                         item.type = NewsTypes.INSTAGRAM
                         break
                     case 3:
-                        item.type = NewsTypes.FACEBOOK
+                        item.type = NewsTypes.TWITTER
+                        break
+                    case 5:
+                        item.type = NewsTypes.YOUTUBE
                         break
                 }
                 return item;
