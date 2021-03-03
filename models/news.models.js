@@ -276,7 +276,7 @@ News.getInstagramPhotos = (result, body) => {
                 })
                 connection.query(`SELECT external_id as 'externalId' FROM pw_news WHERE type=?`, 2, function (error, results) {
                     const response = {
-                        result: results,
+                        result: Object.values(results),
                         photos: photos,
                     }
                     result(response, null)
