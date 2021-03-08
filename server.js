@@ -21,7 +21,7 @@ const pathsRoutes = require('./routes/paths.routes')
 app.use('/api/v1/vineyards', vineyardsRoutes)
 app.use('/api/v1/news', newsRoutes)
 app.use('/api/v1/paths', pathsRoutes)
-app.use('/backoffice/login', (req, res) => {
+app.use('/api/backoffice/login', (req, res) => {
     res.send({
         token: 'test123'
     });
