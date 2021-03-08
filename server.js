@@ -22,6 +22,7 @@ app.use('/api/v1/vineyards', vineyardsRoutes)
 app.use('/api/v1/news', newsRoutes)
 app.use('/api/v1/paths', pathsRoutes)
 app.use('/api/backoffice/login', (req, res) => {
+    console.log(req);
     res.send({
         token: 'test123'
     });
