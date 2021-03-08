@@ -16,7 +16,7 @@ exports.getAllVineyards = function (req, res) {
 };
 
 exports.loginAdmin = function (req, res) {
-    BackOffice.loginAdmin(req.params.id, function (token, err) {
+    BackOffice.loginAdmin(function (token, err) {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
             res.status(500)

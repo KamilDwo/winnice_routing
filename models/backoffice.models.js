@@ -3,8 +3,6 @@
 require('dotenv').config()
 const connection = require('../config/db.config')
 const listToArray = require('../helpers/listToArray.helper')
-const speakingurl = require('speakingurl')
-const featuresIndex = require('../helpers/featuresIndex.helper')
 
 const BackOffice = news => {
     this.id = news.id
