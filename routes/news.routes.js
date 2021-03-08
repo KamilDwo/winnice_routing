@@ -9,5 +9,6 @@ const corsOptionsDelegate = require('../config/cors.config')
 router.post('/', cors(corsOptionsDelegate), newsController.findAll)
 router.post('/categories', cors(corsOptionsDelegate), newsController.findAllCategories)
 router.post('/instagram', cors(corsOptionsDelegate), newsController.getInstagramPhotos)
+router.post('/facebook', cors(corsOptionsDelegate), newsController.getFacebookNews)
 
 module.exports = router

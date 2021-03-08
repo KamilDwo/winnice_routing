@@ -42,3 +42,18 @@ exports.getInstagramPhotos = function (req, res) {
     }, req.body)
 }
 
+exports.getFacebookNews = function (req, res) {
+    News.getFacebookNews(function (news, err) {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.error.message)
+            res.status(500).json({ error: err.error.message })
+            res.end()
+        }
+        else {
+            res.status(200)
+            res.end()
+        }
+    }, req.body)
+}
+
+

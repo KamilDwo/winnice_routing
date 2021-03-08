@@ -8,6 +8,8 @@ const InstagramApi = require('instagram-web-api')
 const {INSTAGRAM_USERNAME, INSTAGRAM_PASSWORD} = process.env
 const instagramClient = new InstagramApi({username: INSTAGRAM_USERNAME, password: INSTAGRAM_PASSWORD})
 const moment = require('moment')
+const OAuth2 = require('oauth').OAuth2
+const axios = require('axios')
 
 const News = news => {
     this.id = news.id
@@ -34,6 +36,38 @@ News.findAllCategories = (result, body) => {
             result(parseItems, null)
         }
     })
+}
+
+News.getFacebookNews = (result, body) => {
+    try {
+        const getAccessToken = () => {
+            return new Promise((resolve, reject) => axios.get('https://graph.facebook.com/oauth/access_token?client_id=918657384983659&client_secret=8b33bca18a2780fe7b4ae42220a89929&grant_type=client_credentials')
+                .then(function (response) {
+                    resolve(response.data.access_token)
+                })
+                .catch(function (error) {
+                    reject(error)
+                })
+            )
+        }
+
+        getAccessToken().then(token => {
+            axios.get(`https://graph.facebook.com/v2.9/heartitpl/posts?access_token=${token}`)
+                .then(function (response) {
+                    result(response, null)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    result(null, {error: {message: error.response.data.error.message}})
+                })
+        }).catch(error => {
+            console.log('blad2', error.response);
+            result(null, {error: {message: error}})
+        })
+    } catch (error) {
+        console.log('blad1', error.response);
+        result(null, {error: {message: error}})
+    }
 }
 
 News.getInstagramPhotos = (result, body) => {
