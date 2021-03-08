@@ -11,7 +11,9 @@ const BackOffice = news => {
 }
 
 BackOffice.loginAdmin = (result, body) => {
-    result(Math.random(), null)
+    result({
+        token: Math.random()
+    }, null)
 }
 
 BackOffice.getAllVineyards = (result, body) => {
