@@ -8,6 +8,6 @@ const corsOptionsDelegate = require('../config/cors.config');
 
 router.get('/vineyards', cors(corsOptionsDelegate), backOfficeController.getAllVineyards);
 router.post('/login', cors(corsOptionsDelegate), backOfficeController.loginAdmin);
-router.post('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.getVineyardById);
+router.get('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.getVineyardById);
 
 module.exports = router;
