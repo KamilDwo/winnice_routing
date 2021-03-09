@@ -93,7 +93,7 @@ BackOffice.getVineyardById = (id, result) => {
                 }
                 return item
             });
-            result(parseItems, null)
+            result(parseItems[0], null)
         }
     })
 }
