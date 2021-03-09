@@ -26,8 +26,8 @@ BackOffice.getAllVineyards = (result, body) => {
         '';
 
     connection.query(`SELECT ${defaultFields} FROM pw_vineyard
-     OUTER JOIN pw_vineyard_paths ON pw_vineyard_paths.vineyard_id=pw_vineyard.id
-     OUTER JOIN pw_vineyard_organizations ON pw_vineyard_organizations.vineyard_id=pw_vineyard.id
+     FULL OUTER JOIN pw_vineyard_paths ON pw_vineyard_paths.vineyard_id=pw_vineyard.id
+     FULL OUTER JOIN pw_vineyard_organizations ON pw_vineyard_organizations.vineyard_id=pw_vineyard.id
       GROUP BY pw_vineyard.id`, function (error, results) {
         if (error) {
             result(error, null)
