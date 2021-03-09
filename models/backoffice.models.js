@@ -21,7 +21,7 @@ BackOffice.getAllVineyards = (result, body) => {
         ' pw_vineyard.date_add as \'dateAdd\',' +
         ' pw_vineyard.province_id as \'provinceId\',' +
         ' pw_vineyard.is_active as \'isActive\', ' +
-        ' COUNT(pw_vineyard_paths.id) as \'paths\' ' +
+        ' COUNT(pw_vineyard_paths.id) as \'paths\', ' +
         ' COUNT(pw_vineyard_organizations.id) as \'organizations\' ' +
         '';
 
