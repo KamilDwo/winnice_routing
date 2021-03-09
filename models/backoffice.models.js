@@ -22,7 +22,7 @@ BackOffice.getAllVineyards = (result, body) => {
         ' pw_vineyard.province_id as \'provinceId\',' +
         ' pw_vineyard.is_active as \'isActive\', ' +
         ' (SELECT COUNT(pw_vineyard_paths.id) as \'paths\' FROM pw_vineyard_paths WHERE pw_vineyard_paths.vineyard_id = pw_vineyard.id) as \'paths\', ' +
-        ' (SELECT COUNT(pw_vineyard_organizations.id) as \'organizations\' FROM pw_vineyard_organizations WHERE pw_vineyard_organizations.vineyard_id = pw_vineyard.id) as \'paths\'' +
+        ' (SELECT COUNT(pw_vineyard_organizations.id) as \'organizations\' FROM pw_vineyard_organizations WHERE pw_vineyard_organizations.vineyard_id = pw_vineyard.id) as \'organizations\'' +
         '';
 
     connection.query(`SELECT ${defaultFields} FROM pw_vineyard`, function (error, results) {
