@@ -21,8 +21,8 @@ BackOffice.getAllVineyards = (result, body) => {
         ' pw_vineyard.date_add as \'dateAdd\',' +
         ' pw_vineyard.province_id as \'provinceId\',' +
         ' pw_vineyard.is_active as \'isActive\', ' +
-        ' COUNT(pw_vineyard_organizations.id) as \'organisations\', ' +
-        ' COUNT(pw_vineyard_paths.id) as \'paths\' ' +
+        ' pw_vineyard_organizations.organization_id as \'organisations\', ' +
+        ' pw_vineyard_paths.path_id as \'paths\' ' +
         '';
 
     connection.query(`SELECT ${defaultFields} FROM pw_vineyard
