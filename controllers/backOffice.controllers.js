@@ -27,3 +27,16 @@ exports.loginAdmin = function (req, res) {
         }
     });
 };
+
+exports.getVineyardById = function (req, res) {
+    BackOffice.getVineyardById(req.params.id, function (vineyard, err) {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500)
+            res.end()
+        }
+        else {
+            res.json(vineyard);
+        }
+    });
+};
