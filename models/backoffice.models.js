@@ -21,14 +21,11 @@ BackOffice.getAllVineyards = (result, body) => {
         ' pw_vineyard.date_add as \'dateAdd\',' +
         ' pw_vineyard.province_id as \'provinceId\',' +
         ' pw_vineyard.is_active as \'isActive\', ' +
-        ' COUNT(pw_vineyard_paths.id) as \'paths\', ' +
-        ' COUNT(pw_vineyard_organizations.id) as \'organizations\' ' +
+        ' (SELECT COUNT(pw_vineyard_paths.id) as \'paths\' FROM pw_vineyard_paths WHERE pw_vineyard_paths.vineyard_id = pw_vineyard.id) as \'paths\', ' +
+        ' (SELECT COUNT(pw_vineyard_organizations.id) as \'organizations\' FROM pw_vineyard_organizations WHERE pw_vineyard_organizations.vineyard_id = pw_vineyard.id) as \'paths\'' +
         '';
 
-    connection.query(`SELECT ${defaultFields} FROM pw_vineyard
-     FULL OUTER JOIN pw_vineyard_paths ON pw_vineyard_paths.vineyard_id=pw_vineyard.id
-     FULL OUTER JOIN pw_vineyard_organizations ON pw_vineyard_organizations.vineyard_id=pw_vineyard.id
-      GROUP BY pw_vineyard.id`, function (error, results) {
+    connection.query(`SELECT ${defaultFields} FROM pw_vineyard`, function (error, results) {
         if (error) {
             result(error, null)
         } else {
