@@ -58,7 +58,7 @@ BackOffice.getVineyardById = (id, result) => {
         ' GROUP_CONCAT(pw_vineyard_paths.path_id) AS paths, ' +
         ' pw_vineyard.marker_id as \'markerId\''
 
-    connection.query(`SELECT ${defaultFields} FROM pw_vineyard LEFT JOIN pw_vineyard_paths ON pw_vineyard.id=pw_vineyard_paths.vineyard_id WHERE pw_vineyard.id = ? GROUP BY pw_vineyard.id`, id, function (error, results) {
+    connection.query(`SELECT ${defaultFields} FROM pw_vineyard LEFT JOIN pw_vineyard_paths ON pw_vineyard.id=pw_vineyard_paths.vineyard_id WHERE pw_vineyard.id = ? GROUP BY pw_vineyard.id LIMIT 1`, id, function (error, results) {
         if (error) {
             result(error, null)
         } else {
