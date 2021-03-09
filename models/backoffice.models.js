@@ -23,7 +23,7 @@ BackOffice.getAllVineyards = (result, body) => {
         ' pw_vineyard.province_id as \'provinceId\',' +
         ' pw_vineyard.is_active as \'isActive\', ' +
         ' GROUP_CONCAT(pw_vineyard_paths.path_id) AS paths,' +
-        ' GROUP_CONCAT(pw_vineyard_organizations.organization_id) AS paths' +
+        ' GROUP_CONCAT(pw_vineyard_organizations.organization_id) AS organizations' +
         '';
 
     connection.query(`SELECT ${defaultFields} FROM pw_vineyard
