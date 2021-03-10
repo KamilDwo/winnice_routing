@@ -102,7 +102,8 @@ BackOffice.getVineyardById = (id, result) => {
                 if (item.sale === 2) {
                     item.features.push(featuresIndex('sale'))
                 }
-                item.wineTypes = results[1];
+                item.wineTypes = results[2];
+                item.allWineTypes = results[1];
                 delete item.meals
                 delete item.events
                 delete item.additional
