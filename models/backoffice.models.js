@@ -34,6 +34,7 @@ const storage = multer.diskStorage({
 const upload = multer({storage: storage})
 
 BackOffice.uploadPhoto = (req, res, next) => {
+    console.log('zwrotka', req, res);
     upload.single('photo')
     res({
         image: req.file.path
