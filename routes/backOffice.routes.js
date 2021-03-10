@@ -10,6 +10,7 @@ router.get('/vineyards', cors(corsOptionsDelegate), backOfficeController.getAllV
 router.post('/login', cors(corsOptionsDelegate), backOfficeController.loginAdmin);
 router.get('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.getVineyardById);
 router.post('/upload_photo', cors(corsOptionsDelegate), (req, res, next) => {
+    console.log(req);
     let uploadFile = req.files.file
     const fileName = req.files.file.name
     uploadFile.mv(
