@@ -25,8 +25,8 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
     "mysql2": "^2.2.5",
+    "npm": "^7.6.2",
     "oauth": "0.9.10",
-    "path": "^0.12.7",
     "speakingurl": "^14.0.1"
   },
   "devDependencies": {
