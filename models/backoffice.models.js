@@ -58,7 +58,7 @@ BackOffice.getVineyardById = (id, result) => {
         ' pw_vineyard.additional, ' +
         ' pw_vineyard.accommodation, ' +
         ' pw_vineyard.sale, ' +
-        ' (SELECT pw_vineyard_winetypes.winetype_id, pw_vineyard_winetypes.winetype_id.winetype_type FROM pw_vineyard_winetypes WHERE pw_vineyard_winetypes.vineyard_id = pw_vineyard.id) as \'winetypes\'' +
+        ' (SELECT pw_vineyard_winetypes.winetype_id, pw_vineyard_winetypes.winetype_type FROM pw_vineyard_winetypes WHERE pw_vineyard_winetypes.vineyard_id = pw_vineyard.id) as \'winetypes\'' +
         '';
 
     connection.query(`SELECT ${defaultFields} FROM pw_vineyard LEFT JOIN pw_vineyard_paths ON pw_vineyard.id=pw_vineyard_paths.vineyard_id WHERE pw_vineyard.id = ? GROUP BY pw_vineyard.id LIMIT 1`, id, function (error, results) {
