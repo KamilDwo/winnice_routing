@@ -2,7 +2,6 @@
 
 require('dotenv').config()
 const connection = require('../config/db.config')
-const speakingurl = require('speakingurl')
 const listToArray = require('../helpers/listToArray.helper')
 const featuresIndex = require('../helpers/featuresIndex.helper')
 
@@ -60,7 +59,8 @@ BackOffice.getVineyardById = (id, result) => {
         ' pw_vineyard.sale';
 
 
-    const query = `SELECT ${defaultFields} FROM pw_vineyard WHERE pw_vineyard.id = ? LIMIT 1; SELECT pw_vineyard_winetypes.winetype_id, pw_vineyard_winetypes.winetype_type FROM pw_vineyard_winetypes WHERE pw_vineyard_winetypes.vineyard_id = ?`;
+    const query = `SELECT ${defaultFields} FROM pw_vineyard WHERE pw_vineyard.id = ? LIMIT 1;
+     SELECT pw_vineyard_winetypes.winetype_id FROM pw_vineyard_winetypes WHERE pw_vineyard_winetypes.vineyard_id = ? LEFT JOIN pw_winetypes ON pw_vineyard_winetypes.winetype_id=pw_winetypes.id GROUP BY pw_winetypes.id`;
 
     connection.query(query, [id, id], function (error, results) {
         if (error) {
@@ -71,9 +71,7 @@ BackOffice.getVineyardById = (id, result) => {
                 const location = item.location.split(',')
                 item.paths = listToArray(item.paths, ',')
                 item.isActive = item.isActive === 2
-                const objUrl = `${item.id}-${speakingurl(item.name, [])}`
                 item.location = [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))]
-                item.url = objUrl
                 if (item.accommodation === 2) {
                     item.features.push(featuresIndex('accommodation'))
                 }
@@ -96,6 +94,13 @@ BackOffice.getVineyardById = (id, result) => {
                     item.features.push(featuresIndex('sale'))
                 }
                 item.wineTypes = results[1];
+                delete item.meals
+                delete item.events
+                delete item.additional
+                delete item.accommodation
+                delete item.sightseeing
+                delete item.tastings
+                delete item.sale
                 return item
             });
             result(parseItems[0], null)
