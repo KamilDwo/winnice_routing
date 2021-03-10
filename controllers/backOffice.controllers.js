@@ -28,6 +28,19 @@ exports.loginAdmin = function (req, res) {
     });
 };
 
+exports.uploadPhoto = function (req, res) {
+    BackOffice.uploadPhoto(function (photo, err) {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500)
+            res.end()
+        }
+        else {
+            res.json(photo);
+        }
+    });
+};
+
 exports.getVineyardById = function (req, res) {
     BackOffice.getVineyardById(req.params.id, function (vineyard, err) {
         if (err) {
