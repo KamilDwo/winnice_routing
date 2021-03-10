@@ -11,8 +11,8 @@ router.post('/login', cors(corsOptionsDelegate), backOfficeController.loginAdmin
 router.get('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.getVineyardById);
 router.post('/upload_photo', cors(corsOptionsDelegate), (req, res, next) => {
     console.log(`${__dirname}`);
-    let uploadFile = req.files.file
-    const fileName = req.files.file.name
+    let uploadFile = req.file.file
+    const fileName = req.file.file.name
     uploadFile.mv(
         `${__dirname}/public/files/${fileName}`,
         function (err) {
@@ -20,7 +20,7 @@ router.post('/upload_photo', cors(corsOptionsDelegate), (req, res, next) => {
                 return res.status(500).send(err)
             }
             res.json({
-                file: `public/${req.files.file.name}`,
+                file: `public/${req.file.file.name}`,
             })
         },
     )
