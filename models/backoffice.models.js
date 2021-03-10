@@ -17,7 +17,6 @@ BackOffice.loginAdmin = (result, body) => {
 }
 
 BackOffice.uploadPhoto = (req, body) => {
-    console.log('dane: ', req, body);
     req({
         image: req
     }, null)

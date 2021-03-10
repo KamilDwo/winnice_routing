@@ -7,13 +7,14 @@ const cors = require('cors');
 const corsOptionsDelegate = require('../config/cors.config');
 const multer  = require('multer')
 const path = require('path')
+const speakingurl = require('speakingurl')
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'assets/uploads')
     },
     filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+        cb(null, speakingurl(file.originalname, []) + '-' + Date.now() + path.extname(file.originalname))
     }
 });
 
