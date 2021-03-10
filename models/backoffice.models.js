@@ -3,8 +3,6 @@
 require('dotenv').config()
 const connection = require('../config/db.config')
 const featuresIndex = require('../helpers/featuresIndex.helper')
-const multer = require('multer')
-const path = require('path')
 
 const BackOffice = news => {
     this.id = news.id
@@ -18,27 +16,20 @@ BackOffice.loginAdmin = (result, body) => {
     }, null)
 }
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'assets/uploads')
-    },
-    filename: function (req, file, cb) {
-        // You could rename the file name
-        // cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
-
-        // You could use the original name
-        cb(null, file.originalname)
-    }
-});
-
-const upload = multer({storage: storage})
-
 BackOffice.uploadPhoto = (req, res, next) => {
-    console.log('zwrotka', req, res);
-    upload.single('photo')
-    res({
-        image: req.file.path
-    }, null)
+    let uploadFile = req.files.file
+    const fileName = req.files.file.name
+    uploadFile.mv(
+        `${__dirname}/public/files/${fileName}`,
+        function (err) {
+            if (err) {
+                return res.status(500).send(err)
+            }
+            res({
+                photo: `public/${req.files.file.name}`,
+            })
+        },
+    )
 }
 
 BackOffice.getAllVineyards = (result, body) => {
