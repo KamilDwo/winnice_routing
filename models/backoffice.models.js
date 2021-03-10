@@ -86,7 +86,7 @@ BackOffice.getVineyardById = (id, result) => {
     SELECT ${defaultFields4} FROM pw_vineyard_paths LEFT JOIN pw_paths ON pw_vineyard_paths.organization_id=pw_paths.id WHERE pw_vineyard_paths.vineyard_id = ? GROUP BY pw_vineyard_paths.path_id;
      `;
 
-    connection.query(query, [id, id, id], function (error, results) {
+    connection.query(query, [id, id, id, id], function (error, results) {
         if (error) {
             result(error, null)
         } else {
