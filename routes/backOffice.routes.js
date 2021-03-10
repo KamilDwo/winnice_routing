@@ -5,25 +5,31 @@ const router = express.Router();
 const backOfficeController = require('../controllers/backOffice.controllers');
 const cors = require('cors');
 const corsOptionsDelegate = require('../config/cors.config');
+const multer  = require('multer')
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'assets/uploads')
+    },
+    filename: function (req, file, cb) {
+        // You could rename the file name
+        // cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
+
+        // You could use the original name
+        cb(null, file.originalname)
+    }
+});
+
+const upload = multer({storage: storage})
 
 router.get('/vineyards', cors(corsOptionsDelegate), backOfficeController.getAllVineyards);
 router.post('/login', cors(corsOptionsDelegate), backOfficeController.loginAdmin);
 router.get('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.getVineyardById);
-router.post('/upload_photo', cors(corsOptionsDelegate), (req, res, next) => {
+router.post('/upload_photo', cors(corsOptionsDelegate), upload.single('photo'), (req, res, next) => {
     console.log(`${__dirname}`);
-    let uploadFile = req.file.file
-    const fileName = req.file.file.name
-    uploadFile.mv(
-        `${__dirname}/public/files/${fileName}`,
-        function (err) {
-            if (err) {
-                return res.status(500).send(err)
-            }
-            res.json({
-                file: `public/${req.file.file.name}`,
-            })
-        },
-    )
+    return res.json({
+        image: req.file.path
+    });
 })
 
 module.exports = router;

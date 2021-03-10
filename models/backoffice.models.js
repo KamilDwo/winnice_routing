@@ -16,20 +16,10 @@ BackOffice.loginAdmin = (result, body) => {
     }, null)
 }
 
-BackOffice.uploadPhoto = (req, res, next) => {
-    let uploadFile = req.files.file
-    const fileName = req.files.file.name
-    uploadFile.mv(
-        `${__dirname}/public/files/${fileName}`,
-        function (err) {
-            if (err) {
-                return res.status(500).send(err)
-            }
-            res({
-                photo: `public/${req.files.file.name}`,
-            })
-        },
-    )
+BackOffice.uploadPhoto = (result, body) => {
+    result({
+        image: null
+    }, null)
 }
 
 BackOffice.getAllVineyards = (result, body) => {
