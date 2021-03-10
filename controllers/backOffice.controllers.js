@@ -30,6 +30,7 @@ exports.loginAdmin = function (req, res) {
 
 exports.uploadPhoto = function (req, res) {
     BackOffice.uploadPhoto(function (photo, err) {
+        console.log(photo, err);
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
             res.status(500)

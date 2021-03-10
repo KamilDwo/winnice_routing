@@ -4,6 +4,7 @@ require('dotenv').config()
 const connection = require('../config/db.config')
 const featuresIndex = require('../helpers/featuresIndex.helper')
 const multer = require('multer')
+const path = require('path')
 
 const BackOffice = news => {
     this.id = news.id
