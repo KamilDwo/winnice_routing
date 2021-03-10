@@ -63,6 +63,7 @@ BackOffice.getVineyardById = (id, result) => {
     const query = `SELECT ${defaultFields} FROM pw_vineyard WHERE pw_vineyard.id = ? LIMIT 1;
      SELECT
       pw_winetypes.title,
+      pw_winetypes.id,
        pw_winetypes.colour,
         pw_winetypes.colour,
         pw_winetypes.is_important as \'isImportant\',
