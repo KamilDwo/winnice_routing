@@ -61,6 +61,7 @@ BackOffice.getVineyardById = (id, result) => {
 
 
     const query = `SELECT ${defaultFields} FROM pw_vineyard WHERE pw_vineyard.id = ? LIMIT 1;
+    SELECT * FROM pw_winetypes as \'allWineTypes\';
      SELECT
       pw_winetypes.title,
       pw_winetypes.id,
@@ -69,7 +70,7 @@ BackOffice.getVineyardById = (id, result) => {
         pw_winetypes.is_important as \'isImportant\',
         pw_winetypes.is_active as \'isActive\',
         pw_winetypes.sort
-         FROM pw_vineyard_winetypes LEFT JOIN pw_winetypes ON pw_vineyard_winetypes.winetype_id=pw_winetypes.id WHERE pw_vineyard_winetypes.vineyard_id = ? GROUP BY pw_vineyard_winetypes.winetype_id`;
+         FROM pw_vineyard_winetypes WHERE pw_vineyard_winetypes.vineyard_id = ?`;
 
     connection.query(query, [id, id], function (error, results) {
         if (error) {
