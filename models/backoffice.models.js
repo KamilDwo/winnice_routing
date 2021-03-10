@@ -53,6 +53,7 @@ BackOffice.getVineyardById = (id, result) => {
         ' pw_vineyard.elevation, ' +
         ' pw_vineyard.sightseeing, ' +
         ' pw_vineyard.meals, ' +
+        ' pw_vineyard.sqm, ' +
         ' pw_vineyard.events, ' +
         ' pw_vineyard.additional, ' +
         ' pw_vineyard.accommodation, ' +
