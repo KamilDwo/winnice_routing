@@ -6,6 +6,7 @@ const backOfficeController = require('../controllers/backOffice.controllers');
 const cors = require('cors');
 const corsOptionsDelegate = require('../config/cors.config');
 const multer  = require('multer')
+const path = require('path')
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
