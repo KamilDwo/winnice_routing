@@ -41,23 +41,23 @@ BackOffice.getAllVineyards = (result, body) => {
 }
 
 BackOffice.getVineyardById = (id, result) => {
-    const defaultFields = 'pw_vineyard.id,' +
-        ' pw_vineyard.name,' +
-        ' pw_vineyard.date_add as \'dateAdd\',' +
-        ' pw_vineyard.location,' +
-        ' pw_vineyard.province_id as \'provinceId\',' +
-        ' pw_vineyard.image_1 as \'image1\',' +
-        ' pw_vineyard.tastings, ' +
-        ' pw_vineyard.year_open as \'yearOpen\', ' +
-        ' pw_vineyard.owners, ' +
-        ' pw_vineyard.elevation, ' +
-        ' pw_vineyard.sightseeing, ' +
-        ' pw_vineyard.meals, ' +
-        ' pw_vineyard.sqm, ' +
-        ' pw_vineyard.events, ' +
-        ' pw_vineyard.additional, ' +
-        ' pw_vineyard.accommodation, ' +
-        ' pw_vineyard.sale';
+    const defaultFields = `pw_vineyard.id,
+        pw_vineyard.name,
+       pw_vineyard.date_add as 'dateAdd',
+        pw_vineyard.location,' +
+        pw_vineyard.province_id as 'provinceId',
+         pw_vineyard.image_1 as 'image1',
+         pw_vineyard.tastings, ' +
+         pw_vineyard.year_open as 'yearOpen',
+        pw_vineyard.owners, 
+         pw_vineyard.elevation, 
+         pw_vineyard.sightseeing,
+         pw_vineyard.meals,
+        pw_vineyard.sqm, 
+       pw_vineyard.events, 
+         pw_vineyard.additional,
+        pw_vineyard.accommodation, 
+       pw_vineyard.sale`
 
     const defaultFields2 = `pw_winetypes.title,
         pw_winetypes.id,
@@ -67,12 +67,18 @@ BackOffice.getVineyardById = (id, result) => {
         pw_winetypes.is_active as 'isActive',
         pw_winetypes.sort`;
 
+    const defaultFields3 = `pw_organizations.name,
+        pw_organizations.id,
+        pw_organizations.is_active as 'isActive',
+        pw_organizations.sort`;
 
     const query = `SELECT ${defaultFields} FROM pw_vineyard WHERE pw_vineyard.id = ? LIMIT 1;
     SELECT * FROM pw_winetypes;
     SELECT * FROM pw_organizations;
     SELECT * FROM pw_paths;
-    SELECT ${defaultFields2} FROM pw_vineyard_winetypes LEFT JOIN pw_winetypes ON pw_vineyard_winetypes.winetype_id=pw_winetypes.id WHERE pw_vineyard_winetypes.vineyard_id = ? GROUP BY pw_vineyard_winetypes.winetype_id`;
+    SELECT ${defaultFields2} FROM pw_vineyard_winetypes LEFT JOIN pw_winetypes ON pw_vineyard_winetypes.winetype_id=pw_winetypes.id WHERE pw_vineyard_winetypes.vineyard_id = ? GROUP BY pw_vineyard_winetypes.winetype_id;
+    SELECT ${defaultFields3} FROM pw_vineyard_organizations LEFT JOIN pw_organizations ON pw_vineyard_organizations.organization_id=pw_organizations.id WHERE pw_vineyard_organizations.vineyard_id = ? GROUP BY pw_vineyard_organizations.organization_id;
+     `;
 
     connection.query(query, [id, id], function (error, results) {
         if (error) {
@@ -109,6 +115,7 @@ BackOffice.getVineyardById = (id, result) => {
                 item.wineTypes = results[4]
                 item.allOrganizations = results[2]
                 item.allPaths = results[3]
+                item.organizations = results[5];
                 delete item.meals
                 delete item.events
                 delete item.additional
