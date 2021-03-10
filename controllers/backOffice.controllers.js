@@ -29,14 +29,14 @@ exports.loginAdmin = function (req, res) {
 };
 
 exports.uploadPhoto = function (req, res) {
-    BackOffice.uploadPhoto(function (photo, err, req) {
+    BackOffice.uploadPhoto(function (req, err) {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
             res.status(500)
             res.end()
         }
         else {
-            res.json(photo);
+            res.json(req);
         }
     });
 };
