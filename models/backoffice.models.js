@@ -49,14 +49,17 @@ BackOffice.getVineyardById = (id, result) => {
         ' pw_vineyard.province_id as \'provinceId\',' +
         ' pw_vineyard.image_1 as \'image1\',' +
         ' pw_vineyard.tastings, ' +
+        ' pw_vineyard.year_open as \'yearOpen\', ' +
+        ' pw_vineyard.owners, ' +
+        ' pw_vineyard.elevation, ' +
         ' pw_vineyard.sightseeing, ' +
         ' pw_vineyard.meals, ' +
         ' pw_vineyard.events, ' +
         ' pw_vineyard.additional, ' +
         ' pw_vineyard.accommodation, ' +
         ' pw_vineyard.sale, ' +
-        ' GROUP_CONCAT(pw_vineyard_paths.path_id) AS paths, ' +
-        ' pw_vineyard.marker_id as \'markerId\''
+        ' (SELECT pw_vineyard_winetypes.winetype_id, pw_vineyard_winetypes.winetype_id.winetype_type FROM pw_vineyard_winetypes WHERE pw_vineyard_winetypes.vineyard_id = pw_vineyard.id) as \'winetypes\'' +
+        '';
 
     connection.query(`SELECT ${defaultFields} FROM pw_vineyard LEFT JOIN pw_vineyard_paths ON pw_vineyard.id=pw_vineyard_paths.vineyard_id WHERE pw_vineyard.id = ? GROUP BY pw_vineyard.id LIMIT 1`, id, function (error, results) {
         if (error) {
