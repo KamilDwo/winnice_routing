@@ -61,9 +61,8 @@ BackOffice.getVineyardById = (id, result) => {
 
 
     const query = `SELECT ${defaultFields} FROM pw_vineyard WHERE pw_vineyard.id = ? LIMIT 1;
-    SELECT * FROM pw_winetypes as \'allWineTypes\';
-     SELECT
-      pw_winetypes.title,
+    SELECT id, title FROM pw_winetypes as \'allWineTypes\';
+     SELECT pw_winetypes.title,
       pw_winetypes.id,
        pw_winetypes.colour,
         pw_winetypes.colour,
