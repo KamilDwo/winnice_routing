@@ -64,7 +64,7 @@ BackOffice.getVineyardById = (id, result) => {
       pw_winetypes.title,
        pw_winetypes.colour,
         pw_winetypes.colour,
-        pw_winetypes.is_important as \'isImportant\'
+        pw_winetypes.is_important as \'isImportant\',
         pw_winetypes.is_active as \'isActive\',
         pw_winetypes.sort
          FROM pw_vineyard_winetypes LEFT JOIN pw_winetypes ON pw_vineyard_winetypes.winetype_id=pw_winetypes.id WHERE pw_vineyard_winetypes.vineyard_id = ? GROUP BY pw_vineyard_winetypes.winetype_id`;
