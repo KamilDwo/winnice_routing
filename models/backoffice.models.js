@@ -57,15 +57,16 @@ BackOffice.getVineyardById = (id, result) => {
         ' pw_vineyard.events, ' +
         ' pw_vineyard.additional, ' +
         ' pw_vineyard.accommodation, ' +
-        ' pw_vineyard.sale, ' +
-        ' (SELECT pw_vineyard_winetypes.winetype_id, pw_vineyard_winetypes.winetype_type FROM pw_vineyard_winetypes WHERE pw_vineyard_winetypes.vineyard_id = pw_vineyard.id) as \'winetypes\'' +
-        '';
+        ' pw_vineyard.sale';
 
-    connection.query(`SELECT ${defaultFields} FROM pw_vineyard LEFT JOIN pw_vineyard_paths ON pw_vineyard.id=pw_vineyard_paths.vineyard_id WHERE pw_vineyard.id = ? GROUP BY pw_vineyard.id LIMIT 1`, id, function (error, results) {
+
+    const query = `SELECT ${defaultFields} FROM pw_vineyard WHERE pw_vineyard.id = ? LIMIT 1; SELECT pw_vineyard_winetypes.winetype_id, pw_vineyard_winetypes.winetype_type FROM pw_vineyard_winetypes WHERE pw_vineyard_winetypes.vineyard_id = ?`;
+
+    connection.query(query, [id, id], function (error, results) {
         if (error) {
             result(error, null)
         } else {
-            const parseItems = results.map(item => {
+            const parseItems = results[0].map(item => {
                 item.features = []
                 const location = item.location.split(',')
                 item.paths = listToArray(item.paths, ',')
@@ -94,6 +95,7 @@ BackOffice.getVineyardById = (id, result) => {
                 if (item.sale === 2) {
                     item.features.push(featuresIndex('sale'))
                 }
+                item.wineTypes = results[1];
                 return item
             });
             result(parseItems[0], null)
