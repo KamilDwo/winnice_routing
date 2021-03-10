@@ -72,12 +72,18 @@ BackOffice.getVineyardById = (id, result) => {
         pw_organizations.is_active as 'isActive',
         pw_organizations.sort`;
 
+    const defaultFields4 = `pw_paths.name,
+        pw_paths.id,
+        pw_paths.is_active as 'isActive',
+        pw_paths.sort`;
+
     const query = `SELECT ${defaultFields} FROM pw_vineyard WHERE pw_vineyard.id = ? LIMIT 1;
     SELECT * FROM pw_winetypes;
     SELECT * FROM pw_organizations;
     SELECT * FROM pw_paths;
     SELECT ${defaultFields2} FROM pw_vineyard_winetypes LEFT JOIN pw_winetypes ON pw_vineyard_winetypes.winetype_id=pw_winetypes.id WHERE pw_vineyard_winetypes.vineyard_id = ? GROUP BY pw_vineyard_winetypes.winetype_id;
     SELECT ${defaultFields3} FROM pw_vineyard_organizations LEFT JOIN pw_organizations ON pw_vineyard_organizations.organization_id=pw_organizations.id WHERE pw_vineyard_organizations.vineyard_id = ? GROUP BY pw_vineyard_organizations.organization_id;
+    SELECT ${defaultFields4} FROM pw_vineyard_paths LEFT JOIN pw_paths ON pw_vineyard_paths.organization_id=pw_paths.id WHERE pw_vineyard_paths.vineyard_id = ? GROUP BY pw_vineyard_paths.path_id;
      `;
 
     connection.query(query, [id, id, id], function (error, results) {
@@ -87,7 +93,6 @@ BackOffice.getVineyardById = (id, result) => {
             const parseItems = results[0].map(item => {
                 item.features = []
                 const location = item.location.split(',')
-                item.paths = listToArray(item.paths, ',')
                 item.isActive = item.isActive === 2
                 item.location = [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))]
                 if (item.accommodation === 2) {
@@ -116,6 +121,7 @@ BackOffice.getVineyardById = (id, result) => {
                 item.allOrganizations = results[2]
                 item.allPaths = results[3]
                 item.organizations = results[5];
+                item.paths = results[6];
                 delete item.meals
                 delete item.events
                 delete item.additional
