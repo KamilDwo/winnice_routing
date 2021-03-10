@@ -62,6 +62,8 @@ BackOffice.getVineyardById = (id, result) => {
 
     const query = `SELECT ${defaultFields} FROM pw_vineyard WHERE pw_vineyard.id = ? LIMIT 1;
     SELECT * FROM pw_winetypes;
+    SELECT * FROM pw_organizations;
+    SELECT * FROM pw_paths;
      SELECT
       pw_winetypes.title,
       pw_winetypes.id,
@@ -69,8 +71,11 @@ BackOffice.getVineyardById = (id, result) => {
         pw_winetypes.colour,
         pw_winetypes.is_important as \'isImportant\',
         pw_winetypes.is_active as \'isActive\',
+        pw_vineyard_organizations.organization_id as \'organizationId\',
         pw_winetypes.sort
-         FROM pw_vineyard_winetypes LEFT JOIN pw_winetypes ON pw_vineyard_winetypes.winetype_id=pw_winetypes.id WHERE pw_vineyard_winetypes.vineyard_id = ? GROUP BY pw_vineyard_winetypes.winetype_id`;
+         FROM pw_vineyard_winetypes LEFT JOIN pw_winetypes ON pw_vineyard_winetypes.winetype_id=pw_winetypes.id
+          LEFT JOIN pw_vineyard_organizations ON pw_vineyard_organizations.vineyard_id=pw_vineyard.id
+          WHERE pw_vineyard_winetypes.vineyard_id = ? GROUP BY pw_vineyard_winetypes.winetype_id`;
 
     connection.query(query, [id, id], function (error, results) {
         if (error) {
@@ -104,7 +109,9 @@ BackOffice.getVineyardById = (id, result) => {
                     item.features.push(featuresIndex('sale'))
                 }
                 item.allWineTypes = results[1]
-                item.wineTypes = results[2]
+                item.wineTypes = results[4]
+                item.allOrganizations = results[2]
+                item.allPaths = results[3]
                 delete item.meals
                 delete item.events
                 delete item.additional
