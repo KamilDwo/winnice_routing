@@ -39,9 +39,20 @@ BackOffice.getAllVineyards = (result, body) => {
     })
 }
 
-BackOffice.updateVineyardById = (id, result) => {
-    console.log(id, result);
-    result({}, null);
+BackOffice.updateVineyardById = (body, result) => {
+    const { id, name, owners } = body.values;
+
+    const setData = `
+    name=?,
+    owners=?
+    `;
+    connection.query(`UPDATE pw_vineyard SET ${setData} WHERE id=?`, [name, owners, id], function (error) {
+        if (error) {
+            result(error, null)
+        } else {
+            result({}, null);
+        }
+    })
 }
 
 BackOffice.getVineyardById = (id, result) => {

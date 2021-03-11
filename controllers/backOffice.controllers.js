@@ -49,7 +49,8 @@ exports.updateVineyardById = function (req, res) {
             res.end()
         }
         else {
-            res.json(vineyard);
+            res.status(200)
+            res.end()
         }
     });
 };
