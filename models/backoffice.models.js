@@ -41,20 +41,38 @@ BackOffice.getAllVineyards = (result, body) => {
     })
 }
 
+function toDataURL(url, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+        const reader = new FileReader();
+        reader.onloadend = function() {
+            callback(reader.result);
+        }
+        reader.readAsDataURL(xhr.response);
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
+}
+
+
 BackOffice.uploadVineyardImage = (req, result) => {
     const post  = {
         vineyardId: req.body.vineyardId,
         photoFile: req.file.filename
     }
+    console.log(req.file);
     connection.query("INSERT INTO vineyards_photos SET ?", post, function (error) {
         if (error) {
             result(null, error)
         } else {
+            toDataURL(`https://polskiewinnice.ovh/image/${req.file.filename}`, function(dataUrl) {
+                console.log('RESULT:', dataUrl)
+            })
             const moreFile = {
-                ...req.file,
-                name: "dsc_3453-jpg-1615495342362.jpg",
-                thumbUrl: "dsc_3453-jpg-1615495342362.jpg",
-                uid: 0.07078520896212526
+                filename: req.file.filename,
+                thumbUrl: req.file.filename,
+                uid: Math.random() + Math.random() + Math.random()
             }
             result(moreFile, null)
         }
