@@ -41,7 +41,7 @@ BackOffice.getAllVineyards = (result, body) => {
 
 BackOffice.updateVineyardById = (id, result) => {
     console.log(id, result);
-    result({}, null);
+    result(id, null);
 }
 
 BackOffice.getVineyardById = (id, result) => {

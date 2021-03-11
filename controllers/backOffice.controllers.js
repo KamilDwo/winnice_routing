@@ -29,7 +29,7 @@ exports.loginAdmin = function (req, res) {
 };
 
 exports.getVineyardById = function (req, res) {
-    BackOffice.getVineyardById(req, function (vineyard, err) {
+    BackOffice.getVineyardById(req.params.id, function (vineyard, err) {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
             res.status(500)
@@ -42,7 +42,7 @@ exports.getVineyardById = function (req, res) {
 };
 
 exports.updateVineyardById = function (req, res) {
-    BackOffice.updateVineyardById(req, function (vineyard, err) {
+    BackOffice.updateVineyardById(req.params.id, function (vineyard, err) {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
             res.status(500)

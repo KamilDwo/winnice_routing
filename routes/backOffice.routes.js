@@ -23,10 +23,11 @@ const upload = multer({storage: storage})
 router.get('/vineyards', cors(corsOptionsDelegate), backOfficeController.getAllVineyards);
 router.post('/login', cors(corsOptionsDelegate), backOfficeController.loginAdmin);
 router.get('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.getVineyardById);
-router.post('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.updateVineyardById);
-router.post('/upload_photo', cors(corsOptionsDelegate), upload.single('photo'), (req, res) => res.json({
+router.post('/upload_photo', cors(corsOptionsDelegate), upload.single('photo'), (req, res, next) => res.json({
     ...req.file,
     file: req.file.path,
 }))
 
-module.exports = router
+router.post('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.updateVineyardById);
+
+module.exports = router;
