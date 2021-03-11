@@ -41,6 +41,19 @@ exports.getVineyardById = function (req, res) {
     });
 };
 
+exports.uploadVineyardImage = function (req, res) {
+    BackOffice.uploadVineyardImage(req, function (file, err) {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500)
+            res.end()
+        }
+        else {
+            res.json(file);
+        }
+    });
+};
+
 exports.updateVineyardById = function (req, res) {
     BackOffice.updateVineyardById(req, function (vineyard, err) {
         if (err) {
