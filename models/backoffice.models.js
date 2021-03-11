@@ -39,6 +39,11 @@ BackOffice.getAllVineyards = (result, body) => {
     })
 }
 
+BackOffice.updateVineyardById = (id, result) => {
+    console.log(id, result);
+    result({}, null);
+}
+
 BackOffice.getVineyardById = (id, result) => {
     const defaultFields = `pw_vineyard.id,
         pw_vineyard.name,

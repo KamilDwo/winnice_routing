@@ -30,5 +30,6 @@ router.post('/upload_photo', cors(corsOptionsDelegate), upload.single('photo'), 
         file: req.file.path,
     });
 });
+router.post('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.updateVineyardById);
 
 module.exports = router;
