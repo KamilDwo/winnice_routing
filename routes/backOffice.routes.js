@@ -11,7 +11,7 @@ const speakingurl = require('speakingurl')
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'assets/uploads')
+        cb(null, 'public/images')
     },
     filename: function (req, file, cb) {
         cb(null, speakingurl(file.originalname, []) + '-' + Date.now() + path.extname(file.originalname))
