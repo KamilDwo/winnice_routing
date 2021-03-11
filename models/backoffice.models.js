@@ -20,7 +20,7 @@ BackOffice.getAllVineyards = (result, body) => {
     const defaultFields = 'pw_vineyard.id,' +
         ' pw_vineyard.name,' +
         ' pw_vineyard.date_add as \'dateAdd\',' +
-        ' pw_vineyard.province_id as \'provinceId\',' +
+        ' pw_vineyard.provinceId,' +
         ' pw_vineyard.is_active as \'isActive\', ' +
         ' (SELECT COUNT(pw_vineyard_paths.id) as \'paths\' FROM pw_vineyard_paths WHERE pw_vineyard_paths.vineyard_id = pw_vineyard.id) as \'paths\', ' +
         ' (SELECT COUNT(pw_vineyard_organizations.id) as \'organizations\' FROM pw_vineyard_organizations WHERE pw_vineyard_organizations.vineyard_id = pw_vineyard.id) as \'organizations\'' +
@@ -41,13 +41,16 @@ BackOffice.getAllVineyards = (result, body) => {
 
 BackOffice.updateVineyardById = (req, result) => {
     const { id } = req.body;
-    const { name, owners } = req.body.values;
+    const { name, owners, yearOpen, sqm, postal } = req.body.values;
 
     const setData = `
     name=?,
     owners=?
+    yearOpen=?
+    sqm=?
+    postal=?
     `;
-    connection.query(`UPDATE pw_vineyard SET ${setData} WHERE id=?`, [name, owners, id], function (error) {
+    connection.query(`UPDATE pw_vineyard SET ${setData} WHERE id=?`, [name, owners, yearOpen, sqm, postal, id], function (error) {
         if (error) {
             result(error, null)
         } else {
@@ -61,10 +64,10 @@ BackOffice.getVineyardById = (id, result) => {
         pw_vineyard.name,
        pw_vineyard.date_add as 'dateAdd',
         pw_vineyard.location,
-        pw_vineyard.province_id as 'provinceId',
+        pw_vineyard.provinceId,
          pw_vineyard.image_1 as 'image1',
          pw_vineyard.tastings,
-         pw_vineyard.year_open as 'yearOpen',
+         pw_vineyard.yearOpen,
         pw_vineyard.owners, 
          pw_vineyard.elevation, 
          pw_vineyard.sightseeing,

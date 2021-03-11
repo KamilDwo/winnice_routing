@@ -14,7 +14,7 @@ const defaultFields = 'pw_vineyard.id,' +
     ' pw_vineyard.name,' +
     ' pw_vineyard.date_add as \'dateAdd\',' +
     ' pw_vineyard.location,' +
-    ' pw_vineyard.province_id as \'provinceId\',' +
+    ' pw_vineyard.provinceId,' +
     ' pw_vineyard.image_1 as \'image1\',' +
     ' pw_vineyard.tastings, ' +
     ' pw_vineyard.sightseeing, ' +
