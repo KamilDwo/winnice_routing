@@ -70,15 +70,30 @@ BackOffice.updateVineyardById = (req, result) => {
         groundType, description,
     } = req.body.values;
     const location = `${locationX}, ${locationY}`;
-    const post  = {
-        name
+    const query = 'UPDATE vineyards SET ? WHERE id=?';
+    const post = {
+        name: name,
+        owners: owners,
+        yearOpen: yearOpen,
+        sqm: sqm,
+        postal: postal,
+        provinceId: provinceId,
+        address: address,
+        city: city,
+        locationX: locationX,
+        locationY: locationY,
+        phone: phone,
+        email: email,
+        www: www,
+        facebook: facebook,
+        instagram: instagram,
+        groundTilt: groundTilt,
+        elevation: elevation,
+        groundTiltDirection: groundTiltDirection,
+        groundType: groundType,
+        description: description,
     }
-
-    console.log(name, id);
-
-    connection.query(`UPDATE vineyards SET ? WHERE id=?`, [
-        name, id,
-    ], function (error) {
+    connection.query(query, [post, id], function(error, rows) {
         if (error) {
             result(error, null)
         } else {
