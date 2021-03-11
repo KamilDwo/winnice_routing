@@ -47,11 +47,10 @@ BackOffice.uploadVineyardImage = (req, result) => {
         vineyardId: req.body.vineyardId,
         photoFile: req.file.filename
     }
-    console.log(req.file);
     connection.query("INSERT INTO vineyards_photos SET ?", post, function (error) {
         if (error) {
             result(null, error)
-        } else {        
+        } else {
             const moreFile = {
                 filename: req.file.filename,
                 thumbUrl: `https://polskiewinnice.ovh/images/${req.file.filename}`,
