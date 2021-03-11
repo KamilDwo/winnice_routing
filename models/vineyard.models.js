@@ -21,7 +21,7 @@ const defaultFields = `vineyards.id,
      vineyards.events, 
      vineyards.additional,
      vineyards.accommodation,
-     vineyards.sale
+     vineyards.sale,
     GROUP_CONCAT(vineyards_paths.pathId) AS paths
     `
 
