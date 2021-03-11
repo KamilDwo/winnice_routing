@@ -24,7 +24,10 @@ router.get('/vineyards', cors(corsOptionsDelegate), backOfficeController.getAllV
 router.post('/login', cors(corsOptionsDelegate), backOfficeController.loginAdmin);
 router.get('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.getVineyardById);
 router.post('/upload_photo', cors(corsOptionsDelegate), upload.single('photo'), (req, res, next) => {
-    return res.json(req);
+    console.log(req);
+    return res.json({
+        image: req.file.path
+    });
 });
 
 module.exports = router;
