@@ -27,7 +27,7 @@ router.post('/upload_photo', cors(corsOptionsDelegate), upload.single('photo'), 
     console.log(req.file);
     return res.json({
         ...req.file,
-        file: 'dupa',
+        file: req.file.path,
     });
 });
 
