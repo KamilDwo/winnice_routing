@@ -40,9 +40,10 @@ BackOffice.getAllVineyards = (result, body) => {
 }
 
 BackOffice.updateVineyardById = (body, result) => {
-    const { name, owners } = body.values;
     console.log(body.values);
     console.log('id: ', body.id);
+    const { name, owners } = body.values;
+
     const setData = `
     name=?,
     owners=?
