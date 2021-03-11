@@ -16,13 +16,6 @@ BackOffice.loginAdmin = (result, body) => {
     }, null)
 }
 
-BackOffice.uploadPhoto = (req, body) => {
-    console.log(req);
-    req({
-        image: req
-    }, null)
-}
-
 BackOffice.getAllVineyards = (result, body) => {
     const defaultFields = 'pw_vineyard.id,' +
         ' pw_vineyard.name,' +
