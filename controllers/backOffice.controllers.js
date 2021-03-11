@@ -42,7 +42,7 @@ exports.getVineyardById = function (req, res) {
 };
 
 exports.updateVineyardById = function (req, res) {
-    BackOffice.updateVineyardById(req.params, function (vineyard, err) {
+    BackOffice.updateVineyardById(req.params.id, function (vineyard, err) {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
             res.status(500)
