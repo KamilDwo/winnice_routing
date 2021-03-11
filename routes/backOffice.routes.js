@@ -26,7 +26,7 @@ router.get('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.get
 router.post('/upload_photo', cors(corsOptionsDelegate), upload.single('photo'), (req, res, next) => {
     console.log(req);
     return res.json({
-        image: req.file.path
+       ...req.file
     });
 });
 
