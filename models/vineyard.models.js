@@ -10,25 +10,24 @@ const Vineyard = vineyard => {
     this.name = vineyard.name
 };
 
-const defaultFields = 'pw_vineyard.id,' +
-    ' pw_vineyard.name,' +
-    ' pw_vineyard.date_add as \'dateAdd\',' +
-    ' pw_vineyard.location,' +
-    ' pw_vineyard.provinceId,' +
-    ' pw_vineyard.image_1 as \'image1\',' +
-    ' pw_vineyard.tastings, ' +
-    ' pw_vineyard.sightseeing, ' +
-    ' pw_vineyard.meals, ' +
-    ' pw_vineyard.events, ' +
-    ' pw_vineyard.additional, ' +
-    ' pw_vineyard.accommodation, ' +
-    ' pw_vineyard.sale, ' +
-    ' GROUP_CONCAT(pw_vineyard_paths.path_id) AS paths, ' +
-    ' pw_vineyard.marker_id as \'markerId\''
+const defaultFields = `vineyards.id,
+     vineyards.name,
+     vineyards.dateAdd,
+    vineyards.location,
+    vineyards.provinceId,
+     vineyards.tastings,
+     vineyards.sightseeing, 
+     vineyards.meals, 
+     vineyards.events, 
+     vineyards.additional,
+     vineyards.accommodation,
+     vineyards.sale
+    GROUP_CONCAT(vineyards_paths.pathId) AS paths
+    `
 
 
 Vineyard.findAll = result => {
-    connection.query(`SELECT ${defaultFields} FROM pw_vineyard LEFT JOIN pw_vineyard_paths ON pw_vineyard.id=pw_vineyard_paths.vineyard_id GROUP BY pw_vineyard.id`, function (error, results) {
+    connection.query(`SELECT ${defaultFields} FROM vineyards LEFT JOIN vineyards_paths ON vineyards.id=vineyards_paths.vineyardId GROUP BY vineyards.id`, function (error, results) {
         if (error) {
             result(error, null)
         } else {
@@ -69,7 +68,7 @@ Vineyard.findAll = result => {
 };
 
 Vineyard.findById = (id, result) => {
-    connection.query(`SELECT ${defaultFields} FROM pw_vineyard LEFT JOIN pw_vineyard_paths ON pw_vineyard.id=pw_vineyard_paths.vineyard_id WHERE pw_vineyard.id = ? GROUP BY pw_vineyard.id LIMIT 1`, id, function (error, results) {
+    connection.query(`SELECT ${defaultFields} FROM vineyards LEFT JOIN vineyards_paths ON vineyards.id=vineyards_paths.vineyardId WHERE vineyards.id = ? GROUP BY vineyards.id LIMIT 1`, id, function (error, results) {
         if (error) {
             result(error, null)
         } else {

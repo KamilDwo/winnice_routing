@@ -7,12 +7,12 @@ const Paths = () => {}
 
 
 Paths.findAll = (result, body) => {
-    let defaultFields = 'id,' +
-        ' name,' +
-        ' is_active as \'isActive\',' +
-        ' bounds'
+    let defaultFields = `id,
+         name,
+         isActive,
+        bounds`
 
-    connection.query(`SELECT ${defaultFields} FROM pw_paths`, function (error, results) {
+    connection.query(`SELECT ${defaultFields} FROM paths`, function (error, results) {
         if (error) {
             result(error, null)
         } else {
