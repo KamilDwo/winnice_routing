@@ -89,15 +89,19 @@ BackOffice.updateVineyardById = (req, result) => {
             const checkIfAddRed2 = checkIfAddRed.map(winetype => [id, parseInt(winetype), 2])
 
             const dataArray = [...checkIfAddRed2, ...checkIfAddWhite2];
-
-            const sql = "INSERT INTO vineyards_winetypes (vineyardId, winetypeId, winetypeType) VALUES ?";
-            connection.query(sql, [dataArray], function(err) {
-                if (err) {
-                    throw err;
-                } else {
-                    updateVineyards();
-                }
-            });
+            if (dataArray.length > 0) {
+                const sql = "INSERT INTO vineyards_winetypes (vineyardId, winetypeId, winetypeType) VALUES ?";
+                connection.query(sql, [dataArray], function (err) {
+                    if (err) {
+                        throw err;
+                    } else {
+                        updateVineyards();
+                    }
+                });
+            }
+            else {
+                updateVineyards();
+            }
         }
     })
 
