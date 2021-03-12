@@ -80,8 +80,7 @@ BackOffice.updateVineyardById = (req, result) => {
         provinceId: provinceId,
         address: address,
         city: city,
-        locationX: locationX,
-        locationY: locationY,
+        location: location,
         phone: phone,
         email: email,
         www: www,
@@ -91,13 +90,13 @@ BackOffice.updateVineyardById = (req, result) => {
         elevation: elevation,
         groundTiltDirection: groundTiltDirection,
         groundType: groundType,
-        description: description,
+        vineyardDescription: description,
     }
     connection.query(query, [post, id], function(error, rows) {
         if (error) {
             result(error, null)
         } else {
-            result({}, null);
+            result(null, {});
         }
     })
 }

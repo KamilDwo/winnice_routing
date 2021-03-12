@@ -55,7 +55,7 @@ exports.uploadVineyardImage = function (req, res) {
 };
 
 exports.updateVineyardById = function (req, res) {
-    BackOffice.updateVineyardById(req, function (vineyard, err) {
+    BackOffice.updateVineyardById(req, function (err, vineyard) {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
             res.status(500)
