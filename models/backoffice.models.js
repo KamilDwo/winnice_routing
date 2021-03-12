@@ -43,7 +43,7 @@ BackOffice.getAllVineyards = (result, body) => {
 
 
 BackOffice.uploadVineyardImage = (req, result) => {
-    const post  = {
+    const post = {
         vineyardId: req.body.vineyardId,
         photoFile: req.file.filename
     }
@@ -67,38 +67,72 @@ BackOffice.updateVineyardById = (req, result) => {
     const {
         name, owners, yearOpen, sqm, postal, provinceId, address, city, locationX, locationY,
         phone, email, www, facebook, instagram, groundTilt, elevation, groundTiltDirection,
-        groundType, description,
+        groundType, description, wineTypesWhite, wineTypesRed
     } = req.body.values;
     const location = `${locationX}, ${locationY}`;
-    const query = 'UPDATE vineyards SET ? WHERE id=?';
-    const post = {
-        name: name,
-        owners: owners,
-        yearOpen: yearOpen,
-        sqm: sqm,
-        postal: postal,
-        provinceId: provinceId,
-        address: address,
-        city: city,
-        location: location,
-        phone: phone,
-        email: email,
-        www: www,
-        facebook: facebook,
-        instagram: instagram,
-        groundTilt: groundTilt,
-        elevation: elevation,
-        groundTiltDirection: groundTiltDirection,
-        groundType: groundType,
-        vineyardDescription: description,
-    }
-    connection.query(query, [post, id], function(error, rows) {
+
+
+    connection.query("SELECT winetypeId, winetypeType FROM vineyards_winetypes WHERE vineyardId = ?", id, function (error, results) {
         if (error) {
-            result(error, null)
+            result(null, error)
         } else {
-            result(null, {});
+            const filterWhiteResults = results.filter(winetypesWhite => winetypesWhite.winetypeType === 1)
+            const filterRedResults = results.filter(winetypesRed => winetypesRed.winetypeType === 2)
+            const wineTypesWhiteToAdd = filterWhiteResults.map(winetype => winetype.winetypeId)
+            const wineTypesRedToAdd = filterRedResults.map(winetype => winetype.winetypeId)
+
+
+            const checkIfAddWhite = wineTypesWhite.filter(winetype => !wineTypesWhiteToAdd.includes(parseInt(winetype)))
+            const checkIfAddWhite2 = checkIfAddWhite.map(winetype => [id, parseInt(winetype), 1])
+
+            const checkIfAddRed = wineTypesRed.filter(winetype => !wineTypesRedToAdd.includes(parseInt(winetype)))
+            const checkIfAddRed2 = checkIfAddRed.map(winetype => [id, parseInt(winetype), 2])
+
+            const dataArray = [...checkIfAddRed2, ...checkIfAddWhite2];
+
+            const sql = "INSERT INTO vineyards_winetypes (vineyardId, winetypeId, winetypeType) VALUES ?";
+            connection.query(sql, [dataArray], function(err) {
+                if (err) {
+                    throw err;
+                } else {
+                    updateVineyards();
+                }
+            });
         }
     })
+
+    const updateVineyards = () => {
+        const query = `UPDATE vineyards SET ? WHERE id=?;`
+
+        const post = {
+            name: name,
+            owners: owners,
+            yearOpen: yearOpen,
+            sqm: sqm,
+            postal: postal,
+            provinceId: provinceId,
+            address: address,
+            city: city,
+            location: location,
+            phone: phone,
+            email: email,
+            www: www,
+            facebook: facebook,
+            instagram: instagram,
+            groundTilt: groundTilt,
+            elevation: elevation,
+            groundTiltDirection: groundTiltDirection,
+            groundType: groundType,
+            vineyardDescription: description,
+        }
+        connection.query(query, [post, id], function (error, rows) {
+            if (error) {
+                result(error, null)
+            } else {
+                result(null, {});
+            }
+        })
+    }
 }
 
 BackOffice.getVineyardById = (id, result) => {
