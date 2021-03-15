@@ -15,6 +15,19 @@ exports.getAllVineyards = function (req, res) {
     });
 };
 
+exports.getAllRequiredData = function (req, res) {
+    BackOffice.getAllRequiredData(function (data, err) {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500)
+            res.end()
+        }
+        else {
+            res.json(data);
+        }
+    });
+};
+
 exports.loginAdmin = function (req, res) {
     BackOffice.loginAdmin(function (token, err) {
         if (err) {

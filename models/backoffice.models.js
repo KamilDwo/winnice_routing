@@ -17,36 +17,53 @@ BackOffice.loginAdmin = (result, body) => {
   }, null);
 };
 
-BackOffice.getAllVineyards = (result, body) => {
+BackOffice.getAllRequiredData = (result) => {
+  const query = `SELECT * FROM winetypes;
+    SELECT * FROM organizations;
+    SELECT * FROM paths;
+    `
+
+  connection.query(query, function (error, results) {
+    if (error) {
+      result(null, error);
+    }
+    else {
+      const returnData = {
+        allWineTypes: results[0],
+        allOrganizations: results[1],
+        allPaths: results[2],
+      }
+      result(returnData, null);
+    }
+  });
+};
+
+BackOffice.getAllVineyards = (result) => {
   const defaultFields = `
      vineyards.id,
      vineyards.name,
      vineyards.dateAdd,
      vineyards.provinceId,
      vineyards.isActive, 
-     (SELECT COUNT(vineyards_paths.pathId) FROM vineyards_paths WHERE vineyards_paths.vineyardId = vineyards.id) as 'paths', 
-     (SELECT COUNT(vineyards_organizations.organizationId) FROM vineyards_organizations WHERE vineyards_organizations.vineyardId = vineyards.id) as 'organizations'
-     `;
+     (SELECT COUNT(vineyards_paths.pathId) FROM vineyards_paths WHERE vineyards_paths.vineyardId = vineyards.id) as paths, 
+     (SELECT COUNT(vineyards_organizations.organizationId) FROM vineyards_organizations WHERE vineyards_organizations.vineyardId = vineyards.id) as organizations
+     `
 
   connection.query(`SELECT ${defaultFields} FROM vineyards`, function (error, results) {
     if (error) {
-      result(error, null);
+      result(error, null)
     }
     else {
-      const parseItems = results.map(item => {
-        item.isActive = item.isActive === 2;
-        return item;
-      });
-      result(parseItems, null);
+      result(results, null)
     }
-  });
-};
+  })
+}
 
 BackOffice.uploadVineyardImage = (req, result) => {
   const post = {
     vineyardId: req.body.vineyardId,
     photoFile: req.file.filename
-  };
+  }
   connection.query('INSERT INTO vineyards_photos SET ?', post, function (error) {
     if (error) {
       result(null, error);
@@ -89,7 +106,7 @@ BackOffice.updateVineyardById = (req, result) => {
     wineTypesRed,
     organizations,
     paths,
-    features,
+    features
   } = req.body.values;
   const location = `${locationX}, ${locationY}`;
 
@@ -246,12 +263,13 @@ BackOffice.deleteSpecificFile = (body, result) => {
     connection.query(sql, [body.body.vineyardId, body.body.file], function (error, results) {
       if (error) {
         result(null, error);
-      } else {
+      }
+      else {
         result({}, null);
       }
     });
   }
-}
+};
 
 BackOffice.getVineyardById = (id, result) => {
   const defaultFields = `
@@ -260,18 +278,13 @@ BackOffice.getVineyardById = (id, result) => {
        vineyards.dateAdd,
         vineyards.location,
         vineyards.provinceId,
-         vineyards.tastings,
          vineyards.yearOpen,
         vineyards.owners, 
          vineyards.elevation, 
-         vineyards.sightseeing,
-         vineyards.meals,
          vineyards.postal,
          vineyards.address,
          vineyards.city,
         vineyards.sqm, 
-       vineyards.events, 
-         vineyards.additional,
          vineyards.phone,
          vineyards.email,
           vineyards.www,
@@ -280,9 +293,7 @@ BackOffice.getVineyardById = (id, result) => {
           vineyards.groundTilt,
           vineyards.groundTiltDirection,
           vineyards.groundType,
-          vineyards.vineyardDescription,
-        vineyards.accommodation, 
-       vineyards.sale`;
+          vineyards.vineyardDescription`;
 
   const defaultFields2 = `
     winetypes.title,
@@ -309,9 +320,6 @@ BackOffice.getVineyardById = (id, result) => {
         `;
 
   const query = `SELECT ${defaultFields} FROM vineyards WHERE vineyards.id = ? LIMIT 1;
-    SELECT * FROM winetypes;
-    SELECT * FROM organizations;
-    SELECT * FROM paths;
     SELECT ${defaultFields2} FROM vineyards_winetypes LEFT JOIN winetypes ON vineyards_winetypes.winetypeId=winetypes.id WHERE vineyards_winetypes.vineyardId = ? GROUP BY vineyards_winetypes.winetypeId;
     SELECT ${defaultFields3} FROM vineyards_organizations LEFT JOIN organizations ON vineyards_organizations.organizationId=organizations.id WHERE vineyards_organizations.vineyardId = ? GROUP BY vineyards_organizations.organizationId;
     SELECT ${defaultFields4} FROM vineyards_paths LEFT JOIN paths ON vineyards_paths.pathId=paths.id WHERE vineyards_paths.vineyardId = ? GROUP BY vineyards_paths.pathId;
@@ -326,56 +334,25 @@ BackOffice.getVineyardById = (id, result) => {
     else {
       const parseItems = results[0].map(item => {
         const location = item.location.split(',');
-        const features = results[8].map(feature => feature.featureId);
+        const features = results[5].map(feature => feature.featureId);
         item.isActive = item.isActive === 2;
         item.location = [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))];
-        if (item.accommodation === 2) {
-          item.features.push(featuresIndex('accommodation'));
-        }
-        if (item.additional === 2) {
-          item.features.push(featuresIndex('additional'));
-        }
-        if (item.events === 2) {
-          item.features.push(featuresIndex('events'));
-        }
-        if (item.meals === 2) {
-          item.features.push(featuresIndex('meals'));
-        }
-        if (item.sightseeing === 2) {
-          item.features.push(featuresIndex('sightseeing'));
-        }
-        if (item.tastings === 2) {
-          item.features.push(featuresIndex('tastings'));
-        }
-        if (item.sale === 2) {
-          item.features.push(featuresIndex('sale'));
-        }
-        item.allWineTypes = results[1];
-        item.wineTypes = results[4];
-        item.allOrganizations = results[2];
-        item.allPaths = results[3];
-        item.organizations = results[5];
-        item.paths = results[6];
-        item.photos = results[7].map(photo => {
+        item.paths = results[3];
+        item.wineTypes = results[1];
+        item.organizations = results[2];
+        item.photos = results[4].map(photo => {
           return {
             uid: Math.random(),
             name: photo.photoFile,
             thumbUrl: photo.photoFile
           };
         });
-        item.features = features
-        delete item.meals
-        delete item.events
-        delete item.additional
-        delete item.accommodation
-        delete item.sightseeing
-        delete item.tastings
-        delete item.sale
-        return item
+        item.features = features;
+        return item;
       });
-      result(parseItems[0], null)
+      result(parseItems[0], null);
     }
-  })
-}
+  });
+};
 
-module.exports = BackOffice
+module.exports = BackOffice;

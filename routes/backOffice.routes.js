@@ -26,5 +26,6 @@ router.get('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.get
 router.post('/upload_photo', cors(corsOptionsDelegate), upload.single('photo'), backOfficeController.uploadVineyardImage)
 router.post('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.updateVineyardById)
 router.delete('/delete_file/:from', cors(corsOptionsDelegate), backOfficeController.deleteSpecificFile)
+router.get('/get_data', cors(corsOptionsDelegate), backOfficeController.getAllRequiredData)
 
 module.exports = router;
