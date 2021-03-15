@@ -33,7 +33,20 @@ exports.getVineyardById = function (req, res) {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
             res.status(500)
-            res.end()
+            res.json({ type: 'ERROR', message: err.sqlMessage });
+        }
+        else {
+            res.json(vineyard);
+        }
+    });
+};
+
+exports.deleteSpecificFile = function (req, res) {
+    BackOffice.deleteSpecificFile(req, function (vineyard, err) {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500)
+            res.json({ type: 'ERROR', message: err.sqlMessage });
         }
         else {
             res.json(vineyard);
