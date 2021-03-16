@@ -1,13 +1,12 @@
-'use strict';
-
 const BackOffice = require('../models/backoffice.models');
 
+
 exports.getAllVineyards = function (req, res) {
-    BackOffice.getAllVineyards(function (vineyards, err) {
+    BackOffice.getAllVineyards((vineyards, err) => {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
-            res.status(500)
-            res.end()
+            res.status(500);
+            res.end();
         }
         else {
             res.json(vineyards);
@@ -16,11 +15,11 @@ exports.getAllVineyards = function (req, res) {
 };
 
 exports.getAllRequiredData = function (req, res) {
-    BackOffice.getAllRequiredData(function (data, err) {
+    BackOffice.getAllRequiredData((data, err) => {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
-            res.status(500)
-            res.end()
+            res.status(500);
+            res.end();
         }
         else {
             res.json(data);
@@ -29,11 +28,11 @@ exports.getAllRequiredData = function (req, res) {
 };
 
 exports.loginAdmin = function (req, res) {
-    BackOffice.loginAdmin(function (token, err) {
+    BackOffice.loginAdmin((token, err) => {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
-            res.status(500)
-            res.end()
+            res.status(500);
+            res.end();
         }
         else {
             res.json(token);
@@ -42,11 +41,13 @@ exports.loginAdmin = function (req, res) {
 };
 
 exports.getVineyardById = function (req, res) {
-    BackOffice.getVineyardById(req.params.id, function (vineyard, err) {
+    BackOffice.getVineyardById(req.params.id, (vineyard, err) => {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
-            res.status(500)
-            res.json({ type: 'ERROR', message: err.sqlMessage });
+            res.status(500);
+            res.json({
+                type: 'ERROR', message: err.sqlMessage,
+            });
         }
         else {
             res.json(vineyard);
@@ -55,11 +56,13 @@ exports.getVineyardById = function (req, res) {
 };
 
 exports.deleteSpecificFile = function (req, res) {
-    BackOffice.deleteSpecificFile(req, function (vineyard, err) {
+    BackOffice.deleteSpecificFile(req, (vineyard, err) => {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
-            res.status(500)
-            res.json({ type: 'ERROR', message: err.sqlMessage });
+            res.status(500);
+            res.json({
+                type: 'ERROR', message: err.sqlMessage,
+            });
         }
         else {
             res.json(vineyard);
@@ -68,11 +71,11 @@ exports.deleteSpecificFile = function (req, res) {
 };
 
 exports.uploadVineyardImage = function (req, res) {
-    BackOffice.uploadVineyardImage(req, function (file, err) {
+    BackOffice.uploadVineyardImage(req, (file, err) => {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
-            res.status(500)
-            res.end()
+            res.status(500);
+            res.end();
         }
         else {
             res.json(file);
@@ -81,15 +84,15 @@ exports.uploadVineyardImage = function (req, res) {
 };
 
 exports.updateVineyardById = function (req, res) {
-    BackOffice.updateVineyardById(req, function (err, vineyard) {
+    BackOffice.updateVineyardById(req, err => {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
-            res.status(500)
-            res.end()
+            res.status(500);
+            res.end();
         }
         else {
-            res.status(200)
-            res.end()
+            res.status(200);
+            res.end();
         }
     });
 };
