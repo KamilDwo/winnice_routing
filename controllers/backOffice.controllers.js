@@ -96,3 +96,17 @@ exports.updateVineyardById = function (req, res) {
         }
     });
 };
+
+exports.createVineyard = function (req, res) {
+    BackOffice.createVineyard(req, err => {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500);
+            res.end();
+        }
+        else {
+            res.status(200);
+            res.end();
+        }
+    });
+};

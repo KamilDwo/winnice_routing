@@ -49,17 +49,14 @@ BackOffice.getAllVineyards = result => {
      (SELECT COUNT(vineyards_organizations.organizationId) FROM vineyards_organizations WHERE vineyards_organizations.vineyardId = vineyards.id) as organizations
      `;
 
-    connection.query(
-    `SELECT ${defaultFields} FROM vineyards`,
-    (error, results) => {
+    connection.query(`SELECT ${defaultFields} FROM vineyards`, (error, results) => {
         if (error) {
             result(error, null);
         }
         else {
             result(results, null);
         }
-    }
-    );
+    });
 };
 
 BackOffice.uploadVineyardImage = (req, result) => {
@@ -81,8 +78,129 @@ BackOffice.uploadVineyardImage = (req, result) => {
                 result(moreFile, null);
             }
         });
+        result(req.file, null);
     }
-    result(req.file, null);
+    else {
+        const moreFile = {
+            filename: req.file.filename,
+            thumbUrl: `https://polskiewinnice.ovh/images/${req.file.filename}`,
+            uid: Math.random() + Math.random() + Math.random(),
+        };
+        result(moreFile, null);
+    }
+};
+
+BackOffice.createVineyard = (req, result) => {
+    const {
+        name,
+        owners,
+        yearOpen,
+        sqm,
+        postal,
+        provinceId,
+        address,
+        city,
+        locationX,
+        locationY,
+        phone,
+        email,
+        www,
+        facebook,
+        instagram,
+        groundTilt,
+        elevation,
+        groundTiltDirection,
+        groundType,
+        description,
+        wineTypesWhite,
+        wineTypesRed,
+        organizations,
+        paths,
+        features,
+    } = req.body.values;
+    const locationMerge = `${locationX}, ${locationY}`;
+    const formFeatures = features.map(feature => parseInt(feature));
+    const values = {
+        location: locationMerge,
+        name,
+        yearOpen,
+        owners,
+        sqm,
+        postal,
+        provinceId,
+        address,
+        city,
+        phone: phone || '',
+        email: email || '',
+        www: www || '',
+        facebook: facebook || '',
+        instagram: instagram || '',
+        groundTilt: groundTilt || '',
+        elevation: elevation || '',
+        groundTiltDirection: groundTiltDirection || '',
+        groundType: groundType || '',
+        vineyardDescription: description || '',
+    };
+
+    connection.query('INSERT INTO vineyards SET ?', values, (error, results) => {
+        if (error) {
+            result(error, null);
+        }
+        else {
+            if(results.insertId) {
+                if (formFeatures.length > 0) {
+                    const featuresToAddArray = formFeatures.map(path => [results.insertId, path]);
+                    connection.query('INSERT INTO vineyards_features (vineyardId, featureId) VALUES ?', [featuresToAddArray], err => {
+                        if (err) {
+                            throw err;
+                        }
+                    });
+                }
+                if (organizations && organizations.length > 0) {
+                    const organizationsToAddArray = organizations.map(organization => [results.insertId, organization]);
+                    connection.query('INSERT INTO vineyards_organizations (vineyardId, organizationId) VALUES ?', [organizationsToAddArray], err => {
+                        if (err) {
+                            throw err;
+                        }
+                    });
+                }
+                if (paths && paths.length > 0) {
+                    const pathsToAddArray = paths.map(path => [results.insertId, path]);
+                    connection.query('INSERT INTO vineyards_paths (vineyardId, pathId) VALUES ?', [pathsToAddArray], err => {
+                        if (err) {
+                            throw err;
+                        }
+                    });
+                }
+                if ((wineTypesWhite && wineTypesWhite.length > 0)) {
+                    const checkIfAddWhite = wineTypesWhite.map(winetype => [
+                        results.insertId,
+                        parseInt(winetype),
+                        1,
+                    ]);
+                    connection.query('INSERT INTO vineyards_winetypes (vineyardId, winetypeId, winetypeType) VALUES ?', [checkIfAddWhite], err => {
+                        if (err) {
+                            throw err;
+                        }
+                    });
+                }
+                if ((wineTypesRed && wineTypesRed.length > 0)) {
+                    const checkIfAddRed = wineTypesRed.map(winetype => [
+                        results.insertId,
+                        parseInt(winetype),
+                        2,
+                    ]);
+                    connection.query('INSERT INTO vineyards_winetypes (vineyardId, winetypeId, winetypeType) VALUES ?', [checkIfAddRed], err => {
+                        if (err) {
+                            throw err;
+                        }
+                    });
+                }
+            }
+            result(null, {
+            });
+        }
+    });
 };
 
 BackOffice.updateVineyardById = (req, result) => {
@@ -116,128 +234,106 @@ BackOffice.updateVineyardById = (req, result) => {
     } = req.body.values;
     const location = `${locationX}, ${locationY}`;
 
-    connection.query(
-        'SELECT vineyardId, organizationId FROM vineyards_organizations WHERE vineyardId = ?',
-        id,
-        (error, results) => {
-            const formOrganizations = organizations.map(organization =>
+    connection.query('SELECT vineyardId, organizationId FROM vineyards_organizations WHERE vineyardId = ?', id, (error, results) => {
+        const formOrganizations = organizations.map(organization =>
             // eslint-disable-next-line radix
-                parseInt(organization)
-            );
-            const addedOrganizations = results.map(
-                organization => organization.organizationId
-            );
-            const checkIfAddOrganization = formOrganizations.filter(
-                // eslint-disable-next-line radix
-                organization => !addedOrganizations.includes(parseInt(organization))
-            );
-            const toDeleteOrganization = addedOrganizations.filter(
-                organization => !formOrganizations.includes(organization)
-            );
+            parseInt(organization)
+        );
+        const addedOrganizations = results.map(
+            organization => organization.organizationId
+        );
+        const checkIfAddOrganization = formOrganizations.filter(
+            // eslint-disable-next-line radix
+            organization => !addedOrganizations.includes(parseInt(organization))
+        );
+        const toDeleteOrganization = addedOrganizations.filter(
+            organization => !formOrganizations.includes(organization)
+        );
 
-            if (toDeleteOrganization.length > 0) {
-                const toDeleteOrganizationMap = toDeleteOrganization.map(
-                    organization => [id, organization]
-                );
-                const sql =
-          'DELETE FROM vineyards_organizations WHERE (vineyardId, organizationId) IN (?)';
-                connection.query(sql, [toDeleteOrganizationMap], err => {
-                    if (err) {
-                        throw err;
-                    }
-                });
-            }
-
-            if (checkIfAddOrganization.length > 0) {
-                const sql =
-          'INSERT INTO vineyards_organizations (vineyardId, organizationId) VALUES ?';
-                const organizationsToAddArray = checkIfAddOrganization.map(
-                    organization => [id, organization]
-                );
-                connection.query(sql, [organizationsToAddArray], err => {
-                    if (err) {
-                        throw err;
-                    }
-                });
-            }
+        if (toDeleteOrganization.length > 0) {
+            const toDeleteOrganizationMap = toDeleteOrganization.map(
+                organization => [id, organization]
+            );
+            connection.query('DELETE FROM vineyards_organizations WHERE (vineyardId, organizationId) IN (?)', [toDeleteOrganizationMap], err => {
+                if (err) {
+                    throw err;
+                }
+            });
         }
+
+        if (checkIfAddOrganization.length > 0) {
+            const organizationsToAddArray = checkIfAddOrganization.map(
+                organization => [id, organization]
+            );
+            connection.query('INSERT INTO vineyards_organizations (vineyardId, organizationId) VALUES ?', [organizationsToAddArray], err => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+    }
     );
 
-    connection.query(
-        'SELECT vineyardId, featureId FROM vineyards_features WHERE vineyardId = ?',
-        id,
-        (error, results) => {
-            const formFeatures = features.map(feature => parseInt(feature));
-            const addedFeatures = results.map(feature => feature.featureId);
-            const checkIfAddFeature = formFeatures.filter(
-                feature => !addedFeatures.includes(parseInt(feature))
-            );
-            const toDeleteFeature = addedFeatures.filter(
-                feature => !formFeatures.includes(feature)
-            );
+    connection.query('SELECT vineyardId, featureId FROM vineyards_features WHERE vineyardId = ?', id, (error, results) => {
+        const formFeatures = features.map(feature => parseInt(feature));
+        const addedFeatures = results.map(feature => feature.featureId);
+        const checkIfAddFeature = formFeatures.filter(
+            feature => !addedFeatures.includes(parseInt(feature))
+        );
+        const toDeleteFeature = addedFeatures.filter(
+            feature => !formFeatures.includes(feature)
+        );
 
-            if (toDeleteFeature.length > 0) {
-                const toDeleteFeatureMap = toDeleteFeature.map(feature => [
-                    id,
-                    feature,
-                ]);
-                const sql =
-          'DELETE FROM vineyards_features WHERE (vineyardId, featureId) IN (?)';
-                connection.query(sql, [toDeleteFeatureMap], err => {
-                    if (err) {
-                        throw err;
-                    }
-                });
-            }
-
-            if (checkIfAddFeature.length > 0) {
-                const sql =
-          'INSERT INTO vineyards_features (vineyardId, featureId) VALUES ?';
-                const featuresToAddArray = checkIfAddFeature.map(path => [id, path]);
-                connection.query(sql, [featuresToAddArray], err => {
-                    if (err) {
-                        throw err;
-                    }
-                });
-            }
+        if (toDeleteFeature.length > 0) {
+            const toDeleteFeatureMap = toDeleteFeature.map(feature => [
+                id,
+                feature,
+            ]);
+            connection.query('DELETE FROM vineyards_features WHERE (vineyardId, featureId) IN (?)', [toDeleteFeatureMap], err => {
+                if (err) {
+                    throw err;
+                }
+            });
         }
-    );
 
-    connection.query(
-        'SELECT vineyardId, pathId FROM vineyards_paths WHERE vineyardId = ?',
-        id,
-        (error, results) => {
-            const formPaths = paths.map(path => parseInt(path));
-            const addedPaths = results.map(path => path.pathId);
-            const checkIfAddPath = formPaths.filter(
-                path => !addedPaths.includes(parseInt(path))
-            );
-            const toDeletePath = addedPaths.filter(
-                path => !formPaths.includes(path)
-            );
-
-            if (toDeletePath.length > 0) {
-                const toDeletePathMap = toDeletePath.map(path => [id, path]);
-                const sql =
-          'DELETE FROM vineyards_paths WHERE (vineyardId, pathId) IN (?)';
-                connection.query(sql, [toDeletePathMap], err => {
-                    if (err) {
-                        throw err;
-                    }
-                });
-            }
-
-            if (checkIfAddPath.length > 0) {
-                const sql = 'INSERT INTO vineyards_paths (vineyardId, pathId) VALUES ?';
-                const pathsToAddArray = checkIfAddPath.map(path => [id, path]);
-                connection.query(sql, [pathsToAddArray], err => {
-                    if (err) {
-                        throw err;
-                    }
-                });
-            }
+        if (checkIfAddFeature.length > 0) {
+            const featuresToAddArray = checkIfAddFeature.map(path => [id, path]);
+            connection.query('INSERT INTO vineyards_features (vineyardId, featureId) VALUES ?', [featuresToAddArray], err => {
+                if (err) {
+                    throw err;
+                }
+            });
         }
-    );
+    });
+
+    connection.query('SELECT vineyardId, pathId FROM vineyards_paths WHERE vineyardId = ?', id, (error, results) => {
+        const formPaths = paths.map(path => parseInt(path));
+        const addedPaths = results.map(path => path.pathId);
+        const checkIfAddPath = formPaths.filter(
+            path => !addedPaths.includes(parseInt(path))
+        );
+        const toDeletePath = addedPaths.filter(
+            path => !formPaths.includes(path)
+        );
+
+        if (toDeletePath.length > 0) {
+            const toDeletePathMap = toDeletePath.map(path => [id, path]);
+            connection.query('DELETE FROM vineyards_paths WHERE (vineyardId, pathId) IN (?)', [toDeletePathMap], err => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+
+        if (checkIfAddPath.length > 0) {
+            const pathsToAddArray = checkIfAddPath.map(path => [id, path]);
+            connection.query('INSERT INTO vineyards_paths (vineyardId, pathId) VALUES ?', [pathsToAddArray], err => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+    });
 
     connection.query(
         'SELECT vineyardId, winetypeId, winetypeType FROM vineyards_winetypes WHERE vineyardId = ?',
@@ -296,9 +392,7 @@ BackOffice.updateVineyardById = (req, result) => {
                 });
             }
             if (dataArray.length > 0) {
-                const sql =
-          'INSERT INTO vineyards_winetypes (vineyardId, winetypeId, winetypeType) VALUES ?';
-                connection.query(sql, [dataArray], err => {
+                connection.query('INSERT INTO vineyards_winetypes (vineyardId, winetypeId, winetypeType) VALUES ?', [dataArray], err => {
                     if (err) {
                         throw err;
                     }
@@ -329,7 +423,7 @@ BackOffice.updateVineyardById = (req, result) => {
         groundType,
         vineyardDescription: description,
     };
-    connection.query(query, [post, id], (error, rows) => {
+    connection.query(query, [post, id], error => {
         if (error) {
             result(error, null);
         }
@@ -347,7 +441,7 @@ BackOffice.deleteSpecificFile = (body, result) => {
         connection.query(
             sql,
             [body.body.vineyardId, body.body.file],
-            (error, results) => {
+            error => {
                 if (error) {
                     result(null, error);
                 }
@@ -371,6 +465,7 @@ BackOffice.getVineyardById = (id, result) => {
         vineyards.owners, 
          vineyards.elevation, 
          vineyards.postal,
+         vineyards.isActive,
          vineyards.address,
          vineyards.city,
         vineyards.sqm, 
@@ -424,21 +519,22 @@ BackOffice.getVineyardById = (id, result) => {
             const parseItems = results[0].map(item => {
                 const location = item.location.split(',');
                 const features = results[5].map(feature => feature.featureId);
-                item.isActive = item.isActive === 2;
-                item.location = [
-                    parseFloat(location[0]),
-                    parseFloat(location[1].replace(/\s+/g, '')),
-                ];
-                item.paths = results[3];
-                item.wineTypes = results[1];
-                item.organizations = results[2];
-                item.photos = results[4].map(photo => ({
-                    uid: Math.random(),
-                    name: photo.photoFile,
-                    thumbUrl: photo.photoFile,
-                }));
-                item.features = features;
-                return item;
+                return {
+                    ...item,
+                    location: [
+                        parseFloat(location[0]),
+                        parseFloat(location[1].replace(/\s+/g, '')),
+                    ],
+                    paths: results[3],
+                    wineTypes: results[1],
+                    organizations: results[2],
+                    photos: results[4].map(photo => ({
+                        uid: Math.random(),
+                        name: photo.photoFile,
+                        thumbUrl: photo.photoFile,
+                    })),
+                    features,
+                };
             });
             result(parseItems[0], null);
         }
