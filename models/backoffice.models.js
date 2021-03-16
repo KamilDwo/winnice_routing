@@ -78,7 +78,6 @@ BackOffice.uploadVineyardImage = (req, result) => {
                 result(moreFile, null);
             }
         });
-        console.log('tutaj1');
         result(req.file, null);
     }
     else {
@@ -88,7 +87,6 @@ BackOffice.uploadVineyardImage = (req, result) => {
             uid: Math.random() + Math.random() + Math.random(),
             name: req.file.filename,
         };
-        console.log('tutaj2');
         result(moreFile, null);
     }
 };
@@ -120,6 +118,7 @@ BackOffice.createVineyard = (req, result) => {
         organizations,
         paths,
         features,
+        files,
     } = req.body.values;
     const locationMerge = `${locationX}, ${locationY}`;
     const formFeatures = features.map(feature => parseInt(feature));
@@ -170,6 +169,14 @@ BackOffice.createVineyard = (req, result) => {
                 if (paths && paths.length > 0) {
                     const pathsToAddArray = paths.map(path => [results.insertId, path]);
                     connection.query('INSERT INTO vineyards_paths (vineyardId, pathId) VALUES ?', [pathsToAddArray], err => {
+                        if (err) {
+                            throw err;
+                        }
+                    });
+                }
+                if (files && files.fileList && files.fileList.length > 0) {
+                    const filesToAddArray = files.fileList.map(file => [results.insertId, file.name]);
+                    connection.query('INSERT INTO vineyards_photos (vineyardId, photoFile) VALUES ?', [filesToAddArray], err => {
                         if (err) {
                             throw err;
                         }
@@ -439,20 +446,15 @@ BackOffice.updateVineyardById = (req, result) => {
 
 BackOffice.deleteSpecificFile = (body, result) => {
     if (body.params.from === 'VINEYARD_EDIT') {
-        const sql =
-      'DELETE FROM vineyards_photos WHERE vineyardId = ? AND photoFile = ?';
-        connection.query(
-            sql,
-            [body.body.vineyardId, body.body.file],
-            error => {
-                if (error) {
-                    result(null, error);
-                }
-                else {
-                    result({
-                    }, null);
-                }
+        connection.query('DELETE FROM vineyards_photos WHERE vineyardId = ? AND photoFile = ?', [body.body.vineyardId, body.body.file], error => {
+            if (error) {
+                result(null, error);
             }
+            else {
+                result({
+                }, null);
+            }
+        }
         );
     }
 };
