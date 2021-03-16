@@ -54,7 +54,11 @@ BackOffice.getAllVineyards = result => {
             result(error, null);
         }
         else {
-            result(results, null);
+            const parseItems = results.map(item => ({
+                ...item,
+                isActive: item.isActive === 2,
+            }));
+            result(parseItems, null);
         }
     });
 };
