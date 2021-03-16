@@ -78,6 +78,7 @@ BackOffice.uploadVineyardImage = (req, result) => {
                 result(moreFile, null);
             }
         });
+        console.log('tutaj1');
         result(req.file, null);
     }
     else {
@@ -85,7 +86,9 @@ BackOffice.uploadVineyardImage = (req, result) => {
             filename: req.file.filename,
             thumbUrl: `https://polskiewinnice.ovh/images/${req.file.filename}`,
             uid: Math.random() + Math.random() + Math.random(),
+            name: req.file.filename,
         };
+        console.log('tutaj2');
         result(moreFile, null);
     }
 };
