@@ -232,6 +232,7 @@ BackOffice.updateVineyardById = (req, result) => {
         email,
         www,
         facebook,
+        isActive,
         instagram,
         groundTilt,
         elevation,
@@ -283,8 +284,7 @@ BackOffice.updateVineyardById = (req, result) => {
                 }
             });
         }
-    }
-    );
+    });
 
     connection.query('SELECT vineyardId, featureId FROM vineyards_features WHERE vineyardId = ?', id, (error, results) => {
         const formFeatures = features.map(feature => parseInt(feature));
@@ -347,70 +347,67 @@ BackOffice.updateVineyardById = (req, result) => {
         }
     });
 
-    connection.query(
-        'SELECT vineyardId, winetypeId, winetypeType FROM vineyards_winetypes WHERE vineyardId = ?',
-        id,
-        (error, results) => {
-            const filterWhiteResults = results.filter(
-                winetypesWhite => winetypesWhite.winetypeType === 1
-            );
-            const filterRedResults = results.filter(
-                winetypesRed => winetypesRed.winetypeType === 2
-            );
-            const wineTypesWhiteToAdd = filterWhiteResults.map(
-                winetype => winetype.winetypeId
-            );
-            const wineTypesRedToAdd = filterRedResults.map(
-                winetype => winetype.winetypeId
-            );
-            const checkIfAddWhite = wineTypesWhite.filter(
-                winetype => !wineTypesWhiteToAdd.includes(parseInt(winetype))
-            );
-            const checkIfAddWhite2 = checkIfAddWhite.map(winetype => [
-                id,
-                parseInt(winetype),
-                1,
-            ]);
-            const checkIfAddRed = wineTypesRed.filter(
-                winetype => !wineTypesRedToAdd.includes(parseInt(winetype))
-            );
-            const checkIfAddRed2 = checkIfAddRed.map(winetype => [
-                id,
-                parseInt(winetype),
-                2,
-            ]);
-            const allAddedWinetypesPerVineyardId = results.filter(
-                winetype => winetype.vineyardId === id
-            );
-            const allAddedWinetypesPerVineyardIdMapId = allAddedWinetypesPerVineyardId.map(
-                winetype => [winetype.winetypeId, id]
-            );
-            const allWineTypesFromForm = [...wineTypesWhite, ...wineTypesRed];
-            const allWineTypesFromFormInt = allWineTypesFromForm.map(winetype =>
-                parseInt(winetype)
-            );
-            const toDeleteWineTypes = allAddedWinetypesPerVineyardIdMapId.filter(
-                winetype => !allWineTypesFromFormInt.includes(winetype[0])
-            );
-            const dataArray = [...checkIfAddRed2, ...checkIfAddWhite2];
+    connection.query('SELECT vineyardId, winetypeId, winetypeType FROM vineyards_winetypes WHERE vineyardId = ?', id, (error, results) => {
+        const filterWhiteResults = results.filter(
+            winetypesWhite => winetypesWhite.winetypeType === 1
+        );
+        const filterRedResults = results.filter(
+            winetypesRed => winetypesRed.winetypeType === 2
+        );
+        const wineTypesWhiteToAdd = filterWhiteResults.map(
+            winetype => winetype.winetypeId
+        );
+        const wineTypesRedToAdd = filterRedResults.map(
+            winetype => winetype.winetypeId
+        );
+        const checkIfAddWhite = wineTypesWhite.filter(
+            winetype => !wineTypesWhiteToAdd.includes(parseInt(winetype))
+        );
+        const checkIfAddWhite2 = checkIfAddWhite.map(winetype => [
+            id,
+            parseInt(winetype),
+            1,
+        ]);
+        const checkIfAddRed = wineTypesRed.filter(
+            winetype => !wineTypesRedToAdd.includes(parseInt(winetype))
+        );
+        const checkIfAddRed2 = checkIfAddRed.map(winetype => [
+            id,
+            parseInt(winetype),
+            2,
+        ]);
+        const allAddedWinetypesPerVineyardId = results.filter(
+            winetype => winetype.vineyardId === id
+        );
+        const allAddedWinetypesPerVineyardIdMapId = allAddedWinetypesPerVineyardId.map(
+            winetype => [winetype.winetypeId, id]
+        );
+        const allWineTypesFromForm = [...wineTypesWhite, ...wineTypesRed];
+        const allWineTypesFromFormInt = allWineTypesFromForm.map(winetype =>
+            parseInt(winetype)
+        );
+        const toDeleteWineTypes = allAddedWinetypesPerVineyardIdMapId.filter(
+            winetype => !allWineTypesFromFormInt.includes(winetype[0])
+        );
+        const dataArray = [...checkIfAddRed2, ...checkIfAddWhite2];
 
-            if (toDeleteWineTypes.length > 0) {
-                const sql =
+        if (toDeleteWineTypes.length > 0) {
+            const sql =
           'DELETE FROM vineyards_winetypes WHERE (winetypeId, vineyardId) IN (?)';
-                connection.query(sql, [toDeleteWineTypes], err => {
-                    if (err) {
-                        throw err;
-                    }
-                });
-            }
-            if (dataArray.length > 0) {
-                connection.query('INSERT INTO vineyards_winetypes (vineyardId, winetypeId, winetypeType) VALUES ?', [dataArray], err => {
-                    if (err) {
-                        throw err;
-                    }
-                });
-            }
+            connection.query(sql, [toDeleteWineTypes], err => {
+                if (err) {
+                    throw err;
+                }
+            });
         }
+        if (dataArray.length > 0) {
+            connection.query('INSERT INTO vineyards_winetypes (vineyardId, winetypeId, winetypeType) VALUES ?', [dataArray], err => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+    }
     );
 
     const query = `UPDATE vineyards SET ? WHERE id=?;`;
@@ -424,6 +421,7 @@ BackOffice.updateVineyardById = (req, result) => {
         address,
         city,
         location,
+        isActive,
         phone,
         email,
         www,
