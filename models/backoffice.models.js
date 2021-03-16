@@ -425,7 +425,7 @@ BackOffice.updateVineyardById = (req, result) => {
         address,
         city,
         location,
-        isActive,
+        isActive: isActive ? 2 : 1,
         phone,
         email,
         www,
