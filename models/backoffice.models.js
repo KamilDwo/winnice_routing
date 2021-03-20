@@ -1,6 +1,7 @@
 require('dotenv').config();
 const connection = require('../config/db.config');
 const fs = require('fs');
+const base64Img = require('base64-img');
 
 
 const BackOffice = news => {
@@ -61,7 +62,10 @@ BackOffice.getAllVineyards = result => {
 };
 
 BackOffice.uploadVineyardImage = (req, result) => {
-    console.log(req.file);
+    const imageData1 = base64Img.base64Sync(req.file);
+    const base64Data = imageData1.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
+    const img = Buffer.from(base64Data, 'base64');
+
     if (req.body.vineyardId) {
         const post = {
             vineyardId: req.body.vineyardId,
@@ -76,6 +80,7 @@ BackOffice.uploadVineyardImage = (req, result) => {
                     filename: req.file.filename,
                     thumbUrl: `https://polskiewinnice.ovh/images/${req.file.filename}`,
                     uid: Math.random() + Math.random() + Math.random(),
+                    base64: img,
                 };
                 result(moreFile, null);
             }
