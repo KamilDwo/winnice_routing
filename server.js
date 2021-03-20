@@ -18,7 +18,8 @@ app.use(bodyParser.json({
 }));
 app.use(cors());
 app.use(morgan('combined'));
-app.use(express.static(`${__dirname  }/public`));
+app.use(express.static(`${__dirname}/public`));
+app.use(express.static(`${__dirname}/assets/uploads`));
 
 const vineyardsRoutes = require('./routes/vineyard.routes');
 const newsRoutes = require('./routes/news.routes');
