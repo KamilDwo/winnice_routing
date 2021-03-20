@@ -468,7 +468,7 @@ BackOffice.deleteSpecificVineyard = (body, result) => {
     `;
 
     const deletePhotosArray = () => {
-        connection.query('DELETE FROM vineyards_photos WHERE vineyardId = ?', body.body.vineyardId, error => {
+        connection.query('DELETE FROM vineyards_photos WHERE vineyardId = ?', body.params.id, error => {
             if (error) {
                 result(null, error);
             }
