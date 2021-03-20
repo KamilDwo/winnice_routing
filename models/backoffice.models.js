@@ -251,6 +251,8 @@ BackOffice.updateVineyardById = (req, result) => {
     } = req.body.values;
     const location = `${locationX}, ${locationY}`;
 
+    console.log(name);
+
     connection.query('SELECT vineyardId, organizationId FROM vineyards_organizations WHERE vineyardId = ?', id, (error, results) => {
         const formOrganizations = organizations.map(organization =>
             // eslint-disable-next-line radix
