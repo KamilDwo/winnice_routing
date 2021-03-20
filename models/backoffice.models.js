@@ -532,7 +532,6 @@ BackOffice.getVineyardById = (id, result) => {
                         parseFloat(location[0]),
                         parseFloat(location[1].replace(/\s+/g, '')),
                     ],
-                    isActive: item.isActive === 2,
                     paths: results[3],
                     wineTypes: results[1],
                     organizations: results[2],
