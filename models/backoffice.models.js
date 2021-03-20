@@ -61,7 +61,6 @@ BackOffice.getAllVineyards = result => {
 };
 
 BackOffice.uploadVineyardImage = (req, result) => {
-    console.log(req.file);
     if (req.body.vineyardId) {
         const post = {
             vineyardId: req.body.vineyardId,
@@ -74,7 +73,7 @@ BackOffice.uploadVineyardImage = (req, result) => {
             else {
                 const moreFile = {
                     filename: req.file.filename,
-                    thumbUrl: `https://polskiewinnice.ovh/assets/uploads/${req.file.filename}`,
+                    thumbUrl: `https://polskiewinnice.ovh/images_preview/${req.file.filename}`,
                     uid: Math.random() + Math.random() + Math.random(),
                 };
                 result(moreFile, null);
