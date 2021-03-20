@@ -63,7 +63,8 @@ BackOffice.getAllVineyards = result => {
 
 BackOffice.uploadVineyardImage = (req, result) => {
     const imageData1 = base64Img.base64Sync(req.file.path);
-    const img = imageData1.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
+    const base64Data = imageData1.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
+    const img = Buffer.from(base64Data, 'base64');
 
     if (req.body.vineyardId) {
         const post = {
