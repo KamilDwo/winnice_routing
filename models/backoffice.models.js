@@ -61,6 +61,7 @@ BackOffice.getAllVineyards = result => {
 };
 
 BackOffice.uploadVineyardImage = (req, result) => {
+    console.log(req.file);
     if (req.body.vineyardId) {
         const post = {
             vineyardId: req.body.vineyardId,

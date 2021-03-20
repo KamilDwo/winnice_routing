@@ -11,10 +11,10 @@ const backOfficeController = require('../controllers/backOffice.controllers');
 
 const storage = multer.diskStorage({
     destination (req, file, cb) {
-        cb(null, 'public/images');
+        cb(null, 'assets/uploads');
     },
     filename (req, file, cb) {
-        cb(null, `${speakingurl(file.originalname, [])  }-${  Date.now()  }${path.extname(file.originalname)}`);
+        cb(null, `${speakingurl(file.originalname, [])}-${  Date.now()}${path.extname(file.originalname)}`);
     },
 });
 
