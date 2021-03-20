@@ -36,20 +36,16 @@ Vineyard.findAll = result => {
         else {
             const parseItems = results.map(item => {
                 const location = item.location.split(',');
-                // eslint-disable-next-line no-param-reassign
-                item.paths = [...new Set(listToArray(item.paths, ','))];
-                // eslint-disable-next-line no-param-reassign
-                item.organizations = [...new Set(listToArray(item.organizations, ','))];
-                // eslint-disable-next-line no-param-reassign
-                item.features = [...new Set(listToArray(item.features, ','))];
-                // eslint-disable-next-line no-param-reassign
-                item.winetypes = [...new Set(listToArray(item.winetypes, ','))];
                 const objUrl = `${item.id}-${speakingurl(item.name, [])}`;
-                // eslint-disable-next-line no-param-reassign
-                item.location = [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))];
-                // eslint-disable-next-line no-param-reassign
-                item.url = objUrl;
-                return item;
+                return {
+                    ...item,
+                    paths: [...new Set(listToArray(item.paths, ','))],
+                    organizations: [...new Set(listToArray(item.organizations, ','))],
+                    features: [...new Set(listToArray(item.features, ','))],
+                    winetypes: [...new Set(listToArray(item.winetypes, ','))],
+                    location: [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))],
+                    url: objUrl,
+                };
             });
             result(parseItems, null);
         }

@@ -58,17 +58,7 @@ module.exports = {
         'import/prefer-default-export': 0,
         'import/no-extraneous-dependencies': 0,
         'import/no-webpack-loader-syntax': 0,
-        'import/order': [2, {
-            groups: [
-                ['builtin', 'external'],
-                'internal',
-                ['parent', 'sibling', 'index'],
-            ],
-            'newlines-between': 'always',
-        }],
-        'import/newline-after-import': [2, {
-            count: 2,
-        }],
+        'import/order': 0,
         'no-plusplus': ['error', {
             allowForLoopAfterthoughts: true,
         }],

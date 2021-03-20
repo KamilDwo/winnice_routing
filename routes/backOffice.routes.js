@@ -1,13 +1,10 @@
-// eslint-disable-next-line import/order
 const express = require('express');
-
+const cors = require('cors');
 
 const router = express.Router();
-const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 const speakingurl = require('speakingurl');
-
 const corsOptionsDelegate = require('../config/cors.config');
 const backOfficeController = require('../controllers/backOffice.controllers');
 
