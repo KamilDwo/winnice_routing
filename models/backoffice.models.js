@@ -490,7 +490,7 @@ BackOffice.deleteSpecificVineyard = (body, result) => {
                 }
                 else {
                     results.forEach(photo => {
-                        const filePath = `public/images/${photo.photoFile}`;
+                        const filePath = `public/upload/${photo.photoFile}`;
                         fs.unlink(filePath, err => {
                             if (err) {
                                 console.error(err);
