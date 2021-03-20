@@ -87,9 +87,7 @@ exports.deleteSpecificVineyard = function (req, res) {
 };
 
 exports.uploadVineyardImage = function (req, res) {
-    // eslint-disable-next-line no-unused-vars
     BackOffice.uploadVineyardImage(req, (file, err) => {
-        res.end();/*
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
             res.status(500);
@@ -97,8 +95,7 @@ exports.uploadVineyardImage = function (req, res) {
         }
         else {
             res.json(file);
-            res.end();
-        } */
+        }
     });
 };
 
