@@ -1,5 +1,6 @@
 require('dotenv').config();
 const connection = require('../config/db.config');
+const fs = require('fs');
 
 
 const BackOffice = news => {
@@ -78,7 +79,6 @@ BackOffice.uploadVineyardImage = (req, result) => {
                 result(moreFile, null);
             }
         });
-        result(req.file, null);
     }
     else {
         const moreFile = {
@@ -246,8 +246,6 @@ BackOffice.updateVineyardById = (req, result) => {
         features,
     } = req.body.values;
     const location = `${locationX}, ${locationY}`;
-
-    console.log(name);
 
     connection.query('SELECT vineyardId, organizationId FROM vineyards_organizations WHERE vineyardId = ?', id, (error, results) => {
         const formOrganizations = organizations.map(organization =>
@@ -456,9 +454,55 @@ BackOffice.deleteSpecificFile = (body, result) => {
                 result({
                 }, null);
             }
-        }
-        );
+        });
     }
+};
+
+BackOffice.deleteSpecificVineyard = (body, result) => {
+    const query = `
+        DELETE FROM vineyards_winetypes WHERE vineyardId = ?;
+        DELETE FROM vineyards_paths WHERE vineyardId = ?;
+        DELETE FROM vineyards_organizations WHERE vineyardId = ?;
+        DELETE FROM vineyards_features WHERE vineyardId = ?;
+        DELETE FROM vineyards WHERE id = ?;
+    `;
+
+    const deletePhotosArray = () => {
+        connection.query('DELETE FROM vineyards_photos WHERE vineyardId = ?', body.body.vineyardId, error => {
+            if (error) {
+                result(null, error);
+            }
+            else {
+                result({
+                }, null);
+            }
+        });
+    };
+
+    connection.query(query, [body.params.id, body.params.id, body.params.id, body.params.id, body.params.id], error => {
+        if (error) {
+            result(null, error);
+        }
+        else {
+            connection.query('SELECT photoFile FROM vineyards_photos WHERE vineyardId = ?', body.params.id, (errorPhoto, results) => {
+                if (errorPhoto) {
+                    result(null, errorPhoto);
+                }
+                else {
+                    results.forEach(photo => {
+                        const filePath = `public/images/${photo.photoFile}`;
+                        fs.unlink(filePath, err => {
+                            if (err) {
+                                console.error(err);
+                            }
+                        });
+                    });
+                    deletePhotosArray();
+                }
+            });
+        }
+    });
+
 };
 
 BackOffice.getVineyardById = (id, result) => {

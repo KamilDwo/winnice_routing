@@ -30,5 +30,6 @@ router.post('/vineyards/new', cors(corsOptionsDelegate), backOfficeController.cr
 router.post('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.updateVineyardById);
 router.delete('/delete_file/:from', cors(corsOptionsDelegate), backOfficeController.deleteSpecificFile);
 router.get('/get_data', cors(corsOptionsDelegate), backOfficeController.getAllRequiredData);
+router.delete('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.deleteSpecificVineyard);
 
 module.exports = router;
