@@ -144,6 +144,7 @@ BackOffice.createVineyard = (req, result) => {
         groundTiltDirection: groundTiltDirection || '',
         groundType: groundType || '',
         vineyardDescription: description || '',
+        dateAdd: Date.now(),
     };
 
     connection.query('INSERT INTO vineyards SET ?', values, (error, results) => {
