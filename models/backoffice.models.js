@@ -555,7 +555,8 @@ BackOffice.deleteSpecificVineyard = (body, result) => {
         });
     };
 
-    connection.query(query, [body.params.id, body.params.id, body.params.id, body.params.id, body.params.id], error => {
+    // eslint-disable-next-line no-shadow
+    connection.query(query, [body.params.id, body.params.id, body.params.id, body.params.id, body.params.id], (error, result) => {
         if (error) {
             result(null, error);
         }
