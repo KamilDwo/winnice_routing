@@ -55,8 +55,8 @@ exports.getVineyardById = function (req, res) {
     });
 };
 
-exports.deleteSpecificFile = function (req, res) {
-    BackOffice.deleteSpecificFile(req, (vineyard, err) => {
+exports.getOrganizationById = function (req, res) {
+    BackOffice.getOrganizationById(req.params.id, (response, err) => {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
             res.status(500);
@@ -65,13 +65,44 @@ exports.deleteSpecificFile = function (req, res) {
             });
         }
         else {
-            res.json(vineyard);
+            res.json(response);
+        }
+    });
+};
+
+exports.deleteSpecificFile = function (req, res) {
+    BackOffice.deleteSpecificFile(req, (response, err) => {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500);
+            res.json({
+                type: 'ERROR', message: err.sqlMessage,
+            });
+        }
+        else {
+            res.json(response);
         }
     });
 };
 
 exports.deleteSpecificVineyard = function (req, res) {
-    BackOffice.deleteSpecificVineyard(req, (vineyard, err) => {
+    BackOffice.deleteSpecificVineyard(req, err => {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500);
+            res.json({
+                type: 'ERROR', message: err.sqlMessage,
+            });
+        }
+        else {
+            res.status(200);
+            res.end();
+        }
+    });
+};
+
+exports.deleteSpecificOrganization = function (req, res) {
+    BackOffice.deleteSpecificOrganization(req, (response, err) => {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
             res.status(500);
@@ -95,6 +126,34 @@ exports.uploadVineyardImage = function (req, res) {
         }
         else {
             res.json(file);
+        }
+    });
+};
+
+exports.updateOrganizationById = function (req, res) {
+    BackOffice.updateOrganizationById(req, err => {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500);
+            res.end();
+        }
+        else {
+            res.status(200);
+            res.end();
+        }
+    });
+};
+
+exports.createOrganization = function (req, res) {
+    BackOffice.createOrganization(req, err => {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500);
+            res.end();
+        }
+        else {
+            res.status(200);
+            res.end();
         }
     });
 };

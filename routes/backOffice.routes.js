@@ -31,5 +31,9 @@ router.post('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.up
 router.delete('/delete_file/:from', cors(corsOptionsDelegate), backOfficeController.deleteSpecificFile);
 router.get('/get_data', cors(corsOptionsDelegate), backOfficeController.getAllRequiredData);
 router.delete('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.deleteSpecificVineyard);
+router.post('/organizations/new', cors(corsOptionsDelegate), backOfficeController.createOrganization);
+router.post('/organizations/:id', cors(corsOptionsDelegate), backOfficeController.updateOrganizationById);
+router.get('/organizations/:id', cors(corsOptionsDelegate), backOfficeController.getOrganizationById);
+router.delete('/organizations/:id', cors(corsOptionsDelegate), backOfficeController.deleteSpecificOrganization);
 
 module.exports = router;

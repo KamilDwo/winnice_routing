@@ -20,7 +20,7 @@ BackOffice.loginAdmin = result => {
 
 BackOffice.getAllRequiredData = result => {
     const query = `SELECT * FROM winetypes;
-    SELECT * FROM organizations;
+    SELECT organizations.*, COUNT(vineyards_organizations.vineyardId) AS vineyardsAmount FROM organizations LEFT JOIN vineyards_organizations ON vineyards_organizations.organizationId = organizations.id GROUP BY organizations.id;
     SELECT * FROM paths;
     `;
 
@@ -83,7 +83,7 @@ BackOffice.uploadVineyardImage = (req, result) => {
     else {
         const moreFile = {
             filename: req.file.filename,
-            thumbUrl: `https://polskiewinnice.ovh/images/${req.file.filename}`,
+            thumbUrl: `https://polskiewinnice.ovh/images_preview/${req.file.filename}`,
             uid: Math.random() + Math.random() + Math.random(),
             name: req.file.filename,
         };
@@ -210,6 +210,55 @@ BackOffice.createVineyard = (req, result) => {
                     });
                 }
             }
+            result(null, {
+            });
+        }
+    });
+};
+
+BackOffice.createOrganization = (req, result) => {
+    const {
+        name,
+        isActive,
+        sort,
+    } = req.body.values;
+
+    const values = {
+        name,
+        isActive: isActive || 0,
+        sort,
+    };
+
+    connection.query('INSERT INTO organizations SET ?', values, error => {
+        if (error) {
+            result(error, null);
+        }
+        else {
+            result(null, {
+            });
+        }
+    });
+};
+
+
+BackOffice.updateOrganizationById = (req, result) => {
+    const { id } = req.body;
+    const {
+        name,
+        sort,
+        isActive,
+    } = req.body.values;
+    const query = `UPDATE organizations SET ? WHERE id=?;`;
+    const post = {
+        name,
+        isActive,
+        sort,
+    };
+    connection.query(query, [post, id], error => {
+        if (error) {
+            result(error, null);
+        }
+        else {
             result(null, {
             });
         }
@@ -459,6 +508,31 @@ BackOffice.deleteSpecificFile = (body, result) => {
     }
 };
 
+BackOffice.deleteSpecificOrganization = (body, result) => {
+    if (body.body.vineyardId) {
+        connection.query('DELETE FROM vineyards_organizations WHERE vineyardId = ? AND organizationId = ?', [body.body.vineyardId, body.params.id], error => {
+            if (error) {
+                result(null, error);
+            }
+            else {
+                result({
+                }, null);
+            }
+        });
+    }
+    else {
+        connection.query('DELETE FROM organizations WHERE id = ?', body.params.id, error => {
+            if (error) {
+                result(null, error);
+            }
+            else {
+                result({
+                }, null);
+            }
+        });
+    }
+};
+
 BackOffice.deleteSpecificVineyard = (body, result) => {
     const query = `
         DELETE FROM vineyards_winetypes WHERE vineyardId = ?;
@@ -503,7 +577,27 @@ BackOffice.deleteSpecificVineyard = (body, result) => {
             });
         }
     });
+};
 
+BackOffice.getOrganizationById = (id, result) => {
+    const sql = `
+    SELECT vineyards_organizations.vineyardId, vineyards.name, vineyards.isActive, vineyards.provinceId FROM vineyards_organizations LEFT JOIN vineyards ON vineyards.id = vineyards_organizations.vineyardId WHERE vineyards_organizations.organizationId = ? GROUP BY vineyards.id;
+    SELECT id, name, isActive, sort FROM organizations WHERE id = ?;
+    `;
+
+    connection.query(sql, [id, id], (error, results) => {
+        if (error) {
+            result(null, error);
+        }
+        else {
+            const parseItems = results[1].map(item => ({
+                ...item,
+                isActive: item.isActive === 1,
+                vineyards: results[0],
+            }));
+            result(parseItems[0], null);
+        }
+    });
 };
 
 BackOffice.getVineyardById = (id, result) => {
