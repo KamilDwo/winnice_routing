@@ -1,6 +1,7 @@
 require('dotenv').config();
 const connection = require('../config/db.config');
 const fs = require('fs');
+const moment = require('moment');
 
 
 const BackOffice = news => {
@@ -144,7 +145,7 @@ BackOffice.createVineyard = (req, result) => {
         groundTiltDirection: groundTiltDirection || '',
         groundType: groundType || '',
         vineyardDescription: description || '',
-        dateAdd: Date.now(),
+        dateAdd: moment().format('YYYY-MM-DD HH:mm:ss'),
     };
 
     connection.query('INSERT INTO vineyards SET ?', values, (error, results) => {
