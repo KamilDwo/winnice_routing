@@ -86,7 +86,7 @@ exports.deleteSpecificFile = function (req, res) {
 };
 
 exports.deleteSpecificVineyard = function (req, res) {
-    BackOffice.deleteSpecificVineyard(req, err => {
+    BackOffice.deleteSpecificVineyard(req, (response, err) => {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
             res.status(500);
