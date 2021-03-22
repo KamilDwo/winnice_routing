@@ -133,7 +133,7 @@ BackOffice.createVineyard = (req, result) => {
         provinceId,
         address,
         city,
-        isActive: isActive ? 2 : 1,
+        isActive,
         phone: phone || '',
         email: email || '',
         www: www || '',
