@@ -74,7 +74,6 @@ Vineyard.findById = (id, result) => {
             const item = results[0];
             item.features = [];
             const location = item.location.split(',');
-            item.isActive = item.isActive === 2;
             const objUrl = `${item.id}-${speakingurl(item.name, [])}`;
             item.location = [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))];
             item.paths = listToArray(item.paths, ',');
