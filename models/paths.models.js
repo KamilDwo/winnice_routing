@@ -1,32 +1,28 @@
-'use strict'
+const connection = require('../config/db.config');
 
-const connection = require('../config/db.config')
-
-const Paths = () => {}
+const Paths = () => {};
 
 
-
+// eslint-disable-next-line no-unused-vars
 Paths.findAll = (result, body) => {
-    let defaultFields = `id,
+    const defaultFields = `id,
          name,
          isActive,
-        bounds`
+        bounds`;
 
-    connection.query(`SELECT ${defaultFields} FROM paths`, function (error, results) {
+    connection.query(`SELECT ${defaultFields} FROM paths`, (error, results) => {
         if (error) {
-            result(error, null)
-        } else {
-            const parseItems = results.map(item => {
-                item.isActive = item.isActive === 2
-                item.bounds = item.bounds.split(',')
-                let itemBounds
-                itemBounds = item.bounds.map(bound => parseFloat(bound))
-                item.bounds = itemBounds && itemBounds.length > 1 ? itemBounds : null
-                return item
-            });
-            result(parseItems, null)
+            result(error, null);
         }
-    })
-}
+        else {
+            const parseItems = results.map(item => ({
+                ...item,
+                isActive: item.isActive,
+                bounds: item.bounds,
+            }));
+            result(parseItems, null);
+        }
+    });
+};
 
-module.exports = Paths
+module.exports = Paths;
