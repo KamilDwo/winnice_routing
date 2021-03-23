@@ -15,11 +15,10 @@ Paths.findAll = (result, body) => {
             result(error, null);
         }
         else {
-            console.log(results)
             const parseItems = results.map(item => ({
                 ...item,
                 isActive: item.isActive,
-                bounds: JSON.parse(item.bounds),
+                bounds: item.bounds,
             }));
             result(parseItems, null);
         }
