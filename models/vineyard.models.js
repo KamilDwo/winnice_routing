@@ -18,6 +18,7 @@ const defaultFields = `vineyards.id,
     GROUP_CONCAT(vineyards_paths.pathId) AS paths,
     GROUP_CONCAT(vineyards_features.featureId) AS features,
     GROUP_CONCAT(vineyards_organizations.organizationId) AS organizations,
+    GROUP_CONCAT(vineyards_photos.photoFile) AS photos,
     GROUP_CONCAT(vineyards_winetypes.winetypeId) AS winetypes
     `;
 
@@ -27,8 +28,9 @@ Vineyard.findAll = result => {
      LEFT JOIN vineyards_paths ON vineyards.id=vineyards_paths.vineyardId
        LEFT JOIN vineyards_organizations ON vineyards.id=vineyards_organizations.vineyardId
        LEFT JOIN vineyards_features ON vineyards.id=vineyards_features.vineyardId
+       LEFT JOIN vineyards_photos ON vineyards.id=vineyards_photos.vineyardId
        LEFT JOIN vineyards_winetypes ON vineyards.id=vineyards_winetypes.vineyardId
-       WHERE vineyards.isActive is TRUE
+       WHERE vineyards.isActive = 1
       GROUP BY vineyards.id`, (error, results) => {
         if (error) {
             result(null, error);
@@ -43,6 +45,7 @@ Vineyard.findAll = result => {
                     organizations: [...new Set(listToArray(item.organizations, ','))],
                     features: [...new Set(listToArray(item.features, ','))],
                     winetypes: [...new Set(listToArray(item.winetypes, ','))],
+                    photos: [...new Set(listToArray(item.photos, ','))],
                     location: [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))],
                     url: objUrl,
                 };
