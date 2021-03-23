@@ -75,12 +75,21 @@ Vineyard.findById = (id, result) => {
         }
         else {
             const item = results[0];
-            item.features = [];
+            const { photos } = item;
+            let photosToReturn = [];
+            if (item.photos && item.photos.length > 0) {
+                photosToReturn = photos.split(',');
+            }
+
+            item.paths = [...new Set(listToArray(item.paths, ','))];
+            item.organizations = [...new Set(listToArray(item.organizations, ','))];
+            item.features = [...new Set(listToArray(item.features, ','))];
+            item.winetypes = [...new Set(listToArray(item.winetypes, ','))];
             const location = item.location.split(',');
             const objUrl = `${item.id}-${speakingurl(item.name, [])}`;
             item.location = [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))];
-            item.paths = listToArray(item.paths, ',');
             item.url = objUrl;
+            item.photos = photosToReturn;
             result(item, null);
         }
     });
