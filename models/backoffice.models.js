@@ -279,7 +279,7 @@ BackOffice.createPath = (req, result) => {
         name,
         isActive: isActive || 0,
         sort,
-        bounds: bounds || '',
+        bounds: JSON.stringify(bounds) || '',
     };
 
     connection.query('INSERT INTO paths SET ?', values, error => {
@@ -350,12 +350,14 @@ BackOffice.updatePathById = (req, result) => {
         name,
         sort,
         isActive,
+        bounds,
     } = req.body.values;
     const query = `UPDATE paths SET ? WHERE id=?;`;
     const post = {
         name,
         isActive,
         sort,
+        bounds: JSON.stringify(bounds) || '',
     };
     connection.query(query, [post, id], error => {
         if (error) {
