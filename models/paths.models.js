@@ -18,7 +18,7 @@ Paths.findAll = (result, body) => {
             const parseItems = results.map(item => ({
                 ...item,
                 isActive: item.isActive,
-                bounds: JSON.parse(item.bounds),
+                bounds: item.bounds,
             }));
             result(parseItems, null);
         }
