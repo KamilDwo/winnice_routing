@@ -70,6 +70,36 @@ exports.getOrganizationById = function (req, res) {
     });
 };
 
+exports.getPathById = function (req, res) {
+    BackOffice.getPathById(req.params.id, (response, err) => {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500);
+            res.json({
+                type: 'ERROR', message: err.sqlMessage,
+            });
+        }
+        else {
+            res.json(response);
+        }
+    });
+};
+
+exports.getWineTypeById = function (req, res) {
+    BackOffice.getWineTypeById(req.params.id, (response, err) => {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500);
+            res.json({
+                type: 'ERROR', message: err.sqlMessage,
+            });
+        }
+        else {
+            res.json(response);
+        }
+    });
+};
+
 exports.deleteSpecificFile = function (req, res) {
     BackOffice.deleteSpecificFile(req, (response, err) => {
         if (err) {
@@ -117,6 +147,38 @@ exports.deleteSpecificOrganization = function (req, res) {
     });
 };
 
+exports.deleteSpecificPath = function (req, res) {
+    BackOffice.deleteSpecificPath(req, (response, err) => {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500);
+            res.json({
+                type: 'ERROR', message: err.sqlMessage,
+            });
+        }
+        else {
+            res.status(200);
+            res.end();
+        }
+    });
+};
+
+exports.deleteSpecificWineType = function (req, res) {
+    BackOffice.deleteSpecificWineType(req, (response, err) => {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500);
+            res.json({
+                type: 'ERROR', message: err.sqlMessage,
+            });
+        }
+        else {
+            res.status(200);
+            res.end();
+        }
+    });
+};
+
 exports.uploadVineyardImage = function (req, res) {
     BackOffice.uploadVineyardImage(req, (file, err) => {
         if (err) {
@@ -144,8 +206,50 @@ exports.updateOrganizationById = function (req, res) {
     });
 };
 
+exports.updateWineTypeById = function (req, res) {
+    BackOffice.updateWineTypeById(req, err => {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500);
+            res.end();
+        }
+        else {
+            res.status(200);
+            res.end();
+        }
+    });
+};
+
+exports.updatePathById = function (req, res) {
+    BackOffice.updatePathById(req, err => {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500);
+            res.end();
+        }
+        else {
+            res.status(200);
+            res.end();
+        }
+    });
+};
+
 exports.createOrganization = function (req, res) {
     BackOffice.createOrganization(req, err => {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500);
+            res.end();
+        }
+        else {
+            res.status(200);
+            res.end();
+        }
+    });
+};
+
+exports.createPath = function (req, res) {
+    BackOffice.createPath(req, err => {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
             res.status(500);
@@ -174,6 +278,20 @@ exports.updateVineyardById = function (req, res) {
 
 exports.createVineyard = function (req, res) {
     BackOffice.createVineyard(req, err => {
+        if (err) {
+            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500);
+            res.end();
+        }
+        else {
+            res.status(200);
+            res.end();
+        }
+    });
+};
+
+exports.createWineType = function (req, res) {
+    BackOffice.createWineType(req, err => {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
             res.status(500);

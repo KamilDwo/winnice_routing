@@ -35,5 +35,13 @@ router.post('/organizations/new', cors(corsOptionsDelegate), backOfficeControlle
 router.post('/organizations/:id', cors(corsOptionsDelegate), backOfficeController.updateOrganizationById);
 router.get('/organizations/:id', cors(corsOptionsDelegate), backOfficeController.getOrganizationById);
 router.delete('/organizations/:id', cors(corsOptionsDelegate), backOfficeController.deleteSpecificOrganization);
+router.get('/paths/:id', cors(corsOptionsDelegate), backOfficeController.getPathById);
+router.delete('/paths/:id', cors(corsOptionsDelegate), backOfficeController.deleteSpecificPath);
+router.post('/paths/new', cors(corsOptionsDelegate), backOfficeController.createPath);
+router.post('/paths/:id', cors(corsOptionsDelegate), backOfficeController.updatePathById);
+router.get('/wine_types/:id', cors(corsOptionsDelegate), backOfficeController.getWineTypeById);
+router.delete('/wine_types/:id', cors(corsOptionsDelegate), backOfficeController.deleteSpecificWineType);
+router.post('/wine_types/new', cors(corsOptionsDelegate), backOfficeController.createWineType);
+router.post('/wine_types/:id', cors(corsOptionsDelegate), backOfficeController.updateWineTypeById);
 
 module.exports = router;
