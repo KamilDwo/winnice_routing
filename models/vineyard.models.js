@@ -9,7 +9,8 @@ const Vineyard = vineyard => {
     this.name = vineyard.name;
 };
 
-const defaultFields = `vineyards.id,
+Vineyard.findAll = result => {
+    const defaultFields = `vineyards.id,
      vineyards.name,
      vineyards.dateAdd,
     vineyards.location,
@@ -22,8 +23,6 @@ const defaultFields = `vineyards.id,
     GROUP_CONCAT(vineyards_winetypes.winetypeId) AS winetypes
     `;
 
-
-Vineyard.findAll = result => {
     connection.query(`SELECT ${defaultFields} FROM vineyards
      LEFT JOIN vineyards_paths ON vineyards.id=vineyards_paths.vineyardId
        LEFT JOIN vineyards_organizations ON vineyards.id=vineyards_organizations.vineyardId
