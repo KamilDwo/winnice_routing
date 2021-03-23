@@ -39,13 +39,19 @@ Vineyard.findAll = result => {
             const parseItems = results.map(item => {
                 const location = item.location.split(',');
                 const objUrl = `${item.id}-${speakingurl(item.name, [])}`;
+                const { photos } = item;
+                let photosToReturn = [];
+                if (item.photos && item.photos.length > 0) {
+                    photosToReturn = photos.split(',');
+                }
+
                 return {
                     ...item,
                     paths: [...new Set(listToArray(item.paths, ','))],
                     organizations: [...new Set(listToArray(item.organizations, ','))],
                     features: [...new Set(listToArray(item.features, ','))],
                     winetypes: [...new Set(listToArray(item.winetypes, ','))],
-                    photos: [...new Set(listToArray(item.photos, ','))],
+                    photos: photosToReturn,
                     location: [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))],
                     url: objUrl,
                 };
