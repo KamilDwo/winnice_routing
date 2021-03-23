@@ -24,8 +24,7 @@ const defaultFields = `vineyards.id,
 
 
 Vineyard.findAll = result => {
-    try {
-        connection.query(`SELECT ${defaultFields} FROM vineyards
+    connection.query(`SELECT ${defaultFields} FROM vineyards
      LEFT JOIN vineyards_paths ON vineyards.id=vineyards_paths.vineyardId
        LEFT JOIN vineyards_organizations ON vineyards.id=vineyards_organizations.vineyardId
        LEFT JOIN vineyards_features ON vineyards.id=vineyards_features.vineyardId
@@ -33,37 +32,33 @@ Vineyard.findAll = result => {
        LEFT JOIN vineyards_winetypes ON vineyards.id=vineyards_winetypes.vineyardId
        WHERE vineyards.isActive = 1
       GROUP BY vineyards.id`, (error, results) => {
-            if (error) {
-                result(null, error);
-            }
-            else {
-                const parseItems = results.map(item => {
-                    const location = item.location.split(',');
-                    const objUrl = `${item.id}-${speakingurl(item.name, [])}`;
-                    const { photos } = item;
-                    let photosToReturn = [];
-                    if (item.photos && item.photos.length > 0) {
-                        photosToReturn = photos.split(',');
-                    }
+        if (error) {
+            result(null, error);
+        }
+        else {
+            const parseItems = results.map(item => {
+                const location = item.location.split(',');
+                const objUrl = `${item.id}-${speakingurl(item.name, [])}`;
+                const { photos } = item;
+                let photosToReturn = [];
+                if (item.photos && item.photos.length > 0) {
+                    photosToReturn = photos.split(',');
+                }
 
-                    return {
-                        ...item,
-                        paths: [...new Set(listToArray(item.paths, ','))],
-                        organizations: [...new Set(listToArray(item.organizations, ','))],
-                        features: [...new Set(listToArray(item.features, ','))],
-                        winetypes: [...new Set(listToArray(item.winetypes, ','))],
-                        photos: photosToReturn,
-                        location: [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))],
-                        url: objUrl,
-                    };
-                });
-                result(parseItems, null);
-            }
-        });
-    }
-    catch (e) {
-        result(null, e);
-    }
+                return {
+                    ...item,
+                    paths: [...new Set(listToArray(item.paths, ','))],
+                    organizations: [...new Set(listToArray(item.organizations, ','))],
+                    features: [...new Set(listToArray(item.features, ','))],
+                    winetypes: [...new Set(listToArray(item.winetypes, ','))],
+                    photos: photosToReturn,
+                    location: [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))],
+                    url: objUrl,
+                };
+            });
+            result(parseItems, null);
+        }
+    });
 };
 
 Vineyard.findById = (id, result) => {
