@@ -61,7 +61,12 @@ Vineyard.findAll = result => {
 };
 
 Vineyard.findById = (id, result) => {
-    connection.query(`SELECT ${defaultFields} FROM vineyards LEFT JOIN vineyards_paths ON vineyards.id=vineyards_paths.vineyardId WHERE vineyards.id = ? GROUP BY vineyards.id LIMIT 1`, id, (error, results) => {
+    connection.query(`SELECT vineyards.id,
+     vineyards.name,
+     vineyards.dateAdd,
+    vineyards.location,
+    vineyards.provinceId,
+      vineyards.isActive FROM vineyards LEFT JOIN vineyards_paths ON vineyards.id=vineyards_paths.vineyardId WHERE vineyards.id = ? GROUP BY vineyards.id LIMIT 1`, id, (error, results) => {
         if (error) {
             result(error, null);
         }
