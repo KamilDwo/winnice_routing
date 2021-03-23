@@ -9,8 +9,7 @@ const Vineyard = vineyard => {
     this.name = vineyard.name;
 };
 
-Vineyard.findAll = result => {
-    const defaultFields = `vineyards.id,
+const defaultFields = `vineyards.id,
      vineyards.name,
      vineyards.dateAdd,
     vineyards.location,
@@ -23,6 +22,8 @@ Vineyard.findAll = result => {
     GROUP_CONCAT(vineyards_winetypes.winetypeId) AS winetypes
     `;
 
+
+Vineyard.findAll = result => {
     connection.query(`SELECT ${defaultFields} FROM vineyards
      LEFT JOIN vineyards_paths ON vineyards.id=vineyards_paths.vineyardId
        LEFT JOIN vineyards_organizations ON vineyards.id=vineyards_organizations.vineyardId
@@ -61,12 +62,14 @@ Vineyard.findAll = result => {
 };
 
 Vineyard.findById = (id, result) => {
-    connection.query(`SELECT vineyards.id,
-     vineyards.name,
-     vineyards.dateAdd,
-    vineyards.location,
-    vineyards.provinceId,
-      vineyards.isActive FROM vineyards LEFT JOIN vineyards_paths ON vineyards.id=vineyards_paths.vineyardId WHERE vineyards.id = ? GROUP BY vineyards.id LIMIT 1`, id, (error, results) => {
+    connection.query(`SELECT ${defaultFields} FROM vineyards
+     LEFT JOIN vineyards_paths ON vineyards.id=vineyards_paths.vineyardId
+       LEFT JOIN vineyards_organizations ON vineyards.id=vineyards_organizations.vineyardId
+       LEFT JOIN vineyards_features ON vineyards.id=vineyards_features.vineyardId
+       LEFT JOIN vineyards_photos ON vineyards.id=vineyards_photos.vineyardId
+       LEFT JOIN vineyards_winetypes ON vineyards.id=vineyards_winetypes.vineyardId
+       WHERE vineyards.id = ?
+      GROUP BY vineyards.id`, id, (error, results) => {
         if (error) {
             result(error, null);
         }
