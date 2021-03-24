@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const compression = require('compression');
 
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json({
     limit: '50mb',
 }));
+app.use(compression());
 app.use(cors());
 app.use(morgan('combined'));
 app.use(express.static(`${__dirname}/public`));
