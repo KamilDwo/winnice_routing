@@ -25,6 +25,10 @@ const newsRoutes = require('./routes/news.routes');
 const pathsRoutes = require('./routes/paths.routes');
 const backOfficeRoutes = require('./routes/backOffice.routes');
 
+app.all('/*', (req, res, next) => {
+    res.header('Cache-Control', 'public, max-age=120');
+    next();
+});
 
 app.use('/api/v1/vineyards', vineyardsRoutes);
 app.use('/api/v1/news', newsRoutes);
