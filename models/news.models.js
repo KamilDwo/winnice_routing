@@ -97,7 +97,7 @@ News.getInstagramPhotos = (result, body) => {
             if (profile.user.edge_owner_to_timeline_media.edges) {
                 const photos = profile.user.edge_owner_to_timeline_media.edges.map(photo => ({
                     externalId: photo.node.id,
-                    image1: photo.node.display_url,
+                    image: photo.node.display_url,
                     type: NewsTypes.INSTAGRAM,
                     dateAdd: photo.node.taken_at_timestamp,
                     url: `https://www.instagram.com/p/${photo.node.shortcode}`,
@@ -105,7 +105,7 @@ News.getInstagramPhotos = (result, body) => {
                     likesCount: photo.node.edge_media_preview_like.count,
                     commentsCount: photo.node.edge_media_to_comment.count,
                 }));
-                connection.query(`SELECT external_id as 'externalId', id FROM pw_news`, (error, results) => {
+                connection.query(`SELECT external_id as 'externalId', id FROM news`, (error, results) => {
                     let lastId;
                     if (results) {
                         lastId = results[results.length - 1].id;
@@ -126,7 +126,7 @@ News.getInstagramPhotos = (result, body) => {
                             return [lastId += 1, ...Object.values(newPhoto)];
                         });
 
-                        connection.query(`INSERT INTO pw_news (id, externalId, image, type, dateAdd, url, isActive, likesCount, commentsCount) VALUES ?`, [newPhotosToAdd], (error2, results2) => {
+                        connection.query(`INSERT INTO news (id, externalId, image, type, dateAdd, url, isActive, likesCount, commentsCount) VALUES ?`, [newPhotosToAdd], (error2, results2) => {
                             if (error2) {
                                 result(null, {
                                     error: {
