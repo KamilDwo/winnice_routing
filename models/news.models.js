@@ -107,6 +107,7 @@ News.getInstagramPhotos = (result, body) => {
                 }));
                 connection.query(`SELECT externalId, id FROM news`, (error, results) => {
                     let lastId;
+                    console.log('wyniki', results)
                     if (results) {
                         lastId = results[results.length - 1].id;
                     }
