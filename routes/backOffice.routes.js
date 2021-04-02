@@ -43,5 +43,6 @@ router.get('/wine_types/:id', cors(corsOptionsDelegate), backOfficeController.ge
 router.delete('/wine_types/:id', cors(corsOptionsDelegate), backOfficeController.deleteSpecificWineType);
 router.post('/wine_types/new', cors(corsOptionsDelegate), backOfficeController.createWineType);
 router.post('/wine_types/:id', cors(corsOptionsDelegate), backOfficeController.updateWineTypeById);
+router.get('/news', cors(corsOptionsDelegate), backOfficeController.getAllNews);
 
 module.exports = router;

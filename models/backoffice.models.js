@@ -40,6 +40,29 @@ BackOffice.getAllRequiredData = result => {
     });
 };
 
+BackOffice.getAllNews = result => {
+    const defaultFields = `
+        id,
+        externalId,
+        message,
+        dateAdd,
+        url,
+        image,
+        isActive,
+        likesCount,
+        commentsCount
+    `;
+    connection.query(`SELECT ${defaultFields} FROM news`, (error, results) => {
+        if (error) {
+            result(error, null);
+        }
+        else {
+            result(results, null);
+        }
+    });
+};
+
+
 BackOffice.getAllVineyards = result => {
     const defaultFields = `
      vineyards.id,
