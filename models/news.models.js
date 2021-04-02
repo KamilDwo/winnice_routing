@@ -107,15 +107,14 @@ News.getInstagramPhotos = (result, body) => {
                 }));
                 connection.query(`SELECT externalId, id FROM news`, (error, results) => {
                     let lastId;
-                    console.log('wyniki', results)
-                    if (results) {
+                    if (results && results.length > 0) {
                         lastId = results[results.length - 1].id;
                     }
                     else {
                         lastId = 0;
                     }
                     let photosToAdd;
-                    if (results) {
+                    if (results && results.length > 0) {
                         const parseResults = results.map(resultItem => resultItem.externalId);
                         photosToAdd = photos.filter(photo => !parseResults.includes(photo.externalId));
                     }
