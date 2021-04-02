@@ -105,7 +105,7 @@ News.getInstagramPhotos = (result, body) => {
                     likesCount: photo.node.edge_media_preview_like.count,
                     commentsCount: photo.node.edge_media_to_comment.count,
                 }));
-                connection.query(`SELECT external_id as 'externalId', id FROM news`, (error, results) => {
+                connection.query(`SELECT externalId, id FROM news`, (error, results) => {
                     let lastId;
                     if (results) {
                         lastId = results[results.length - 1].id;
@@ -113,8 +113,14 @@ News.getInstagramPhotos = (result, body) => {
                     else {
                         lastId = 0;
                     }
-                    const parseResults = results.map(resultItem => resultItem.externalId);
-                    const photosToAdd = photos.filter(photo => !parseResults.includes(photo.externalId));
+                    let photosToAdd;
+                    if (results) {
+                        const parseResults = results.map(resultItem => resultItem.externalId);
+                        photosToAdd = photos.filter(photo => !parseResults.includes(photo.externalId));
+                    }
+                    else {
+                        photosToAdd = photos;
+                    }
                     if (photosToAdd.length > 0) {
                         const newPhotosToAdd = photosToAdd.map(photo => {
                             const newPhoto = {
