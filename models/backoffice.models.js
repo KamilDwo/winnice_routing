@@ -50,7 +50,8 @@ BackOffice.getAllNews = result => {
         image,
         isActive,
         likesCount,
-        commentsCount
+        commentsCount,
+        type
     `;
     connection.query(`SELECT ${defaultFields} FROM news`, (error, results) => {
         if (error) {
