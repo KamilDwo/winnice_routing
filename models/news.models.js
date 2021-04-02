@@ -161,126 +161,48 @@ News.getInstagramPhotos = (result, body) => {
     })();
 };
 
+// eslint-disable-next-line no-unused-vars
 News.findAll = (result, body) => {
-    let defaultFields = 'id,' +
-        ' date_add as \'dateAdd\',' +
-        ' category_1 as \'category1\',' +
-        ' category_2 as \'category2\',' +
-        ' category_3 as \'category3\',' +
-        ' category_4 as \'category4\',' +
-        ' category_5 as \'category5\',' +
-        ' category_6 as \'category6\',' +
-        ' category_7 as \'category7\',' +
-        ' category_8 as \'category8\',' +
-        ' category_9 as \'category9\',' +
-        ' category_10 as \'category10\',' +
-        ' is_active as \'isActive\',' +
-        ' id_province as  \'idProvince\',' +
-        ' news_provinces as \'newsProvinces\',';
+    const defaultFields = `
+        id,
+        dateAdd,
+        likesCount,
+        commentsCount,
+        isActive,
+        url,
+        message,
+        image,
+        type
+    `;
 
-    const defaultFields2 = 'id,' +
-        ' date_add as \'dateAdd\',' +
-        ' likes_count as \'likesCount\',' +
-        ' comments_count as \'commentsCount\',' +
-        ' is_active as \'isActive\',' +
-        ' url,' +
-        ' message,' +
-        ' image_1 as \'image1\',' +
-        ' type';
+    const getType = type => {
+        switch (type) {
+            case 1:
+                return NewsTypes.FACEBOOK;
+            case 2:
+                return NewsTypes.INSTAGRAM;
+            case 3:
+                return NewsTypes.TWITTER;
+            case 4:
+                return NewsTypes.YOUTUBE;
+            case 5:
+                return NewsTypes.YOUTUBE;
+            default:
+                return null;
+        }
+    };
 
-    if (body && body.language === 'pl') {
-        defaultFields += ' name_pl as \'name\', message_pl as \'message\',';
-    }
-    else {
-        defaultFields += ' name_en as \'name\', message_en as \'message\',';
-    }
-    defaultFields += ' image_1 as \'image1\'';
-
-    const query = `SELECT ${defaultFields} FROM pw_news2; SELECT ${defaultFields2} FROM pw_news`;
+    const query = `SELECT ${defaultFields} FROM news`;
     connection.query(query, (error, results) => {
         if (error) {
             result(null, error);
         }
         else {
-            const parseItems = results[0].map(item => {
-                const itemCategories = [];
-                item.isActive = item.isActive === 2;
-                item.type = NewsTypes.PAGE;
-                item.categories = itemCategories;
-
-                if (item.category1) {
-                    itemCategories.push(parseInt(item.category1));
-                }
-                if (item.category2) {
-                    itemCategories.push(parseInt(item.category2));
-                }
-                if (item.category3) {
-                    itemCategories.push(parseInt(item.category3));
-                }
-                if (item.category4) {
-                    itemCategories.push(parseInt(item.category4));
-                }
-                if (item.category5) {
-                    itemCategories.push(parseInt(item.category5));
-                }
-                if (item.category6) {
-                    itemCategories.push(parseInt(item.category6));
-                }
-                if (item.category7) {
-                    itemCategories.push(parseInt(item.category7));
-                }
-                if (item.category8) {
-                    itemCategories.push(parseInt(item.category8));
-                }
-                if (item.category9) {
-                    itemCategories.push(parseInt(item.category9));
-                }
-                if (item.category10) {
-                    itemCategories.push(parseInt(item.category10));
-                }
-
-                const element = item.newsProvinces;
-                if (element) {
-                    const newsProvincesParse = element.replace('[', '');
-                    const newsProvincesParse2 = newsProvincesParse.replace(']', '');
-                    item.provinces = listToArray(newsProvincesParse2, ',');
-                    delete item.newsProvinces;
-                }
-
-                delete item.category1;
-                delete item.category2;
-                delete item.category3;
-                delete item.category4;
-                delete item.category5;
-                delete item.category6;
-                delete item.category7;
-                delete item.category8;
-                delete item.category9;
-                delete item.category10;
-                delete item.idProvince;
-                return item;
-            });
-            const parseItems2 = results[1].map(item => {
-                switch (item.type) {
-                    case 1:
-                        item.type = NewsTypes.FACEBOOK;
-                        break;
-                    case 2:
-                        item.type = NewsTypes.INSTAGRAM;
-                        break;
-                    case 3:
-                        item.type = NewsTypes.TWITTER;
-                        break;
-                    case 4:
-                        item.type = NewsTypes.YOUTUBE;
-                        break;
-                    case 5:
-                        item.type = NewsTypes.YOUTUBE;
-                        break;
-                }
-                return item;
-            });
-            result([...parseItems, ...parseItems2], null);
+            const parseItems = results.map(item => ({
+                ...item,
+                type: getType(item.type),
+            }));
+            result(parseItems, null);
         }
     });
 };
