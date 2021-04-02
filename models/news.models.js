@@ -1,5 +1,3 @@
-
-
 require('dotenv').config();
 const connection = require('../config/db.config');
 const listToArray = require('../helpers/listToArray.helper');
@@ -10,7 +8,8 @@ const {INSTAGRAM_USERNAME, INSTAGRAM_PASSWORD} = process.env;
 const instagramClient = new InstagramApi({
     username: INSTAGRAM_USERNAME, password: INSTAGRAM_PASSWORD,
 });
-const moment = require('moment');
+const dayjs = require('dayjs');
+// eslint-disable-next-line no-unused-vars
 const {OAuth2} = require('oauth');
 const axios = require('axios');
 
@@ -34,15 +33,16 @@ News.findAllCategories = (result, body) => {
             result(null, error);
         }
         else {
-            const parseItems = results.map(item => {
-                item.isActive = item.isActive === 2;
-                return item;
-            });
+            const parseItems = results.forEach(item => ({
+                ...item,
+                isActive: item.isActive === 2,
+            }));
             result(parseItems, null);
         }
     });
 };
 
+// eslint-disable-next-line no-unused-vars
 News.getFacebookNews = (result, body) => {
     try {
         const getAccessToken = () => new Promise((resolve, reject) => axios.get('https://graph.facebook.com/oauth/access_token?client_id=918657384983659&client_secret=8b33bca18a2780fe7b4ae42220a89929&grant_type=client_credentials')
@@ -114,7 +114,7 @@ News.getInstagramPhotos = (result, body) => {
                             const newPhoto = {
                                 ...photo,
                                 type: 2,
-                                dateAdd: moment(photo.dateAdd).format('YYYY-MM-DDThh:mm:ss.ms'),
+                                dateAdd: dayjs(photo.dateAdd).format('YYYY-MM-DDThh:mm:ss.ms'),
                             };
                             // eslint-disable-next-line no-return-assign
                             return [lastId += 1, ...Object.values(newPhoto)];
