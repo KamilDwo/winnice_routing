@@ -106,7 +106,13 @@ News.getInstagramPhotos = (result, body) => {
                     commentsCount: photo.node.edge_media_to_comment.count,
                 }));
                 connection.query(`SELECT external_id as 'externalId', id FROM pw_news`, (error, results) => {
-                    let lastId = results[results.length - 1].id;
+                    let lastId;
+                    if (results) {
+                        lastId = results[results.length - 1].id;
+                    }
+                    else {
+                        lastId = 0;
+                    }
                     const parseResults = results.map(resultItem => resultItem.externalId);
                     const photosToAdd = photos.filter(photo => !parseResults.includes(photo.externalId));
                     if (photosToAdd.length > 0) {
