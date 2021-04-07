@@ -54,7 +54,7 @@ News.getFacebookNews = (result, body) => {
 
         // eslint-disable-next-line no-unused-vars
         getAccessToken().then(token => {
-            axios.get(`https://graph.facebook.com/v10.0/polskiewinniceplofficial/posts?fields=picture,scheduled_publish_time,shares,message,permalink_url,created_time,comments.summary(true).limit(0),likes.summary(true).limit(0)&access_token=EAANDg5caLGsBAAM0nfUhryZCGq3D1afAgItrtEHqFDRg88noS6eEqpMI8ZAbt2sLSnbNvUbfcV0sMRUMHfPF3q5TjGZAUBh20Il3mPVEMF5FfsKhGhdZCLvj1ZBpcZA5fwmKHRibZCNvSBkxeqY1wKmERXTsMUFiVPhA4UtTMp71bF8KmtyWGaWBZBaEGfrrbLrRtRuDxMYKsgZDZD`)
+            axios.get(`https://graph.facebook.com/v10.0/polskiewinniceplofficial/posts?fields=picture,scheduled_publish_time,shares,message,permalink_url,created_time,comments.summary(true).limit(0),likes.summary(true).limit(0)&access_token=EAANDg5caLGsBAOqZBFCWs8KTxY0bsGVDT47L2ZCKZAg15qbplsDiT9Az57JdqcjRGTeqEygGuCBuPZApiPGkHV0xDft3t9RGXNbY7DZCOzTo6fDmvlX3P0cI07V5ZCKQy1fpEr9Fkgk8G6vkNdjNeZAVtZCAXYonGd3WCpWlr4BkVHbdFFFkZCSomZBUS9cHxbB0IUeeajsZCITOtg7LwevZAGMm`)
                 .then(response => {
                     const photos = response.data.data.map(post => ({
                         externalId: post.id,
