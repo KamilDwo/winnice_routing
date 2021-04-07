@@ -1,11 +1,9 @@
-'use strict'
-
 const NewsTypes = {
     PAGE: 'PAGE',
     INSTAGRAM: 'INSTAGRAM',
     TWITTER: 'TWITTER',
     FACEBOOK: 'FACEBOOK',
-    YOUTUBE: 'YOUTUBE'
-}
+    YOUTUBE: 'YOUTUBE',
+};
 
-module.exports = NewsTypes
+module.exports = NewsTypes;

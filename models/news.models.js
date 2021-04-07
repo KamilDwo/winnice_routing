@@ -9,8 +9,6 @@ const instagramClient = new InstagramApi({
     username: INSTAGRAM_USERNAME, password: INSTAGRAM_PASSWORD,
 });
 const dayjs = require('dayjs');
-// eslint-disable-next-line no-unused-vars
-const {OAuth2} = require('oauth');
 const axios = require('axios');
 
 const News = news => {
@@ -54,10 +52,69 @@ News.getFacebookNews = (result, body) => {
             })
         );
 
+        // eslint-disable-next-line no-unused-vars
         getAccessToken().then(token => {
-            axios.get(`https://graph.facebook.com/v2.9/heartitpl/posts?access_token=${token}`)
+            axios.get(`https://graph.facebook.com/v10.0/polskiewinniceplofficial/posts?fields=picture,scheduled_publish_time,shares,message,permalink_url,created_time,comments.summary(true).limit(0),likes.summary(true).limit(0)&access_token=EAANDg5caLGsBAAM0nfUhryZCGq3D1afAgItrtEHqFDRg88noS6eEqpMI8ZAbt2sLSnbNvUbfcV0sMRUMHfPF3q5TjGZAUBh20Il3mPVEMF5FfsKhGhdZCLvj1ZBpcZA5fwmKHRibZCNvSBkxeqY1wKmERXTsMUFiVPhA4UtTMp71bF8KmtyWGaWBZBaEGfrrbLrRtRuDxMYKsgZDZD`)
                 .then(response => {
-                    result(response, null);
+                    const photos = response.data.data.map(post => ({
+                        externalId: post.id,
+                        image: post.picture,
+                        type: NewsTypes.FACEBOOK,
+                        dateAdd: post.created_time,
+                        url: post.permalink_url,
+                        isActive: 1,
+                        message: post.message || '',
+                        likesCount: post.likes.summary.total_count,
+                        commentsCount: post.comments.summary.total_count,
+                    }));
+                    connection.query(`SELECT externalId, id FROM news`, (error, results) => {
+                        let lastId;
+                        if (results && results.length > 0) {
+                            lastId = results[results.length - 1].id;
+                        }
+                        else {
+                            lastId = 0;
+                        }
+                        let photosToAdd;
+                        if (results && results.length > 0) {
+                            const parseResults = results.map(resultItem => resultItem.externalId);
+                            photosToAdd = photos.filter(photo => !parseResults.includes(photo.externalId));
+                        }
+                        else {
+                            photosToAdd = photos;
+                        }
+                        if (photosToAdd.length > 0) {
+                            const newPhotosToAdd = photosToAdd.map(photo => {
+                                const newPhoto = {
+                                    ...photo,
+                                    type: 1,
+                                    dateAdd: dayjs(photo.dateAdd).format('YYYY-MM-DDThh:mm:ss.ms'),
+                                };
+                                // eslint-disable-next-line no-return-assign
+                                return [lastId += 1, ...Object.values(newPhoto)];
+                            });
+
+                            connection.query(`INSERT INTO news (id, externalId, image, type, dateAdd, url, isActive, message, likesCount, commentsCount) VALUES ?`, [newPhotosToAdd], (error2, results2) => {
+                                if (error2) {
+                                    result(null, {
+                                        error: {
+                                            message: error2.sqlMessage,
+                                        },
+                                    });
+                                }
+                                else {
+                                    result(results2, null);
+                                }
+                            });
+                        }
+                        else {
+                            result(null, {
+                                error: {
+                                    message: 'No data to add',
+                                },
+                            });
+                        }
+                    });
                 })
                 .catch(error => {
                     console.log(error);

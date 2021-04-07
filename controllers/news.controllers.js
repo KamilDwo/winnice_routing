@@ -56,8 +56,7 @@ exports.getFacebookNews = function (req, res) {
             res.end();
         }
         else {
-            res.status(200);
-            res.end();
+            res.json(news);
         }
     }, req.body);
 };
