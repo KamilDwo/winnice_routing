@@ -146,9 +146,7 @@ News.getFacebookNews = (result, body) => {
 
 const downloadImage = function(uri, filename, callback){
     // eslint-disable-next-line no-unused-vars
-    request.head(uri, (err, res, body)=> {
-        console.log('content-type:', res.headers['content-type']);
-        console.log('content-length:', res.headers['content-length']);
+    request.head(uri, (err, res, body) => {
         request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
     });
 };
