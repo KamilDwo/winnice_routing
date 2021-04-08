@@ -24,7 +24,8 @@ const defaultFields = `vineyards.id,
 
 
 Vineyard.findAll = result => {
-    connection.query(`SELECT ${defaultFields} FROM vineyards
+    connection.query(`SET NAMES utf8;
+    SELECT ${defaultFields} FROM vineyards
      LEFT JOIN vineyards_paths ON vineyards.id=vineyards_paths.vineyardId
        LEFT JOIN vineyards_organizations ON vineyards.id=vineyards_organizations.vineyardId
        LEFT JOIN vineyards_features ON vineyards.id=vineyards_features.vineyardId
@@ -36,7 +37,7 @@ Vineyard.findAll = result => {
             result(null, error);
         }
         else {
-            const parseItems = results.map(item => {
+            const parseItems = results[1].map(item => {
                 const location = item.location.split(',');
                 const objUrl = `${item.id}-${speakingurl(item.name, [])}`;
                 const { photos } = item;
