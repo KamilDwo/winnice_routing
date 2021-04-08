@@ -8,7 +8,6 @@ const connection = mysql.createPool({
     database: '11565381_winnice',
     waitForConnections: true,
     multipleStatements: true,
-    charset : 'utf8',
 });
-connection.query("SET NAMES utf8");
+
 module.exports = connection;
