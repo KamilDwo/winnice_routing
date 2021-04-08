@@ -194,7 +194,7 @@ News.getInstagramPhotos = (result, body) => {
                             const newPhoto = {
                                 ...photo,
                                 type: 2,
-                                dateAdd: dayjs(photo.dateAdd * 1000),
+                                dateAdd: new Date(photo.dateAdd * 1000),
                             };
                             // eslint-disable-next-line no-return-assign
                             return [lastId += 1, ...Object.values(newPhoto)];
