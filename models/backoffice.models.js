@@ -593,7 +593,7 @@ BackOffice.updateVineyardById = (req, result) => {
         }
     }
     );
-    connection.query("SET NAMES utf8 COLLATE utf8_unicode_ci");
+
     const query = `UPDATE vineyards SET ? WHERE id=?;`;
     const post = {
         name,
