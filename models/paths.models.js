@@ -10,12 +10,12 @@ Paths.findAll = (result, body) => {
          isActive,
         bounds`;
 
-    connection.query(`SELECT ${defaultFields} FROM paths`, (error, results) => {
+    connection.query(`SET NAMES utf8; SELECT ${defaultFields} FROM paths`, (error, results) => {
         if (error) {
             result(error, null);
         }
         else {
-            const parseItems = results.map(item => ({
+            const parseItems = results[1].map(item => ({
                 ...item,
                 isActive: item.isActive,
                 bounds: item.bounds,
