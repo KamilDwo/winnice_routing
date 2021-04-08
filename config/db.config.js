@@ -9,6 +9,5 @@ const connection = mysql.createPool({
     waitForConnections: true,
     multipleStatements: true,
 });
-connection.query("SET NAMES utf8");
-connection.query("COLLATE utf8_polish_ci");
+connection.query("SET NAMES utf8 COLLATE utf8_polish_ci");
 module.exports = connection;
