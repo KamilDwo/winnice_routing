@@ -1,8 +1,9 @@
 require('dotenv').config();
 const connection = require('../config/db.config');
-const listToArray = require('../helpers/listToArray.helper');
 const NewsTypes = require('../enums/news.enums');
 const InstagramApi = require('instagram-web-api');
+const fs = require('fs');
+const request = require('request');
 
 const {INSTAGRAM_USERNAME, INSTAGRAM_PASSWORD} = process.env;
 const instagramClient = new InstagramApi({
@@ -143,6 +144,15 @@ News.getFacebookNews = (result, body) => {
     }
 };
 
+const downloadImage = function(uri, filename, callback){
+    // eslint-disable-next-line no-unused-vars
+    request.head(uri, (err, res, body)=> {
+        console.log('content-type:', res.headers['content-type']);
+        console.log('content-length:', res.headers['content-length']);
+        request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+    });
+};
+
 // eslint-disable-next-line no-unused-vars
 News.getInstagramPhotos = (result, body) => {
     ;(async () => {
@@ -152,6 +162,11 @@ News.getInstagramPhotos = (result, body) => {
                 username: 'kamil.dwo',
             });
             if (profile.user.edge_owner_to_timeline_media.edges) {
+                profile.user.edge_owner_to_timeline_media.edges.forEach(image => {
+                    downloadImage(image.node.display_url, 'google.png', () => {
+                        console.log('done');
+                    });
+                });
                 const photos = profile.user.edge_owner_to_timeline_media.edges.map(photo => ({
                     externalId: photo.node.id,
                     image: photo.node.display_url,
