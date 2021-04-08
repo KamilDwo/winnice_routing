@@ -1,8 +1,8 @@
-require('dotenv').config();
+require('dotenv')
+    .config();
 const connection = require('../config/db.config');
 const fs = require('fs');
 const dayjs = require('dayjs');
-
 
 const BackOffice = news => {
     this.id = news.id;
@@ -15,7 +15,7 @@ BackOffice.loginAdmin = result => {
         {
             token: Math.random(),
         },
-        null
+        null,
     );
 };
 
@@ -63,24 +63,25 @@ BackOffice.getAllNews = result => {
     });
 };
 
-
 BackOffice.getAllVineyards = result => {
-    const defaultFields = `
-     vineyards.id,
-     vineyards.name,
-     vineyards.dateAdd,
-     vineyards.provinceId,
-     vineyards.isActive, 
-     (SELECT COUNT(vineyards_paths.pathId) FROM vineyards_paths WHERE vineyards_paths.vineyardId = vineyards.id) as paths, 
-     (SELECT COUNT(vineyards_organizations.organizationId) FROM vineyards_organizations WHERE vineyards_organizations.vineyardId = vineyards.id) as organizations
+    const query = `
+        SET NAMES utf8;
+        SELECT vineyards.id,
+        vineyards.name,
+        vineyards.dateAdd,
+        vineyards.provinceId,
+        vineyards.isActive, 
+        (SELECT COUNT(vineyards_paths.pathId) FROM vineyards_paths WHERE vineyards_paths.vineyardId = vineyards.id) as paths, 
+        (SELECT COUNT(vineyards_organizations.organizationId) FROM vineyards_organizations WHERE vineyards_organizations.vineyardId = vineyards.id) as organizations
+        FROM vineyards;
      `;
 
-    connection.query(`SELECT ${defaultFields} FROM vineyards`, (error, results) => {
+    connection.query(query, (error, results) => {
         if (error) {
             result(error, null);
         }
         else {
-            result(results, null);
+            result(results[1], null);
         }
     });
 };
@@ -195,7 +196,8 @@ BackOffice.createVineyard = (req, result) => {
         groundTiltDirection: groundTiltDirection || '',
         groundType: groundType || '',
         vineyardDescription: description || '',
-        dateAdd: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        dateAdd: dayjs()
+            .format('YYYY-MM-DD HH:mm:ss'),
     };
 
     connection.query('INSERT INTO vineyards SET ?', values, (error, results) => {
@@ -203,7 +205,7 @@ BackOffice.createVineyard = (req, result) => {
             result(error, null);
         }
         else {
-            if(results.insertId) {
+            if (results.insertId) {
                 if (formFeatures.length > 0) {
                     const featuresToAddArray = formFeatures.map(path => [results.insertId, path]);
                     connection.query('INSERT INTO vineyards_features (vineyardId, featureId) VALUES ?', [featuresToAddArray], err => {
@@ -316,7 +318,6 @@ BackOffice.createPath = (req, result) => {
         }
     });
 };
-
 
 BackOffice.updateOrganizationById = (req, result) => {
     const { id } = req.body;
@@ -433,23 +434,23 @@ BackOffice.updateVineyardById = (req, result) => {
 
     connection.query('SELECT vineyardId, organizationId FROM vineyards_organizations WHERE vineyardId = ?', id, (error, results) => {
         const formOrganizations = organizations.map(organization =>
-            // eslint-disable-next-line radix
-            parseInt(organization)
+        // eslint-disable-next-line radix
+            parseInt(organization),
         );
         const addedOrganizations = results.map(
-            organization => organization.organizationId
+            organization => organization.organizationId,
         );
         const checkIfAddOrganization = formOrganizations.filter(
             // eslint-disable-next-line radix
-            organization => !addedOrganizations.includes(parseInt(organization))
+            organization => !addedOrganizations.includes(parseInt(organization)),
         );
         const toDeleteOrganization = addedOrganizations.filter(
-            organization => !formOrganizations.includes(organization)
+            organization => !formOrganizations.includes(organization),
         );
 
         if (toDeleteOrganization.length > 0) {
             const toDeleteOrganizationMap = toDeleteOrganization.map(
-                organization => [id, organization]
+                organization => [id, organization],
             );
             connection.query('DELETE FROM vineyards_organizations WHERE (vineyardId, organizationId) IN (?)', [toDeleteOrganizationMap], err => {
                 if (err) {
@@ -460,7 +461,7 @@ BackOffice.updateVineyardById = (req, result) => {
 
         if (checkIfAddOrganization.length > 0) {
             const organizationsToAddArray = checkIfAddOrganization.map(
-                organization => [id, organization]
+                organization => [id, organization],
             );
             connection.query('INSERT INTO vineyards_organizations (vineyardId, organizationId) VALUES ?', [organizationsToAddArray], err => {
                 if (err) {
@@ -474,10 +475,10 @@ BackOffice.updateVineyardById = (req, result) => {
         const formFeatures = features.map(feature => parseInt(feature));
         const addedFeatures = results.map(feature => feature.featureId);
         const checkIfAddFeature = formFeatures.filter(
-            feature => !addedFeatures.includes(parseInt(feature))
+            feature => !addedFeatures.includes(parseInt(feature)),
         );
         const toDeleteFeature = addedFeatures.filter(
-            feature => !formFeatures.includes(feature)
+            feature => !formFeatures.includes(feature),
         );
 
         if (toDeleteFeature.length > 0) {
@@ -506,10 +507,10 @@ BackOffice.updateVineyardById = (req, result) => {
         const formPaths = paths.map(path => parseInt(path));
         const addedPaths = results.map(path => path.pathId);
         const checkIfAddPath = formPaths.filter(
-            path => !addedPaths.includes(parseInt(path))
+            path => !addedPaths.includes(parseInt(path)),
         );
         const toDeletePath = addedPaths.filter(
-            path => !formPaths.includes(path)
+            path => !formPaths.includes(path),
         );
 
         if (toDeletePath.length > 0) {
@@ -533,19 +534,19 @@ BackOffice.updateVineyardById = (req, result) => {
 
     connection.query('SELECT vineyardId, winetypeId, winetypeType FROM vineyards_winetypes WHERE vineyardId = ?', id, (error, results) => {
         const filterWhiteResults = results.filter(
-            winetypesWhite => winetypesWhite.winetypeType === 1
+            winetypesWhite => winetypesWhite.winetypeType === 1,
         );
         const filterRedResults = results.filter(
-            winetypesRed => winetypesRed.winetypeType === 2
+            winetypesRed => winetypesRed.winetypeType === 2,
         );
         const wineTypesWhiteToAdd = filterWhiteResults.map(
-            winetype => winetype.winetypeId
+            winetype => winetype.winetypeId,
         );
         const wineTypesRedToAdd = filterRedResults.map(
-            winetype => winetype.winetypeId
+            winetype => winetype.winetypeId,
         );
         const checkIfAddWhite = wineTypesWhite.filter(
-            winetype => !wineTypesWhiteToAdd.includes(parseInt(winetype))
+            winetype => !wineTypesWhiteToAdd.includes(parseInt(winetype)),
         );
         const checkIfAddWhite2 = checkIfAddWhite.map(winetype => [
             id,
@@ -553,7 +554,7 @@ BackOffice.updateVineyardById = (req, result) => {
             1,
         ]);
         const checkIfAddRed = wineTypesRed.filter(
-            winetype => !wineTypesRedToAdd.includes(parseInt(winetype))
+            winetype => !wineTypesRedToAdd.includes(parseInt(winetype)),
         );
         const checkIfAddRed2 = checkIfAddRed.map(winetype => [
             id,
@@ -561,23 +562,23 @@ BackOffice.updateVineyardById = (req, result) => {
             2,
         ]);
         const allAddedWinetypesPerVineyardId = results.filter(
-            winetype => winetype.vineyardId === id
+            winetype => winetype.vineyardId === id,
         );
         const allAddedWinetypesPerVineyardIdMapId = allAddedWinetypesPerVineyardId.map(
-            winetype => [winetype.winetypeId, id]
+            winetype => [winetype.winetypeId, id],
         );
         const allWineTypesFromForm = [...wineTypesWhite, ...wineTypesRed];
         const allWineTypesFromFormInt = allWineTypesFromForm.map(winetype =>
-            parseInt(winetype)
+            parseInt(winetype),
         );
         const toDeleteWineTypes = allAddedWinetypesPerVineyardIdMapId.filter(
-            winetype => !allWineTypesFromFormInt.includes(winetype[0])
+            winetype => !allWineTypesFromFormInt.includes(winetype[0]),
         );
         const dataArray = [...checkIfAddRed2, ...checkIfAddWhite2];
 
         if (toDeleteWineTypes.length > 0) {
             const sql =
-          'DELETE FROM vineyards_winetypes WHERE (winetypeId, vineyardId) IN (?)';
+                    'DELETE FROM vineyards_winetypes WHERE (winetypeId, vineyardId) IN (?)';
             connection.query(sql, [toDeleteWineTypes], err => {
                 if (err) {
                     throw err;
@@ -591,8 +592,7 @@ BackOffice.updateVineyardById = (req, result) => {
                 }
             });
         }
-    }
-    );
+    });
 
     const query = `UPDATE vineyards SET ? WHERE id=?;`;
     const post = {
@@ -876,7 +876,8 @@ BackOffice.getVineyardById = (id, result) => {
         paths.sort
         `;
 
-    const query = `SELECT ${defaultFields} FROM vineyards WHERE vineyards.id = ? LIMIT 1;
+    const query = `SET NAMES utf8;
+    SELECT ${defaultFields} FROM vineyards WHERE vineyards.id = ? LIMIT 1;
     SELECT ${defaultFields2} FROM vineyards_winetypes LEFT JOIN winetypes ON vineyards_winetypes.winetypeId=winetypes.id WHERE vineyards_winetypes.vineyardId = ? GROUP BY vineyards_winetypes.winetypeId;
     SELECT ${defaultFields3} FROM vineyards_organizations LEFT JOIN organizations ON vineyards_organizations.organizationId=organizations.id WHERE vineyards_organizations.vineyardId = ? GROUP BY vineyards_organizations.organizationId;
     SELECT ${defaultFields4} FROM vineyards_paths LEFT JOIN paths ON vineyards_paths.pathId=paths.id WHERE vineyards_paths.vineyardId = ? GROUP BY vineyards_paths.pathId;
@@ -889,19 +890,19 @@ BackOffice.getVineyardById = (id, result) => {
             result(null, error);
         }
         else {
-            const parseItems = results[0].map(item => {
+            const parseItems = results[1].map(item => {
                 const location = item.location.split(',');
-                const features = results[5].map(feature => feature.featureId);
+                const features = results[6].map(feature => feature.featureId);
                 return {
                     ...item,
                     location: [
                         parseFloat(location[0]),
                         parseFloat(location[1].replace(/\s+/g, '')),
                     ],
-                    paths: results[3],
-                    wineTypes: results[1],
-                    organizations: results[2],
-                    photos: results[4].map(photo => ({
+                    paths: results[4],
+                    wineTypes: results[2],
+                    organizations: results[3],
+                    photos: results[5].map(photo => ({
                         uid: Math.random(),
                         name: photo.photoFile,
                         thumbUrl: photo.photoFile,

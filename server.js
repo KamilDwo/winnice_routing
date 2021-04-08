@@ -29,7 +29,7 @@ const backOfficeRoutes = require('./routes/backOffice.routes');
 
 app.all('/*', (req, res, next) => {
     res.header('Cache-Control', 'public, max-age=120');
-    res.header('Content-type', 'text/html;charset=utf-8');
+    // res.header('Content-type', 'text/html;charset=utf-8');
     next();
 });
 
