@@ -162,21 +162,19 @@ News.getInstagramPhotos = (result, body) => {
                 username: 'kamil.dwo',
             });
             if (profile.user.edge_owner_to_timeline_media.edges) {
-                profile.user.edge_owner_to_timeline_media.edges.forEach(image => {
-                    downloadImage(image.node.display_url, 'google.png', () => {
-                        console.log('done');
-                    });
+                const photos = profile.user.edge_owner_to_timeline_media.edges.map(photo => {
+                    downloadImage(photo.node.display_url, `public/socials/${photo.node.id}.png`, () => {});
+                    return {
+                        externalId: photo.node.id,
+                        image: `${photo.node.id}.png`,
+                        type: NewsTypes.INSTAGRAM,
+                        dateAdd: photo.node.taken_at_timestamp,
+                        url: `https://www.instagram.com/p/${photo.node.shortcode}`,
+                        isActive: true,
+                        likesCount: photo.node.edge_media_preview_like.count,
+                        commentsCount: photo.node.edge_media_to_comment.count,
+                    };
                 });
-                const photos = profile.user.edge_owner_to_timeline_media.edges.map(photo => ({
-                    externalId: photo.node.id,
-                    image: photo.node.display_url,
-                    type: NewsTypes.INSTAGRAM,
-                    dateAdd: photo.node.taken_at_timestamp,
-                    url: `https://www.instagram.com/p/${photo.node.shortcode}`,
-                    isActive: true,
-                    likesCount: photo.node.edge_media_preview_like.count,
-                    commentsCount: photo.node.edge_media_to_comment.count,
-                }));
                 connection.query(`SELECT externalId, id FROM news`, (error, results) => {
                     let lastId;
                     if (results && results.length > 0) {
