@@ -20,7 +20,8 @@ BackOffice.loginAdmin = result => {
 };
 
 BackOffice.getAllRequiredData = result => {
-    const query = `SELECT winetypes.*, COUNT(vineyards_winetypes.winetypeId) AS vineyardsAmount FROM winetypes LEFT JOIN vineyards_winetypes ON vineyards_winetypes.winetypeId = winetypes.id GROUP BY winetypes.id;
+    const query = `SET NAMES utf8;
+    SELECT winetypes.*, COUNT(vineyards_winetypes.winetypeId) AS vineyardsAmount FROM winetypes LEFT JOIN vineyards_winetypes ON vineyards_winetypes.winetypeId = winetypes.id GROUP BY winetypes.id;
     SELECT organizations.*, COUNT(vineyards_organizations.vineyardId) AS vineyardsAmount FROM organizations LEFT JOIN vineyards_organizations ON vineyards_organizations.organizationId = organizations.id GROUP BY organizations.id;
     SELECT paths.*, COUNT(vineyards_paths.vineyardId) AS vineyardsAmount FROM paths LEFT JOIN vineyards_paths ON vineyards_paths.pathId = paths.id GROUP BY paths.id;
     `;
@@ -31,9 +32,9 @@ BackOffice.getAllRequiredData = result => {
         }
         else {
             const returnData = {
-                allWineTypes: results[0],
-                allOrganizations: results[1],
-                allPaths: results[2],
+                allWineTypes: results[1],
+                allOrganizations: results[2],
+                allPaths: results[3],
             };
             result(returnData, null);
         }
