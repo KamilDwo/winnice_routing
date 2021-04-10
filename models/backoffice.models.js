@@ -197,76 +197,82 @@ BackOffice.createVineyard = (req, result) => {
         groundTiltDirection: groundTiltDirection || '',
         groundType: groundType || '',
         vineyardDescription: description || '',
-        dateAdd: dayjs()
-            .format('YYYY-MM-DD HH:mm:ss'),
+        dateAdd: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     };
 
-    connection.query('INSERT INTO vineyards SET ?', values, (error, results) => {
-        if (error) {
-            result(error, null);
-        }
-        else {
-            if (results.insertId) {
-                if (formFeatures.length > 0) {
-                    const featuresToAddArray = formFeatures.map(path => [results.insertId, path]);
-                    connection.query('INSERT INTO vineyards_features (vineyardId, featureId) VALUES ?', [featuresToAddArray], err => {
-                        if (err) {
-                            throw err;
-                        }
-                    });
-                }
-                if (organizations && organizations.length > 0) {
-                    const organizationsToAddArray = organizations.map(organization => [results.insertId, organization]);
-                    connection.query('INSERT INTO vineyards_organizations (vineyardId, organizationId) VALUES ?', [organizationsToAddArray], err => {
-                        if (err) {
-                            throw err;
-                        }
-                    });
-                }
-                if (paths && paths.length > 0) {
-                    const pathsToAddArray = paths.map(path => [results.insertId, path]);
-                    connection.query('INSERT INTO vineyards_paths (vineyardId, pathId) VALUES ?', [pathsToAddArray], err => {
-                        if (err) {
-                            throw err;
-                        }
-                    });
-                }
-                if (files && files.fileList && files.fileList.length > 0) {
-                    const filesToAddArray = files.fileList.map(file => [results.insertId, file.name]);
-                    connection.query('INSERT INTO vineyards_photos (vineyardId, photoFile) VALUES ?', [filesToAddArray], err => {
-                        if (err) {
-                            throw err;
-                        }
-                    });
-                }
-                if ((wineTypesWhite && wineTypesWhite.length > 0)) {
-                    const checkIfAddWhite = wineTypesWhite.map(winetype => [
-                        results.insertId,
-                        parseInt(winetype),
-                        1,
-                    ]);
-                    connection.query('INSERT INTO vineyards_winetypes (vineyardId, winetypeId, winetypeType) VALUES ?', [checkIfAddWhite], err => {
-                        if (err) {
-                            throw err;
-                        }
-                    });
-                }
-                if ((wineTypesRed && wineTypesRed.length > 0)) {
-                    const checkIfAddRed = wineTypesRed.map(winetype => [
-                        results.insertId,
-                        parseInt(winetype),
-                        2,
-                    ]);
-                    connection.query('INSERT INTO vineyards_winetypes (vineyardId, winetypeId, winetypeType) VALUES ?', [checkIfAddRed], err => {
-                        if (err) {
-                            throw err;
-                        }
-                    });
-                }
+
+    const insertNewData = () => new Promise((resolve, reject) => {
+        connection.query('INSERT INTO vineyards SET ?', values, (error, results) => {
+            if (error) {
+                reject(error);
             }
-            result(null, {
+            resolve(results.insertId);
+        });
+    }).then(insertId => {
+        if (formFeatures.length > 0) {
+            const featuresToAddArray = formFeatures.map(path => [insertId, path]);
+            connection.query('INSERT INTO vineyards_features (vineyardId, featureId) VALUES ?', [featuresToAddArray], err => {
+                if (err) {
+                    throw err;
+                }
             });
         }
+        return insertId;
+    }).then(insertId => {
+        if (organizations && organizations.length > 0) {
+            const organizationsToAddArray = organizations.map(organization => [insertId, organization]);
+            connection.query('INSERT INTO vineyards_organizations (vineyardId, organizationId) VALUES ?', [organizationsToAddArray], err => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+        return insertId;
+    }).then(insertId => {
+        if (paths && paths.length > 0) {
+            const pathsToAddArray = paths.map(path => [insertId, path]);
+            connection.query('INSERT INTO vineyards_paths (vineyardId, pathId) VALUES ?', [pathsToAddArray], err => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+        return insertId;
+    }).then(insertId => {
+        if (files && files.fileList && files.fileList.length > 0) {
+            const filesToAddArray = files.fileList.map(file => [insertId, file.name]);
+            connection.query('INSERT INTO vineyards_photos (vineyardId, photoFile) VALUES ?', [filesToAddArray], err => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+        return insertId;
+    }).then(insertId => {
+        if ((wineTypesWhite && wineTypesWhite.length > 0)) {
+            const checkIfAddWhite = wineTypesWhite.map(winetype => [insertId, parseInt(winetype), 1]);
+            connection.query('INSERT INTO vineyards_winetypes (vineyardId, winetypeId, winetypeType) VALUES ?', [checkIfAddWhite], err => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+        return insertId;
+    }).then(insertId => {
+        if ((wineTypesRed && wineTypesRed.length > 0)) {
+            const checkIfAddRed = wineTypesRed.map(winetype => [insertId, parseInt(winetype), 2]);
+            connection.query('INSERT INTO vineyards_winetypes (vineyardId, winetypeId, winetypeType) VALUES ?', [checkIfAddRed], err => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+        return true;
+    });
+
+    insertNewData().then(() => {
+        result(null, {
+        });
     });
 };
 
@@ -502,7 +508,7 @@ BackOffice.updateVineyardById = (req, result) => {
 
     const parsePaths = () => new Promise(resolve => {
         connection.query('SELECT vineyardId, pathId FROM vineyards_paths WHERE vineyardId = ?', id, (error, results) => {
-            const formPaths = paths.map(path => parseInt(path));
+            const formPaths = paths && paths.length > 0 ? paths.map(path => parseInt(path)) : [];
             const addedPaths = results.map(path => path.pathId);
             const checkIfAddPath = formPaths.filter(path => !addedPaths.includes(parseInt(path)));
             const toDeletePath = addedPaths.filter(path => !formPaths.includes(path));
