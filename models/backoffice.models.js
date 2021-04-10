@@ -595,7 +595,7 @@ BackOffice.updateVineyardById = (req, result) => {
         }
     });
 
-    const query = `UPDATE vineyards SET ? WHERE id=?;`;
+    const query = `SET NAMES utf8; UPDATE vineyards SET ? WHERE id=?;`;
     const post = {
         name,
         owners,
