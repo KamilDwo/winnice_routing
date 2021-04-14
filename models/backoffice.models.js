@@ -10,13 +10,23 @@ const BackOffice = news => {
     this.message = news.message;
 };
 
-BackOffice.loginAdmin = result => {
-    result(
-        {
-            token: Math.random(),
-        },
-        null,
-    );
+BackOffice.loginAdmin = (req, result) => {
+    if (req.body.username === 'admin' && req.body.password === 'Pantera11') {
+        result(
+            {
+                token: Math.random(),
+            },
+            null,
+        );
+    }
+    else {
+        result(
+            {
+                error: 'WRONG_CREDENTIALS',
+            },
+            null,
+        );
+    }
 };
 
 BackOffice.getAllRequiredData = result => {

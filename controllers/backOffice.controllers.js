@@ -41,7 +41,7 @@ exports.getAllRequiredData = function (req, res) {
 };
 
 exports.loginAdmin = function (req, res) {
-    BackOffice.loginAdmin((token, err) => {
+    BackOffice.loginAdmin(req,(token, err) => {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
             res.status(500);
