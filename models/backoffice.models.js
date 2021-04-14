@@ -51,6 +51,43 @@ BackOffice.getAllRequiredData = result => {
     });
 };
 
+
+BackOffice.getNewsCategoryById = (data, result) => {
+    const defaultFields = `
+        id,
+        isActive,
+        sort,
+        name_${data.language} as 'name'
+    `;
+    connection.query(`SET NAMES utf8; SELECT ${defaultFields} FROM news_categories WHERE id = ? LIMIT 1`, data.id, (error, results) => {
+        if (error) {
+            result(error, null);
+        }
+        else {
+            result(results[1][0], null);
+        }
+    });
+};
+
+
+BackOffice.getAllNewsCategories = (req, result) => {
+    const defaultFields = `
+        id,
+        isActive,
+        sort,
+        name_${req.query.language} as 'name'
+    `;
+
+    connection.query(`SET NAMES utf8; SELECT ${defaultFields} FROM news_categories`, (error, results) => {
+        if (error) {
+            result(error, null);
+        }
+        else {
+            result(results[1], null);
+        }
+    });
+};
+
 BackOffice.getAllNews = result => {
     const defaultFields = `
         id,
@@ -69,7 +106,7 @@ BackOffice.getAllNews = result => {
             result(error, null);
         }
         else {
-            result(results, null);
+            result(null, results);
         }
     });
 };

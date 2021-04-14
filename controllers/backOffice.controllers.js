@@ -1,5 +1,5 @@
 const BackOffice = require('../models/backoffice.models');
-
+const logSqlError = require('../helpers/logSqlError.helper');
 
 exports.getAllVineyards = function (req, res) {
     BackOffice.getAllVineyards((vineyards, err) => {
@@ -27,9 +27,36 @@ exports.getAllNews = function (req, res) {
     });
 };
 
+exports.getAllNewsCategories = (req, res) => {
+    BackOffice.getAllNewsCategories(req, (news, err) => {
+        if (err) {
+            logSqlError(err.sqlMessage);
+            res.status(500);
+            res.end();
+        }
+        else {
+            res.json(news);
+        }
+    });
+};
+
+exports.getNewsCategoryById = (req, res) => {
+    BackOffice.getNewsCategoryById(req.body.data, (data, err) => {
+        if (err) {
+            logSqlError(err.sqlMessage);
+            res.status(500);
+            res.end();
+        }
+        else {
+            res.json(data);
+        }
+    });
+};
+
 exports.getAllRequiredData = function (req, res) {
     BackOffice.getAllRequiredData((data, err) => {
         if (err) {
+            // eslint-disable-next-line no-console
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
             res.status(500);
             res.end();
