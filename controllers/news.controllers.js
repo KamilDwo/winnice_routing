@@ -1,9 +1,10 @@
 const News = require('../models/news.models');
+const logSqlError = require('../helpers/logSqlError.helper');
 
-exports.findAll = function (req, res) {
-    News.findAll((news, err) => {
+exports.findAllNews = (req, res) => {
+    News.findAllNews((news, err) => {
         if (err) {
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            logSqlError(err.sqlMessage);
             res.status(500).json({
                 error: err.sqlMessage,
             });
@@ -15,17 +16,17 @@ exports.findAll = function (req, res) {
     }, req.body);
 };
 
-exports.findAllCategories = function (req, res) {
-    News.findAllCategories((news, err) => {
+exports.findAllCategories = (req, res) => {
+    News.findAllCategories((data, err) => {
         if (err) {
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            logSqlError(err.sqlMessage);
             res.status(500).json({
                 error: err.sqlMessage,
             });
             res.end();
         }
         else {
-            res.json(news);
+            res.json(data);
         }
     }, req.body);
 };

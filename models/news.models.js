@@ -18,31 +18,24 @@ const News = news => {
     this.message = news.message;
 };
 
-News.findAllCategories = (result, body) => {
-    let defaultFields = 'id,';
-    if (body && body.language === 'pl') {
-        defaultFields += ' name_pl as \'name\'';
-    }
-    else {
-        defaultFields += ' name_en as \'name\'';
-    }
+News.findAllCategories = result => {
+    const defaultFields = `
+    id,
+    name,
+    sort
+    `;
 
-    connection.query(`SELECT ${defaultFields} FROM pw_news_categories`, (error, results) => {
+    connection.query(`SET NAMES utf8; SELECT ${defaultFields} FROM news_categories WHERE isActive = ?`, 1, (error, results) => {
         if (error) {
             result(null, error);
         }
         else {
-            const parseItems = results.forEach(item => ({
-                ...item,
-                isActive: item.isActive === 2,
-            }));
-            result(parseItems, null);
+            result(results[1], null);
         }
     });
 };
 
-// eslint-disable-next-line no-unused-vars
-News.getFacebookNews = (result, body) => {
+News.getFacebookNews = result => {
     try {
         const getAccessToken = () => new Promise((resolve, reject) => axios.get('https://graph.facebook.com/oauth/access_token?client_id=918657384983659&client_secret=8b33bca18a2780fe7b4ae42220a89929&grant_type=client_credentials')
             .then(response => {
@@ -229,8 +222,7 @@ News.getInstagramPhotos = (result, body) => {
     })();
 };
 
-// eslint-disable-next-line no-unused-vars
-News.findAll = (result, body) => {
+News.findAllNews = result => {
     const defaultFields = `
         id,
         dateAdd,
@@ -260,15 +252,16 @@ News.findAll = (result, body) => {
         }
     };
 
-    const query = `SELECT ${defaultFields} FROM news`;
+    const query = `SET NAMES utf8; SELECT ${defaultFields} FROM news`;
     connection.query(query, (error, results) => {
         if (error) {
             result(null, error);
         }
         else {
-            const parseItems = results.map(item => ({
+            const parseItems = results[1].map(item => ({
                 ...item,
                 type: getType(item.type),
+                categories: [],
             }));
             result(parseItems, null);
         }
