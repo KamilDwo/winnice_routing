@@ -101,12 +101,12 @@ BackOffice.getAllNews = result => {
         commentsCount,
         type
     `;
-    connection.query(`SELECT ${defaultFields} FROM news`, (error, results) => {
+    connection.query(`SET NAMES utf8; SELECT ${defaultFields} FROM news`, (error, results) => {
         if (error) {
             result(null, error);
         }
         else {
-            result(results, null);
+            result(results[1], null);
         }
     });
 };
