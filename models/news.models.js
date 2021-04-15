@@ -262,6 +262,7 @@ News.findAllNews = result => {
                 ...item,
                 type: getType(item.type),
                 categories: [],
+                provinces: [],
             }));
             result(parseItems, null);
         }
