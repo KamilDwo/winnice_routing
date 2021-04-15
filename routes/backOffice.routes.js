@@ -44,7 +44,9 @@ router.delete('/wine_types/:id', cors(corsOptionsDelegate), backOfficeController
 router.post('/wine_types/new', cors(corsOptionsDelegate), backOfficeController.createWineType);
 router.post('/wine_types/:id', cors(corsOptionsDelegate), backOfficeController.updateWineTypeById);
 router.get('/news', cors(corsOptionsDelegate), backOfficeController.getAllNews);
-router.get('/news/GetCategoriesList', cors(corsOptionsDelegate), backOfficeController.getAllNewsCategories);
-router.post('/newsCategories/GetNewsCategoryDetails', cors(corsOptionsDelegate), backOfficeController.getNewsCategoryById);
+router.post('/GetCategoriesList', cors(corsOptionsDelegate), backOfficeController.getAllNewsCategories);
+router.post('/GetNewsCategoryDetails', cors(corsOptionsDelegate), backOfficeController.getNewsCategoryById);
+router.post('/EditNewsCategory', cors(corsOptionsDelegate), backOfficeController.editNewsCategoryById);
+router.post('/CreateNewsCategory', cors(corsOptionsDelegate), backOfficeController.createNewsCategory);
 
 module.exports = router;

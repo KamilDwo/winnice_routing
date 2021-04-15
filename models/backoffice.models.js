@@ -57,7 +57,7 @@ BackOffice.getNewsCategoryById = (data, result) => {
         id,
         isActive,
         sort,
-        name_${data.language} as 'name'
+        name
     `;
     connection.query(`SET NAMES utf8; SELECT ${defaultFields} FROM news_categories WHERE id = ? LIMIT 1`, data.id, (error, results) => {
         if (error) {
@@ -69,13 +69,37 @@ BackOffice.getNewsCategoryById = (data, result) => {
     });
 };
 
+BackOffice.editNewsCategoryById = (data, result) => {
+    const { id } = data;
+    const {
+        name,
+        sort,
+        isActive,
+    } = data.values;
+    const query = `UPDATE news_categories SET ? WHERE id = ?`;
+    const post = {
+        name,
+        isActive,
+        sort,
+    };
+    connection.query(query, [post, id], error => {
+        if (error) {
+            result(null, error);
+        }
+        else {
+            result({
+            }, null);
+        }
+    });
+};
+
 
 BackOffice.getAllNewsCategories = (req, result) => {
     const defaultFields = `
         id,
         isActive,
         sort,
-        name_${req.query.language} as 'name'
+        name
     `;
 
     connection.query(`SET NAMES utf8; SELECT ${defaultFields} FROM news_categories`, (error, results) => {
@@ -337,6 +361,30 @@ BackOffice.createOrganization = (req, result) => {
     };
 
     connection.query('INSERT INTO organizations SET ?', values, error => {
+        if (error) {
+            result(error, null);
+        }
+        else {
+            result(null, {
+            });
+        }
+    });
+};
+
+BackOffice.createNewsCategory = (req, result) => {
+    const {
+        name,
+        isActive,
+        sort,
+    } = req.body.values;
+
+    const values = {
+        name,
+        isActive: isActive || 0,
+        sort,
+    };
+
+    connection.query('INSERT INTO news_categories SET ?', values, error => {
         if (error) {
             result(error, null);
         }

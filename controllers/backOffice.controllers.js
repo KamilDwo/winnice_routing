@@ -53,6 +53,19 @@ exports.getNewsCategoryById = (req, res) => {
     });
 };
 
+exports.editNewsCategoryById = (req, res) => {
+    BackOffice.editNewsCategoryById(req.body, (data, err) => {
+        if (err) {
+            logSqlError(err.sqlMessage);
+            res.status(500);
+            res.end();
+        }
+        else {
+            res.json(data);
+        }
+    });
+};
+
 exports.getAllRequiredData = function (req, res) {
     BackOffice.getAllRequiredData((data, err) => {
         if (err) {
@@ -292,6 +305,20 @@ exports.createPath = function (req, res) {
     BackOffice.createPath(req, err => {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            res.status(500);
+            res.end();
+        }
+        else {
+            res.status(200);
+            res.end();
+        }
+    });
+};
+
+exports.createNewsCategory = (req, res) => {
+    BackOffice.createNewsCategory(req, err => {
+        if (err) {
+            logSqlError(err.sqlMessage);
             res.status(500);
             res.end();
         }
