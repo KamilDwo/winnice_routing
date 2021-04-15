@@ -103,10 +103,10 @@ BackOffice.getAllNews = result => {
     `;
     connection.query(`SELECT ${defaultFields} FROM news`, (error, results) => {
         if (error) {
-            result(error, null);
+            result(null, error);
         }
         else {
-            result(null, results);
+            result(results, null);
         }
     });
 };
