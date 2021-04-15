@@ -66,11 +66,10 @@ exports.editNewsCategoryById = (req, res) => {
     });
 };
 
-exports.getAllRequiredData = function (req, res) {
+exports.getAllRequiredData = (req, res) => {
     BackOffice.getAllRequiredData((data, err) => {
         if (err) {
-            // eslint-disable-next-line no-console
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            logSqlError(err.sqlMessage);
             res.status(500);
             res.end();
         }

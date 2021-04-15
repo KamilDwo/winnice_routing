@@ -1,10 +1,10 @@
 const Vineyard = require('../models/vineyard.models');
+const logSqlError = require('../helpers/logSqlError.helper');
 
-
-exports.findAll = function (req, res) {
+exports.findAll = (req, res) => {
     Vineyard.findAll((vineyard, err) => {
         if (err) {
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            logSqlError(err.sqlMessage);
             res.status(500);
             res.end();
         }
@@ -14,10 +14,10 @@ exports.findAll = function (req, res) {
     });
 };
 
-exports.findById = function (req, res) {
+exports.findById = (req, res) => {
     Vineyard.findById(req.params.id, (vineyard, err) => {
         if (err) {
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            logSqlError(err.sqlMessage);
             res.status(500);
             res.end();
         }

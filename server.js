@@ -26,11 +26,13 @@ const vineyardsRoutes = require('./routes/vineyard.routes');
 const newsRoutes = require('./routes/news.routes');
 const pathsRoutes = require('./routes/paths.routes');
 const backOfficeRoutes = require('./routes/backOffice.routes');
+const wineTypesRoutes = require('./routes/wineTypes.routes');
 
 app.use('/api/v1/vineyards', vineyardsRoutes);
 app.use('/api/v1/news', newsRoutes);
 app.use('/api/v1/paths', pathsRoutes);
 app.use('/api/backoffice', backOfficeRoutes);
+app.use('/api/v1/wineTypes', wineTypesRoutes);
 
 app.listen(port, () => {
     console.log(`Listening to requests. Port ${  port}`);

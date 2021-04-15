@@ -29,7 +29,7 @@ router.post('/upload_photo', cors(corsOptionsDelegate), upload.single('photo'), 
 router.post('/vineyards/new', cors(corsOptionsDelegate), backOfficeController.createVineyard);
 router.post('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.updateVineyardById);
 router.delete('/delete_file/:from', cors(corsOptionsDelegate), backOfficeController.deleteSpecificFile);
-router.get('/get_data', cors(corsOptionsDelegate), backOfficeController.getAllRequiredData);
+router.post('/GetRequiredData', cors(corsOptionsDelegate), backOfficeController.getAllRequiredData);
 router.delete('/vineyards/:id', cors(corsOptionsDelegate), backOfficeController.deleteSpecificVineyard);
 router.post('/organizations/new', cors(corsOptionsDelegate), backOfficeController.createOrganization);
 router.post('/organizations/:id', cors(corsOptionsDelegate), backOfficeController.updateOrganizationById);
