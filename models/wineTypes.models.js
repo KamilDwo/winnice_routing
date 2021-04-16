@@ -11,7 +11,7 @@ WineType.findAll = result => {
      winetypes.isImportant,
      winetypes.isActive,
      winetypes.sort,
-     GROUP_CONCAT(winetypes_provinces.provinceId) AS provinces
+     GROUP_CONCAT(winetypes_provinces.provinceId) AS winetypes
     `;
 
     connection.query(`SET NAMES utf8; SELECT ${defaultFields} FROM winetypes

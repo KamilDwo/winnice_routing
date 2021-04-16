@@ -2,9 +2,9 @@ const express = require('express');
 const cors = require('cors');
 
 const router = express.Router();
-const wineTypesController = require('../controllers/wineTypes.controllers');
+const errorsController = require('../controllers/errors.controllers');
 const corsOptionsDelegate = require('../config/cors.config');
 
-router.post('/GetWineTypes', cors(corsOptionsDelegate), wineTypesController.findAll);
+router.post('/LogError', cors(corsOptionsDelegate), errorsController.saveToLog);
 
 module.exports = router;
