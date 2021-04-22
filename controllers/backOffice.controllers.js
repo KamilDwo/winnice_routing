@@ -1,10 +1,10 @@
 const BackOffice = require('../models/backoffice.models');
 const logSqlError = require('../helpers/logSqlError.helper');
 
-exports.getAllVineyards = function (req, res) {
+exports.getAllVineyards = (req, res) => {
     BackOffice.getAllVineyards((vineyards, err) => {
         if (err) {
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            logSqlError(err.sqlMessage);
             res.status(500);
             res.end();
         }
@@ -14,10 +14,23 @@ exports.getAllVineyards = function (req, res) {
     });
 };
 
-exports.getAllNews = function (req, res) {
+exports.getAllWines = (req, res) => {
+    BackOffice.getAllWines((vineyards, err) => {
+        if (err) {
+            logSqlError(err.sqlMessage);
+            res.status(500);
+            res.end();
+        }
+        else {
+            res.json(vineyards);
+        }
+    });
+};
+
+exports.getAllNews = (req, res) => {
     BackOffice.getAllNews((news, err) => {
         if (err) {
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            logSqlError(err.sqlMessage);
             res.status(500);
             res.end();
         }
@@ -79,10 +92,10 @@ exports.getAllRequiredData = (req, res) => {
     });
 };
 
-exports.loginAdmin = function (req, res) {
+exports.loginAdmin = (req, res) => {
     BackOffice.loginAdmin(req,(token, err) => {
         if (err) {
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            logSqlError(err.sqlMessage);
             res.status(500);
             res.end();
         }
@@ -92,10 +105,10 @@ exports.loginAdmin = function (req, res) {
     });
 };
 
-exports.getVineyardById = function (req, res) {
+exports.getVineyardById = (req, res) => {
     BackOffice.getVineyardById(req.params.id, (vineyard, err) => {
         if (err) {
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            logSqlError(err.sqlMessage);
             res.status(500);
             res.json({
                 type: 'ERROR', message: err.sqlMessage,
@@ -107,10 +120,10 @@ exports.getVineyardById = function (req, res) {
     });
 };
 
-exports.getOrganizationById = function (req, res) {
+exports.getOrganizationById = (req, res) => {
     BackOffice.getOrganizationById(req.params.id, (response, err) => {
         if (err) {
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            logSqlError(err.sqlMessage);
             res.status(500);
             res.json({
                 type: 'ERROR', message: err.sqlMessage,
@@ -122,10 +135,10 @@ exports.getOrganizationById = function (req, res) {
     });
 };
 
-exports.getPathById = function (req, res) {
+exports.getPathById = (req, res) => {
     BackOffice.getPathById(req.params.id, (response, err) => {
         if (err) {
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            logSqlError(err.sqlMessage);
             res.status(500);
             res.json({
                 type: 'ERROR', message: err.sqlMessage,
@@ -137,10 +150,10 @@ exports.getPathById = function (req, res) {
     });
 };
 
-exports.getWineTypeById = function (req, res) {
+exports.getWineTypeById = (req, res) => {
     BackOffice.getWineTypeById(req.params.id, (response, err) => {
         if (err) {
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            logSqlError(err.sqlMessage);
             res.status(500);
             res.json({
                 type: 'ERROR', message: err.sqlMessage,
@@ -258,10 +271,10 @@ exports.updateOrganizationById = function (req, res) {
     });
 };
 
-exports.updateWineTypeById = function (req, res) {
+exports.updateWineTypeById = (req, res) => {
     BackOffice.updateWineTypeById(req, err => {
         if (err) {
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            logSqlError(err.sqlMessage);
             res.status(500);
             res.end();
         }
@@ -272,10 +285,37 @@ exports.updateWineTypeById = function (req, res) {
     });
 };
 
-exports.updatePathById = function (req, res) {
+exports.updateWineById = (req, res) => {
+    BackOffice.updateWineById(req, err => {
+        if (err) {
+            logSqlError(err.sqlMessage);
+            res.status(500);
+            res.end();
+        }
+        else {
+            res.status(200);
+            res.end();
+        }
+    });
+};
+
+exports.getWineById = (req, res) => {
+    BackOffice.getWineById(req.body.data.id, (wine, err) => {
+        if (err) {
+            logSqlError(err.sqlMessage);
+            res.status(500);
+            res.end();
+        }
+        else {
+            res.json(wine[0]);
+        }
+    });
+};
+
+exports.updatePathById = (req, res) => {
     BackOffice.updatePathById(req, err => {
         if (err) {
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            logSqlError(err.sqlMessage);
             res.status(500);
             res.end();
         }

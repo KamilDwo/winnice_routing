@@ -3,6 +3,7 @@ require('dotenv')
 const connection = require('../config/db.config');
 const fs = require('fs');
 const dayjs = require('dayjs');
+const listToArray = require('../helpers/listToArray.helper');
 
 const BackOffice = news => {
     this.id = news.id;
@@ -34,6 +35,7 @@ BackOffice.getAllRequiredData = result => {
     SELECT winetypes.*, COUNT(vineyards_winetypes.winetypeId) AS vineyardsAmount FROM winetypes LEFT JOIN vineyards_winetypes ON vineyards_winetypes.winetypeId = winetypes.id GROUP BY winetypes.id;
     SELECT organizations.*, COUNT(vineyards_organizations.vineyardId) AS vineyardsAmount FROM organizations LEFT JOIN vineyards_organizations ON vineyards_organizations.organizationId = organizations.id GROUP BY organizations.id;
     SELECT paths.*, COUNT(vineyards_paths.vineyardId) AS vineyardsAmount FROM paths LEFT JOIN vineyards_paths ON vineyards_paths.pathId = paths.id GROUP BY paths.id;
+    SELECT meals.* FROM meals;
     SELECT id, title FROM provinces;
     `;
 
@@ -46,7 +48,8 @@ BackOffice.getAllRequiredData = result => {
                 allWineTypes: results[1],
                 allOrganizations: results[2],
                 allPaths: results[3],
-                allProvinces: results[4],
+                allProvinces: results[5],
+                allMeals: results[4],
             };
             result(returnData, null);
         }
@@ -133,6 +136,34 @@ BackOffice.getAllNews = result => {
         }
         else {
             result(results[1], null);
+        }
+    });
+};
+
+BackOffice.getAllWines = result => {
+    const defaultFields = `
+       id,
+        name, 
+        type,       
+        isActive
+     `;
+
+    connection.query(`SET NAMES utf8;
+     SELECT ${defaultFields} FROM wines
+      LEFT JOIN wines_provinces ON wines.id=wines_provinces.wineId
+      LEFT JOIN wines_strains ON wines.id=wines_strains.strainId
+       WHERE wines.isActive = 1
+      `, (error, results) => {
+        if (error) {
+            result(error, null);
+        }
+        else {
+            const parseItems = results[1].map(item => ({
+                ...item,
+                provinces: [...new Set(listToArray(item.provinces, ','))],
+                strains: [...new Set(listToArray(item.strains, ','))],
+            }));
+            result(parseItems, null);
         }
     });
 };
@@ -444,6 +475,98 @@ BackOffice.updateOrganizationById = (req, result) => {
             result(null, {
             });
         }
+    });
+};
+
+BackOffice.getWineById = (id, result) => {
+    if (id) {
+        const sql = `        
+            SELECT wines.id, wines.name, wines.isActive,
+            GROUP_CONCAT(wines_meals.mealId) AS meals
+            FROM wines
+            LEFT JOIN wines_meals ON wines.id=wines_meals.mealId
+            WHERE wines.id = ?
+            GROUP BY wines.id;
+        `;
+
+        connection.query(sql, [id, id], (error, results) => {
+            if (error) {
+                result(null, error);
+            }
+            else {
+                const parseItems = results.map(item => ({
+                    ...item,
+                    meals: [...new Set(listToArray(item.meals, ','))],
+                }));
+                result(parseItems, null);
+            }
+        });
+
+    }
+    else {
+        result(null, {
+        });
+    }
+};
+
+BackOffice.updateWineById = (req, result) => {
+    const { id } = req.body;
+    const {
+        name,
+        isActive,
+        meals,
+    } = req.body.values;
+
+    const parseMeals = () => new Promise((resolve, reject) => {
+        connection.query('SELECT wineId, mealId FROM wines_meals WHERE wineId = ?', id, (error, results) => {
+            if (error) {
+                reject(error);
+            }
+            const formMeals = meals.map(item => parseInt(item));
+            const addedMeals = results.map(item => item.mealId);
+            const checkIfAddMeal = formMeals.filter(item => !addedMeals.includes(parseInt(item)));
+            const toDeleteMeal = addedMeals.filter(item => !formMeals.includes(item));
+            resolve({
+                toDeleteMeal,
+                checkIfAddMeal,
+            });
+        });
+    }).then(data => {
+        if (data.toDeleteMeal.length > 0) {
+            const toDeleteMealMap = data.toDeleteMeal.map(item => [id, item]);
+            connection.query('DELETE FROM wines_meals WHERE (wineId, mealId) IN (?)', [toDeleteMealMap], err => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+        return data.checkIfAddMeal;
+    }).then(checkIfAddMeal => {
+        if (checkIfAddMeal.length > 0) {
+            const mealToAddArray = checkIfAddMeal.map(item => [id, item]);
+            connection.query('INSERT INTO wines_meals (wineId, mealId) VALUES ?', [mealToAddArray], err => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+    });
+
+    Promise.all([parseMeals()]).then(() => {
+        const query = `UPDATE wines SET ? WHERE id=?;`;
+        const post = {
+            name,
+            isActive,
+        };
+        connection.query(query, [post, id], error => {
+            if (error) {
+                result(error, null);
+            }
+            else {
+                result(null, {
+                });
+            }
+        });
     });
 };
 

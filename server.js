@@ -38,7 +38,5 @@ app.use('/api/v1/wineTypes', wineTypesRoutes);
 app.use('/api/v1/wines', winesRoutes);
 app.use('/api/v1/errors', errorsRoutes);
 
-app.listen(port, () => {
-    console.log(`Listening to requests. Port ${  port}`);
-});
+app.listen(port);
 
