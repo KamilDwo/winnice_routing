@@ -142,17 +142,20 @@ BackOffice.getAllNews = result => {
 
 BackOffice.getAllWines = result => {
     const defaultFields = `
-       id,
-        name, 
-        type,       
-        isActive
+       wines.id,
+        wines.name, 
+        wines.taste,
+        wines.type,       
+        wines.isActive,
+        GROUP_CONCAT(wines_strains.strainId) AS strains,
+        GROUP_CONCAT(wines_meals.mealId) AS meals
      `;
 
     connection.query(`SET NAMES utf8;
      SELECT ${defaultFields} FROM wines
-      LEFT JOIN wines_provinces ON wines.id=wines_provinces.wineId
-      LEFT JOIN wines_strains ON wines.id=wines_strains.strainId
-       WHERE wines.isActive = 1
+     LEFT JOIN wines_strains ON wines.id=wines_strains.wineId
+     LEFT JOIN wines_meals ON wines.id=wines_meals.wineId
+     GROUP BY wines.id
       `, (error, results) => {
         if (error) {
             result(error, null);
@@ -160,8 +163,9 @@ BackOffice.getAllWines = result => {
         else {
             const parseItems = results[1].map(item => ({
                 ...item,
-                provinces: [...new Set(listToArray(item.provinces, ','))],
+                provinces: [],
                 strains: [...new Set(listToArray(item.strains, ','))],
+                meals: [...new Set(listToArray(item.meals, ','))],
             }));
             result(parseItems, null);
         }
@@ -245,6 +249,125 @@ BackOffice.createWineType = (req, result) => {
             result(null, {
             });
         }
+    });
+};
+
+BackOffice.createWine = (req, result) => {
+    const {
+        name,
+        isActive,
+        years,
+        price,
+        meals,
+        provinces,
+        wineTypes,
+        taste,
+        features,
+        wineTypesWhite,
+        wineTypesRed,
+    } = req.body.values;
+    const values = {
+        isActive: isActive || 0,
+        name,
+        year: years,
+        price,
+        type: wineTypes,
+        taste,
+        dateAdd: new Date(),
+    };
+
+    const insertNewWine = () => new Promise((resolve, reject) => {
+        connection.query('SET NAMES utf8; INSERT INTO wines SET ?;', values, (error, results) => {
+            if (error) {
+                reject(error);
+            }
+            else {
+                resolve(results[1].insertId);
+            }
+        });
+    });
+
+    const insertWinesStrains = insertId => new Promise((resolve, reject) => {
+        const strainsToAdd = [];
+        if (wineTypesWhite && wineTypesWhite.length > 0) {
+            strainsToAdd.push(wineTypesWhite.map(item => [insertId, item]));
+        }
+        if (wineTypesRed && wineTypesRed.length > 0) {
+            strainsToAdd.push(wineTypesRed.map(item => [insertId, item]));
+        }
+        if (strainsToAdd.length > 0) {
+            connection.query('INSERT INTO wines_strains (wineId, strainId) VALUES ?', strainsToAdd, error => {
+                if (error) {
+                    reject(error);
+                }
+                else {
+                    resolve();
+                }
+            });
+        }
+        else {
+            resolve();
+        }
+    });
+
+    const insertFeatures = insertId => new Promise((resolve, reject) => {
+        if (features && features.length > 0) {
+            const featuresToAddArray = features.map(item => [insertId, item]);
+            connection.query('INSERT INTO wines_additional_features (wineId, featureId) VALUES ?', [featuresToAddArray], error => {
+                if (error) {
+                    reject(error);
+                }
+                else {
+                    resolve();
+                }
+            });
+        }
+    });
+
+    const insertNewMeal = insertId => new Promise((resolve, reject) => {
+        if (meals && meals.length > 0) {
+            const mealsToAddArray = meals.map(item => [insertId, item]);
+            connection.query('INSERT INTO wines_meals (wineId, mealId) VALUES ?', [mealsToAddArray], error => {
+                if (error) {
+                    reject(error);
+                }
+                else {
+                    resolve();
+                }
+            });
+        }
+    });
+
+    const insertNewProvinces = insertId => new Promise((resolve, reject) => {
+        if (provinces && provinces.length > 0) {
+            const provincesToAddArray = provinces.map(item => [insertId, item]);
+            connection.query('INSERT INTO wines_provinces (wineId, provinceId) VALUES ?', [provincesToAddArray], error => {
+                if (error) {
+                    reject(error);
+                }
+                else {
+                    resolve();
+                }
+            });
+        }
+    });
+
+    const addRestOfData = data => {
+        Promise.all([
+            insertNewMeal(data),
+            insertNewProvinces(data),
+            insertFeatures(data),
+            insertWinesStrains(data),
+        ]).then(() => true).catch(() => false);
+    };
+
+    insertNewWine().then(data => {
+        addRestOfData(data);
+    }).then(() => {
+        result(null, {
+        });
+    }).catch(error => {
+        result(error, null);
     });
 };
 
@@ -480,23 +603,41 @@ BackOffice.updateOrganizationById = (req, result) => {
 
 BackOffice.getWineById = (id, result) => {
     if (id) {
-        const sql = `        
-            SELECT wines.id, wines.name, wines.isActive,
-            GROUP_CONCAT(wines_meals.mealId) AS meals
-            FROM wines
-            LEFT JOIN wines_meals ON wines.id=wines_meals.mealId
-            WHERE wines.id = ?
-            GROUP BY wines.id;
+        const defaultFields = `
+            id,
+            name,
+            isActive,
+            type,
+            year,
+            price,
+            taste
         `;
 
-        connection.query(sql, [id, id], (error, results) => {
+        const sql = `        
+            SELECT ${defaultFields} FROM wines WHERE id = ?;
+            SELECT wines_meals.mealId, meals.name FROM wines_meals LEFT JOIN meals ON wines_meals.mealId = meals.id WHERE wines_meals.wineId = ? GROUP BY wines_meals.mealId;
+            SELECT wines_provinces.provinceId, provinces.title FROM wines_provinces LEFT JOIN provinces ON provinces.id = wines_provinces.provinceId WHERE wines_provinces.wineId = ? GROUP BY wines_provinces.provinceId;
+            SELECT wines_additional_features.featureId FROM wines_additional_features WHERE wines_additional_features.wineId = ?;
+            SELECT wines_strains.strainId, winetypes.title, winetypes.colour FROM wines_strains LEFT JOIN winetypes ON winetypes.id = wines_strains.strainId WHERE wines_strains.wineId = ? GROUP BY wines_strains.strainId;
+        `;
+
+        connection.query(sql, [id, id, id, id, id], (error, results) => {
             if (error) {
                 result(null, error);
             }
             else {
-                const parseItems = results.map(item => ({
+                const parseItems = results[0].map(item => ({
                     ...item,
-                    meals: [...new Set(listToArray(item.meals, ','))],
+                    meals: results[1],
+                    provinces: results[2],
+                    price: item.price.toString(),
+                    type: item.type.toString(),
+                    taste: item.taste.toString(),
+                    strains: results[4].map(strain => ({
+                        ...strain,
+                        strainId: strain.strainId.toString(),
+                    })),
+                    features: results[3],
                 }));
                 result(parseItems, null);
             }
@@ -515,6 +656,14 @@ BackOffice.updateWineById = (req, result) => {
         name,
         isActive,
         meals,
+        years,
+        price,
+        provinces,
+        wineTypes,
+        taste,
+        features,
+        wineTypesRed,
+        wineTypesWhite,
     } = req.body.values;
 
     const parseMeals = () => new Promise((resolve, reject) => {
@@ -552,11 +701,126 @@ BackOffice.updateWineById = (req, result) => {
         }
     });
 
-    Promise.all([parseMeals()]).then(() => {
-        const query = `UPDATE wines SET ? WHERE id=?;`;
+    const parseProvinces = () => new Promise((resolve, reject) => {
+        connection.query('SELECT wineId, provinceId FROM wines_provinces WHERE wineId = ?', id, (error, results) => {
+            if (error) {
+                reject(error);
+            }
+            const formData = provinces.map(item => parseInt(item));
+            const addedData = results.map(item => item.provinceId);
+            const checkIfAddData = formData.filter(item => !addedData.includes(parseInt(item)));
+            const toDeleteData = addedData.filter(item => !formData.includes(item));
+            resolve({
+                toDeleteData,
+                checkIfAddData,
+            });
+        });
+    }).then(data => {
+        if (data.toDeleteData.length > 0) {
+            const toDeleteDataMap = data.toDeleteData.map(item => [id, item]);
+            connection.query('DELETE FROM wines_provinces WHERE (wineId, provinceId) IN (?)', [toDeleteDataMap], err => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+        return data.checkIfAddData;
+    }).then(checkIfAddData => {
+        if (checkIfAddData.length > 0) {
+            const dataToAddArray = checkIfAddData.map(item => [id, item]);
+            connection.query('INSERT INTO wines_provinces (wineId, provinceId) VALUES ?', [dataToAddArray], err => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+    });
+
+    const parseFeatures = () => new Promise((resolve, reject) => {
+        connection.query('SELECT wineId, featureId FROM wines_additional_features WHERE wineId = ?', id, (error, results) => {
+            if (error) {
+                reject(error);
+            }
+            const formData = features.map(item => parseInt(item));
+            const addedData = results.map(item => item.featureId);
+            const checkIfAddData = formData.filter(item => !addedData.includes(parseInt(item)));
+            const toDeleteData = addedData.filter(item => !formData.includes(item));
+            resolve({
+                toDeleteData,
+                checkIfAddData,
+            });
+        });
+    }).then(data => {
+        if (data.toDeleteData.length > 0) {
+            const toDeleteDataMap = data.toDeleteData.map(item => [id, item]);
+            connection.query('DELETE FROM wines_additional_features WHERE (wineId, featureId) IN (?)', [toDeleteDataMap], err => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+        return data.checkIfAddData;
+    }).then(checkIfAddData => {
+        if (checkIfAddData.length > 0) {
+            const dataToAddArray = checkIfAddData.map(item => [id, item]);
+            connection.query('INSERT INTO wines_additional_features (wineId, featureId) VALUES ?', [dataToAddArray], err => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+    });
+
+    const parseStrains = () => new Promise((resolve, reject) => {
+        connection.query('SELECT wineId, strainId FROM wines_strains WHERE wineId = ?', id, (error, results) => {
+            if (error) {
+                reject(error);
+            }
+            const wineTypesConcat = [...wineTypesRed, ...wineTypesWhite];
+            const formData = wineTypesConcat.map(item => parseInt(item));
+            const addedData = results.map(item => item.strainId);
+            const checkIfAddData = formData.filter(item => !addedData.includes(parseInt(item)));
+            const toDeleteData = addedData.filter(item => !formData.includes(item));
+            resolve({
+                toDeleteData,
+                checkIfAddData,
+            });
+        });
+    }).then(data => {
+        if (data.toDeleteData.length > 0) {
+            const toDeleteDataMap = data.toDeleteData.map(item => [id, item]);
+            connection.query('DELETE FROM wines_strains WHERE (wineId, strainId) IN (?)', [toDeleteDataMap], err => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+        return data.checkIfAddData;
+    }).then(checkIfAddData => {
+        if (checkIfAddData.length > 0) {
+            const dataToAddArray = checkIfAddData.map(item => [id, item]);
+            connection.query('INSERT INTO wines_strains (wineId, strainId) VALUES ?', [dataToAddArray], err => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+    });
+
+    Promise.all([
+        parseMeals(),
+        parseProvinces(),
+        parseFeatures(),
+        parseStrains(),
+    ]).then(() => {
+        const query = `SET NAMES utf8; UPDATE wines SET ? WHERE id=?;`;
         const post = {
             name,
             isActive,
+            price,
+            year: years,
+            type: wineTypes,
+            taste,
         };
         connection.query(query, [post, id], error => {
             if (error) {

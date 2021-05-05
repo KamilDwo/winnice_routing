@@ -15,14 +15,14 @@ exports.getAllVineyards = (req, res) => {
 };
 
 exports.getAllWines = (req, res) => {
-    BackOffice.getAllWines((vineyards, err) => {
+    BackOffice.getAllWines((data, err) => {
         if (err) {
             logSqlError(err.sqlMessage);
             res.status(500);
             res.end();
         }
         else {
-            res.json(vineyards);
+            res.json(data);
         }
     });
 };
@@ -30,9 +30,7 @@ exports.getAllWines = (req, res) => {
 exports.getAllNews = (req, res) => {
     BackOffice.getAllNews((news, err) => {
         if (err) {
-            logSqlError(err.sqlMessage);
-            res.status(500);
-            res.end();
+            res.json(logSqlError(err.sqlMessage));
         }
         else {
             res.json(news);
@@ -257,10 +255,10 @@ exports.uploadVineyardImage = function (req, res) {
     });
 };
 
-exports.updateOrganizationById = function (req, res) {
+exports.updateOrganizationById = (req, res) => {
     BackOffice.updateOrganizationById(req, err => {
         if (err) {
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            logSqlError(err.sqlMessage);
             res.status(500);
             res.end();
         }
@@ -289,12 +287,14 @@ exports.updateWineById = (req, res) => {
     BackOffice.updateWineById(req, err => {
         if (err) {
             logSqlError(err.sqlMessage);
-            res.status(500);
-            res.end();
+            res.json({
+                'error': err.sqlMessage,
+            });
         }
         else {
-            res.status(200);
-            res.end();
+            res.json({
+                'response': 'success',
+            });
         }
     });
 };
@@ -382,10 +382,10 @@ exports.updateVineyardById = function (req, res) {
     });
 };
 
-exports.createVineyard = function (req, res) {
+exports.createVineyard = (req, res) => {
     BackOffice.createVineyard(req, err => {
         if (err) {
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            logSqlError(err.sqlMessage);
             res.status(500);
             res.end();
         }
@@ -396,10 +396,26 @@ exports.createVineyard = function (req, res) {
     });
 };
 
-exports.createWineType = function (req, res) {
+exports.createWine = (req, res) => {
+    BackOffice.createWine(req, err => {
+        if (err) {
+            logSqlError(err.sqlMessage);
+            res.json({
+                'error': err.sqlMessage,
+            });
+        }
+        else {
+            res.json({
+                'response': 'success',
+            });
+        }
+    });
+};
+
+exports.createWineType = (req, res) => {
     BackOffice.createWineType(req, err => {
         if (err) {
-            console.log('~~[MySQL error]~~ ', err.sqlMessage);
+            logSqlError(err.sqlMessage);
             res.status(500);
             res.end();
         }

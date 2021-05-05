@@ -51,5 +51,6 @@ router.post('/CreateNewsCategory', cors(corsOptionsDelegate), backOfficeControll
 router.post('/wines/GetWinesList', cors(corsOptionsDelegate), backOfficeController.getAllWines);
 router.post('/wines/GetWineDetails', cors(corsOptionsDelegate), backOfficeController.getWineById);
 router.post('/wines/EditWine', cors(corsOptionsDelegate), backOfficeController.updateWineById);
+router.post('/wines/CreateWine', cors(corsOptionsDelegate), backOfficeController.createWine);
 
 module.exports = router;
