@@ -30,6 +30,13 @@ BackOffice.loginAdmin = (req, result) => {
     }
 };
 
+BackOffice.deleteWineFromVineyard = (req, result) => {
+    console.log(console.log(req.body));
+    result({
+    }, null);
+};
+
+
 BackOffice.getAllRequiredData = result => {
     const query = `SET NAMES utf8;
     SELECT winetypes.*, COUNT(vineyards_winetypes.winetypeId) AS vineyardsAmount FROM winetypes LEFT JOIN vineyards_winetypes ON vineyards_winetypes.winetypeId = winetypes.id GROUP BY winetypes.id;

@@ -412,6 +412,22 @@ exports.createWine = (req, res) => {
     });
 };
 
+exports.deleteWineFromVineyard = (req, res) => {
+    BackOffice.deleteWineFromVineyard(req, err => {
+        if (err) {
+            logSqlError(err.sqlMessage);
+            res.json({
+                'error': err.sqlMessage,
+            });
+        }
+        else {
+            res.json({
+                'response': 'success',
+            });
+        }
+    });
+};
+
 exports.createWineType = (req, res) => {
     BackOffice.createWineType(req, err => {
         if (err) {
