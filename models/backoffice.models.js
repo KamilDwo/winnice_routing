@@ -841,7 +841,7 @@ BackOffice.updateWineById = (req, result) => {
         parseFeatures(),
         parseStrains(),
     ]).then(() => {
-        const query = `SET NAMES utf8; UPDATE winess SET ? WHERE id=?;`;
+        const query = `SET NAMES utf8; UPDATE wines SET ? WHERE id=?;`;
         const post = {
             name,
             isActive,
