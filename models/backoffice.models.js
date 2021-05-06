@@ -42,6 +42,17 @@ BackOffice.deleteWineFromVineyard = (req, result) => {
     });
 };
 
+BackOffice.deleteSpecificWine = (req, result) => {
+    connection.query('DELETE FROM wines WHERE id = ?', [req.body.wineId], error => {
+        if (error) {
+            result(null, error);
+        }
+        else {
+            result({
+            }, null);
+        }
+    });
+};
 
 BackOffice.getAllRequiredData = result => {
     const query = `SET NAMES utf8;
