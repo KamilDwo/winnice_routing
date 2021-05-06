@@ -148,13 +148,15 @@ BackOffice.getAllWines = result => {
         wines.type,       
         wines.isActive,
         GROUP_CONCAT(wines_strains.strainId) AS strains,
-        GROUP_CONCAT(wines_meals.mealId) AS meals
+        GROUP_CONCAT(wines_meals.mealId) AS meals,
+        GROUP_CONCAT(wines_provinces.provinceId) AS provinces
      `;
 
     connection.query(`SET NAMES utf8;
      SELECT ${defaultFields} FROM wines
      LEFT JOIN wines_strains ON wines.id=wines_strains.wineId
      LEFT JOIN wines_meals ON wines.id=wines_meals.wineId
+     LEFT JOIN wines_provinces ON wines.id=wines_provinces.wineId
      GROUP BY wines.id
       `, (error, results) => {
         if (error) {
