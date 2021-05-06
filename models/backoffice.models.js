@@ -45,7 +45,7 @@ BackOffice.getAllRequiredData = result => {
         }
         else {
             const returnData = {
-                allWineTypes: results[1],
+                allStrains: results[1],
                 allOrganizations: results[2],
                 allPaths: results[3],
                 allProvinces: results[5],
