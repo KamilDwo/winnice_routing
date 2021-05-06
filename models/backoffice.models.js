@@ -621,7 +621,7 @@ BackOffice.getWineById = (id, result) => {
             SELECT wines_provinces.provinceId, provinces.title FROM wines_provinces LEFT JOIN provinces ON provinces.id = wines_provinces.provinceId WHERE wines_provinces.wineId = ? GROUP BY wines_provinces.provinceId;
             SELECT wines_additional_features.featureId FROM wines_additional_features WHERE wines_additional_features.wineId = ?;
             SELECT wines_strains.strainId, winetypes.title, winetypes.colour FROM wines_strains LEFT JOIN winetypes ON winetypes.id = wines_strains.strainId WHERE wines_strains.wineId = ? GROUP BY wines_strains.strainId;
-            SELECT vineyards_wines.vineyardId, vineyards.name FROM vineyards_wines LEFT JOIN vineyards ON vineyards_wines.vineyardIds = vineyards.id WHERE vineyards_wines.wineId = ? GROUP BY vineyards_wines.vineyardId;
+            SELECT vineyards_wines.vineyardId, vineyards.name FROM vineyards_wines LEFT JOIN vineyards ON vineyards_wines.vineyardId = vineyards.id WHERE vineyards_wines.wineId = ? GROUP BY vineyards_wines.vineyardId;
         `;
 
         connection.query(sql, [id, id, id, id, id, id], (error, results) => {

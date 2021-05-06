@@ -303,7 +303,8 @@ exports.getWineById = (req, res) => {
     BackOffice.getWineById(req.body.data.id, (wine, err) => {
         if (err) {
             logSqlError(err.sqlMessage);
-            res.status(500).send('Something broke!');
+            res.status(500);
+            res.end();
         }
         else {
             res.json(wine[0]);
