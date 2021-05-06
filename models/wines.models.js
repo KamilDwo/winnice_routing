@@ -18,6 +18,7 @@ Wine.findAll = result => {
       LEFT JOIN wines_provinces ON wines.id=wines_provinces.wineId
       LEFT JOIN wines_strains ON wines.id=wines_strains.strainId
        WHERE wines.isActive = 1
+       GROUP BY wines.id
      `, (error, results) => {
         if (error) {
             result(null, error);
