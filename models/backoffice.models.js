@@ -31,9 +31,15 @@ BackOffice.loginAdmin = (req, result) => {
 };
 
 BackOffice.deleteWineFromVineyard = (req, result) => {
-    console.log(console.log(req.body));
-    result({
-    }, null);
+    connection.query('DELETE FROM vineyards_wines WHERE vineyardId = ? AND wineId = ?', [req.body.data.vineyardId, req.body.data.wineId], error => {
+        if (error) {
+            result(null, error);
+        }
+        else {
+            result({
+            }, null);
+        }
+    });
 };
 
 
