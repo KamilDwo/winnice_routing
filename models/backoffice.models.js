@@ -150,6 +150,7 @@ BackOffice.getAllWines = result => {
         GROUP_CONCAT(wines_strains.strainId) AS strains,
         GROUP_CONCAT(wines_meals.mealId) AS meals,
         GROUP_CONCAT(wines_provinces.provinceId) AS provinces
+        GROUP_CONCAT(vineyards_wines.vineyardId) AS vineyards
      `;
 
     connection.query(`SET NAMES utf8;
@@ -157,6 +158,7 @@ BackOffice.getAllWines = result => {
      LEFT JOIN wines_strains ON wines.id=wines_strains.wineId
      LEFT JOIN wines_meals ON wines.id=wines_meals.wineId
      LEFT JOIN wines_provinces ON wines.id=wines_provinces.wineId
+     LEFT JOIN vineyards_wines ON wines.id=vineyards_wines.wineId
      GROUP BY wines.id
       `, (error, results) => {
         if (error) {
@@ -168,6 +170,7 @@ BackOffice.getAllWines = result => {
                 provinces: [...new Set(listToArray(item.provinces, ','))],
                 strains: [...new Set(listToArray(item.strains, ','))],
                 meals: [...new Set(listToArray(item.meals, ','))],
+                vineyards: [...new Set(listToArray(item.vineyards, ','))],
             }));
             result(parseItems, null);
         }
