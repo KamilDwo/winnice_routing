@@ -165,7 +165,7 @@ BackOffice.getAllWines = result => {
         else {
             const parseItems = results[1].map(item => ({
                 ...item,
-                provinces: [],
+                provinces: [...new Set(listToArray(item.provinces, ','))],
                 strains: [...new Set(listToArray(item.strains, ','))],
                 meals: [...new Set(listToArray(item.meals, ','))],
             }));
