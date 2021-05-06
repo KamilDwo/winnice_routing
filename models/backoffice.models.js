@@ -150,7 +150,6 @@ BackOffice.getAllWines = result => {
         GROUP_CONCAT(wines_strains.strainId) AS strains,
         GROUP_CONCAT(wines_meals.mealId) AS meals,
         GROUP_CONCAT(wines_provinces.provinceId) AS provinces
-        GROUP_CONCAT(vineyards_wines.vineyardId) AS vineyards
      `;
 
     connection.query(`SET NAMES utf8;
@@ -158,7 +157,6 @@ BackOffice.getAllWines = result => {
      LEFT JOIN wines_strains ON wines.id=wines_strains.wineId
      LEFT JOIN wines_meals ON wines.id=wines_meals.wineId
      LEFT JOIN wines_provinces ON wines.id=wines_provinces.wineId
-     LEFT JOIN vineyards_wines ON wines.id=vineyards_wines.wineId
      GROUP BY wines.id
       `, (error, results) => {
         if (error) {
@@ -170,7 +168,6 @@ BackOffice.getAllWines = result => {
                 provinces: [...new Set(listToArray(item.provinces, ','))],
                 strains: [...new Set(listToArray(item.strains, ','))],
                 meals: [...new Set(listToArray(item.meals, ','))],
-                vineyards: [...new Set(listToArray(item.vineyards, ','))],
             }));
             result(parseItems, null);
         }
@@ -624,9 +621,10 @@ BackOffice.getWineById = (id, result) => {
             SELECT wines_provinces.provinceId, provinces.title FROM wines_provinces LEFT JOIN provinces ON provinces.id = wines_provinces.provinceId WHERE wines_provinces.wineId = ? GROUP BY wines_provinces.provinceId;
             SELECT wines_additional_features.featureId FROM wines_additional_features WHERE wines_additional_features.wineId = ?;
             SELECT wines_strains.strainId, winetypes.title, winetypes.colour FROM wines_strains LEFT JOIN winetypes ON winetypes.id = wines_strains.strainId WHERE wines_strains.wineId = ? GROUP BY wines_strains.strainId;
+            SELECT vineyardId FROM vineyards_wines WHERE wineId = ?;
         `;
 
-        connection.query(sql, [id, id, id, id, id], (error, results) => {
+        connection.query(sql, [id, id, id, id, id, id], (error, results) => {
             if (error) {
                 result(null, error);
             }
@@ -643,6 +641,7 @@ BackOffice.getWineById = (id, result) => {
                         strainId: strain.strainId.toString(),
                     })),
                     features: results[3],
+                    vineyards: results[5],
                 }));
                 result(parseItems, null);
             }
