@@ -11,11 +11,12 @@ WineType.findAll = result => {
      winetypes.isImportant,
      winetypes.isActive,
      winetypes.sort,
-     GROUP_CONCAT(wines_provinces.provinceId) AS winetypes
+     GROUP_CONCAT(winetypes_provinces.provinceId) AS provinces
     `;
 
-    connection.query(`SET NAMES utf8; SELECT ${defaultFields} FROM winetypes
-     LEFT JOIN wines_provinces ON winetypes.id=wines_provinces.wineTypeId
+    connection.query(`SET NAMES utf8;
+     SELECT ${defaultFields} FROM winetypes
+     LEFT JOIN winetypes_provinces ON winetypes.id=winetypes_provinces.wineTypeId
      WHERE winetypes.isActive = 1
      GROUP BY winetypes.id
     `, (error, results) => {
