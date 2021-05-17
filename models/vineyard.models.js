@@ -80,11 +80,18 @@ Vineyard.findById = (id, result) => {
             if (item && item.photos && item.photos.length > 0) {
                 photosToReturn = item.photos.split(',');
             }
-
-            item.paths = [...new Set(listToArray(item.paths, ','))];
-            item.organizations = [...new Set(listToArray(item.organizations, ','))];
-            item.features = [...new Set(listToArray(item.features, ','))];
-            item.winetypes = [...new Set(listToArray(item.winetypes, ','))];
+            if (item && item.paths && item.paths.length > 0) {
+                item.paths = [...new Set(listToArray(item.paths, ','))];
+            }
+            if (item && item.organizations && item.organizations.length > 0) {
+                item.organizations = [...new Set(listToArray(item.organizations, ','))];
+            }
+            if (item && item.features && item.features.length > 0) {
+                item.features = [...new Set(listToArray(item.features, ','))];
+            }
+            if (item && item.winetypes && item.winetypes.length > 0) {
+                item.winetypes = [...new Set(listToArray(item.winetypes, ','))];
+            }
             const location = item.location.split(',');
             const objUrl = `${item.id}-${speakingurl(item.name, [])}`;
             item.location = [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))];
