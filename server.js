@@ -4,7 +4,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const compression = require('compression');
-
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 
 const app = express();
 const port = 9000;
@@ -37,6 +38,11 @@ app.use('/api/backoffice', backOfficeRoutes);
 app.use('/api/v1/wineTypes', wineTypesRoutes);
 app.use('/api/v1/wines', winesRoutes);
 app.use('/api/v1/errors', errorsRoutes);
+app.use(
+    '/api-docs',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerDocument)
+);
 
 app.listen(port);
 

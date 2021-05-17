@@ -2,6 +2,11 @@ const Vineyard = require('../models/vineyard.models');
 const logSqlError = require('../helpers/logSqlError.helper');
 
 exports.findAll = (req, res) => {
+    // #swagger.tags = ['Vineyards']
+    // #swagger.description = 'Lists all the vineyards'
+    /* #swagger.responses[200] = {
+    } */
+    // #swagger.summary = 'Lists all the vineyards'
     Vineyard.findAll((vineyard, err) => {
         if (err) {
             logSqlError(err.sqlMessage);
@@ -9,12 +14,17 @@ exports.findAll = (req, res) => {
             res.end();
         }
         else {
+            res.status(200);
             res.json(vineyard);
         }
     });
 };
 
 exports.findById = (req, res) => {
+    // #swagger.tags = ['Vineyards']
+    // #swagger.description = 'Get specific vineyard by ID'
+    // #swagger.summary = 'Get specific vineyard by ID'
+    // #swagger.parameters['id'] = { description: 'vineyard ID to get data', in: 'path' }
     Vineyard.findById(req.params.id, (vineyard, err) => {
         if (err) {
             logSqlError(err.sqlMessage);
@@ -22,6 +32,7 @@ exports.findById = (req, res) => {
             res.end();
         }
         else {
+            res.status(200);
             res.json(vineyard);
         }
     });
