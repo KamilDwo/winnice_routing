@@ -92,9 +92,11 @@ Vineyard.findById = (id, result) => {
             if (item && item.winetypes && item.winetypes.length > 0) {
                 item.winetypes = [...new Set(listToArray(item.winetypes, ','))];
             }
-            const location = item.location.split(',');
+            if (item && item.location) {
+                const location = item.location.split(',');
+                item.location = [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))];
+            }
             const objUrl = `${item.id}-${speakingurl(item.name, [])}`;
-            item.location = [parseFloat(location[0]), parseFloat(location[1].replace(/\s+/g, ''))];
             item.url = objUrl;
             item.photos = photosToReturn;
             result(item, null);
