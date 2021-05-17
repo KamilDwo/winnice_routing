@@ -75,9 +75,6 @@ Vineyard.findById = (id, result) => {
             result(error, null);
         }
         else {
-            if (!results[0]) {
-                result(error, null);
-            }
             const item = results[0];
             let photosToReturn = [];
             if (item && item.photos && item.photos.length > 0) {
@@ -102,7 +99,9 @@ Vineyard.findById = (id, result) => {
             if (item && item.name) {
                 item.url = `${item.id}-${speakingurl(item.name, [])}`;
             }
-            item.photos = photosToReturn;
+            if (item && item.photos) {
+                item.photos = photosToReturn;
+            }
             result(item, null);
         }
     });
