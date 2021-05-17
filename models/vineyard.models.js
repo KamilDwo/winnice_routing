@@ -76,10 +76,9 @@ Vineyard.findById = (id, result) => {
         }
         else {
             const item = results[0];
-            const { photos } = item;
             let photosToReturn = [];
             if (item.photos && item.photos.length > 0) {
-                photosToReturn = photos.split(',');
+                photosToReturn = item.photos.split(',');
             }
 
             item.paths = [...new Set(listToArray(item.paths, ','))];
