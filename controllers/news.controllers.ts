@@ -1,7 +1,13 @@
 const News = require('../models/news.models');
 const logSqlError = require('../helpers/logSqlError.helper');
 
-exports.findAllNews = (req, res) => {
+exports.findAllNews = (req: { body: any; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { error: any; }): void; new(): any; }; }; end: () => void; json: (arg0: any) => void; }) => {
+    // #swagger.tags = ['News']
+    // #swagger.description = 'Lists all news'
+    /* #swagger.responses[200] = {
+    } */
+    // #swagger.summary = 'Lists all news'
+    // @ts-ignore
     News.findAllNews((news, err) => {
         if (err) {
             logSqlError(err.sqlMessage);
@@ -16,7 +22,8 @@ exports.findAllNews = (req, res) => {
     }, req.body);
 };
 
-exports.findAllCategories = (req, res) => {
+exports.findAllCategories = (req: { body: any; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { error: any; }): void; new(): any; }; }; end: () => void; json: (arg0: any) => void; }) => {
+    // @ts-ignore
     News.findAllCategories((data, err) => {
         if (err) {
             logSqlError(err.sqlMessage);
@@ -31,7 +38,8 @@ exports.findAllCategories = (req, res) => {
     }, req.body);
 };
 
-exports.getInstagramPhotos = function (req, res) {
+exports.getInstagramPhotos = function (req: { body: any; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { error: any; }): void; new(): any; }; }; end: () => void; }) {
+    // @ts-ignore
     News.getInstagramPhotos((news, err) => {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.error.message);
@@ -47,7 +55,8 @@ exports.getInstagramPhotos = function (req, res) {
     }, req.body);
 };
 
-exports.getFacebookNews = function (req, res) {
+exports.getFacebookNews = function (req: { body: any; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { error: any; }): void; new(): any; }; }; end: () => void; json: (arg0: any) => void; }) {
+    // @ts-ignore
     News.getFacebookNews((news, err) => {
         if (err) {
             console.log('~~[MySQL error]~~ ', err.error.message);

@@ -12,9 +12,6 @@ const doc = {
     explorer: true,
     schemes: ["https"],
     host: "polskiewinnice.ovh",
-    swaggerOptions: {
-        url: 'http://petstore.swagger.io/v2/swagger.json'
-    },
     servers: [
         {
             url: "https://polskiewinnice.ovh/api/v1",

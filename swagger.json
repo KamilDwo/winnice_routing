@@ -62,11 +62,7 @@
         "tags": [],
         "description": "",
         "parameters": [],
-        "responses": {
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+        "responses": {}
       }
     },
     "/api/v1/news/categories": {
@@ -74,11 +70,7 @@
         "tags": [],
         "description": "",
         "parameters": [],
-        "responses": {
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+        "responses": {}
       }
     },
     "/api/v1/news/instagram": {
@@ -86,14 +78,7 @@
         "tags": [],
         "description": "",
         "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+        "responses": {}
       }
     },
     "/api/v1/news/facebook": {
@@ -101,11 +86,7 @@
         "tags": [],
         "description": "",
         "parameters": [],
-        "responses": {
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+        "responses": {}
       }
     },
     "/api/v1/news/GetNewsCategoriesList": {
@@ -113,11 +94,7 @@
         "tags": [],
         "description": "",
         "parameters": [],
-        "responses": {
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+        "responses": {}
       }
     },
     "/api/v1/paths": {
@@ -673,11 +650,7 @@
         "tags": [],
         "description": "",
         "parameters": [],
-        "responses": {
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+        "responses": {}
       }
     },
     "/api/v1/provinces/categories": {
@@ -685,11 +658,7 @@
         "tags": [],
         "description": "",
         "parameters": [],
-        "responses": {
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+        "responses": {}
       }
     },
     "/api/v1/provinces/instagram": {
@@ -697,14 +666,7 @@
         "tags": [],
         "description": "",
         "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+        "responses": {}
       }
     },
     "/api/v1/provinces/facebook": {
@@ -712,11 +674,7 @@
         "tags": [],
         "description": "",
         "parameters": [],
-        "responses": {
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+        "responses": {}
       }
     },
     "/api/v1/provinces/GetNewsCategoriesList": {
@@ -724,19 +682,12 @@
         "tags": [],
         "description": "",
         "parameters": [],
-        "responses": {
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+        "responses": {}
       }
     }
   },
   "definitions": {},
   "explorer": true,
-  "swaggerOptions": {
-    "url": "http://petstore.swagger.io/v2/swagger.json"
-  },
   "servers": [
     {
       "url": "https://polskiewinnice.ovh/api/v1"
