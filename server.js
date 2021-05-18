@@ -29,16 +29,6 @@ app.use((request, response, next) => {
 });
 app.use(
     helmet({
-        contentSecurityPolicy: {
-            directives: {
-                ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-                "script-src": ["'self'", "'unsafe-inline'", "example.com"],
-            },
-        },
-    })
-);
-app.use(
-    helmet({
         contentSecurityPolicy: false,
     })
 );

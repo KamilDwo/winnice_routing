@@ -14,7 +14,7 @@
   "consumes": [],
   "produces": "application/json",
   "paths": {
-    "/api/v1/vineyards/": {
+    "/api/v1/vineyards": {
       "get": {
         "tags": [
           "Vineyards"
