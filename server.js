@@ -6,9 +6,6 @@ const morgan = require('morgan');
 const compression = require('compression');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
-import { corsOptions } from "./config/cors.config";
-
-const router = express.Router();
 
 const app = express();
 const port = 9000;
@@ -50,7 +47,5 @@ app.use(
 );
 
 app.listen(port);
-
-export { router, corsOptions, cors };
 
 

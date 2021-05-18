@@ -1,4 +1,4 @@
-const logSqlError = (message: string) => {
+const logSqlError = message => {
     // eslint-disable-next-line no-console
     console.log('~~[MySQL error]~~ ', message);
     return {
@@ -6,4 +6,4 @@ const logSqlError = (message: string) => {
     };
 };
 
-export default logSqlError;
+module.exports = logSqlError;

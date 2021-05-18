@@ -1,13 +1,13 @@
 const Paths = require('../models/paths.models');
-import logSqlError from '../helpers/logSqlError.helper';
+const logSqlError = require('../helpers/logSqlError.helper');
 
-exports.findAll = (req: { body: any; }, res: { status: (arg0: number) => void; end: () => void; json: (arg0: any) => void; }) => {
+exports.findAll = (req, res) => {
     // #swagger.tags = ['Paths']
     // #swagger.description = 'Lists all paths'
     /* #swagger.responses[200] = {
     } */
     // #swagger.summary = 'Lists all paths'
-    Paths.findAll((news: any, err: { sqlMessage: any; }) => {
+    Paths.findAll((news, err) => {
         if (err) {
             logSqlError(err.sqlMessage);
             res.status(500);

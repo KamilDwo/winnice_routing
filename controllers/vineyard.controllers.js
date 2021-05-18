@@ -1,27 +1,14 @@
 const Vineyard = require('../models/vineyard.models');
-import logSqlError from '../helpers/logSqlError.helper';
+const logSqlError = require('../helpers/logSqlError.helper');
 
-interface IFindAllResponse {
-    status: (arg0: number) => void
-    end: () => void
-    json: (arg0: any) => void
-}
 
-interface IFindByIdReqParams {
-    id: number
-}
-
-interface IFindByIdReq {
-    params: IFindByIdReqParams
-}
-
-exports.findAll = (req: any, res: IFindAllResponse) => {
+exports.findAll = (req, res) => {
     // #swagger.tags = ['Vineyards']
     // #swagger.description = 'Lists all vineyards'
     /* #swagger.responses[200] = {
     } */
     // #swagger.summary = 'Lists all vineyards'
-    Vineyard.findAll((vineyard: any, err: { sqlMessage: string; }) => {
+    Vineyard.findAll((vineyard, err) => {
         if (err) {
             logSqlError(err.sqlMessage);
             res.status(500);
@@ -34,12 +21,12 @@ exports.findAll = (req: any, res: IFindAllResponse) => {
     });
 };
 
-exports.findById = (req: IFindByIdReq, res: IFindAllResponse) => {
+exports.findById = (req, res) => {
     // #swagger.tags = ['Vineyards']
     // #swagger.description = 'Get specific vineyard by ID'
     // #swagger.summary = 'Get specific vineyard by ID'
     // #swagger.parameters['id'] = { in: 'path', type: 'number' }
-    Vineyard.findById(req.params.id, (vineyard: any, err: { sqlMessage: string; }) => {
+    Vineyard.findById(req.params.id, (vineyard, err) => {
         if (err) {
             logSqlError(err.sqlMessage);
             res.status(500);
