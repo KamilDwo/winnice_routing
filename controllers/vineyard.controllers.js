@@ -3,10 +3,10 @@ const logSqlError = require('../helpers/logSqlError.helper');
 
 exports.findAll = (req, res) => {
     // #swagger.tags = ['Vineyards']
-    // #swagger.description = 'Lists all the vineyards'
+    // #swagger.description = 'Lists all vineyards'
     /* #swagger.responses[200] = {
     } */
-    // #swagger.summary = 'Lists all the vineyards'
+    // #swagger.summary = Lists all vineyards'
     Vineyard.findAll((vineyard, err) => {
         if (err) {
             logSqlError(err.sqlMessage);

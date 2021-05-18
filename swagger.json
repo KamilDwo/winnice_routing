@@ -19,15 +19,12 @@
         "tags": [
           "Vineyards"
         ],
-        "summary": "Lists all the vineyards",
-        "description": "Lists all the vineyards",
+        "summary": "",
+        "description": "Lists all vineyards",
         "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
           }
         }
       }
@@ -122,8 +119,11 @@
     },
     "/api/v1/paths": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Paths"
+        ],
+        "summary": "Lists all paths",
+        "description": "Lists all paths",
         "parameters": [],
         "responses": {
           "200": {
