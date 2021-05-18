@@ -38,7 +38,6 @@ app.use('/api/backoffice', backOfficeRoutes);
 app.use('/api/v1/wineTypes', wineTypesRoutes);
 app.use('/api/v1/wines', winesRoutes);
 app.use('/api/v1/errors', errorsRoutes);
-app.use('/api/v1/provinces', newsRoutes);
 
 app.use(
     '/api-docs',
