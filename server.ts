@@ -6,6 +6,9 @@ const morgan = require('morgan');
 const compression = require('compression');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
+import { corsOptions } from "./config/cors.config";
+
+const router = express.Router();
 
 const app = express();
 const port = 9000;
@@ -38,6 +41,8 @@ app.use('/api/backoffice', backOfficeRoutes);
 app.use('/api/v1/wineTypes', wineTypesRoutes);
 app.use('/api/v1/wines', winesRoutes);
 app.use('/api/v1/errors', errorsRoutes);
+app.use('/api/v1/provinces', newsRoutes);
+
 app.use(
     '/api-docs',
     swaggerUi.serve,
@@ -45,4 +50,7 @@ app.use(
 );
 
 app.listen(port);
+
+export { router, corsOptions, cors };
+
 

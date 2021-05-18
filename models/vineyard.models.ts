@@ -4,10 +4,7 @@ const connection = require('../config/db.config');
 const listToArray = require('../helpers/listToArray.helper');
 
 
-const Vineyard = vineyard => {
-    this.id = vineyard.id;
-    this.name = vineyard.name;
-};
+const Vineyard = () => {};
 
 const defaultFields = `vineyards.id,
      vineyards.name,
@@ -23,7 +20,7 @@ const defaultFields = `vineyards.id,
     `;
 
 
-Vineyard.findAll = result => {
+Vineyard.findAll = (result: (arg0: null, arg1: null) => void) => {
     connection.query(`SET NAMES utf8;
     SELECT ${defaultFields} FROM vineyards
      LEFT JOIN vineyards_paths ON vineyards.id=vineyards_paths.vineyardId
@@ -32,7 +29,7 @@ Vineyard.findAll = result => {
        LEFT JOIN vineyards_photos ON vineyards.id=vineyards_photos.vineyardId
        LEFT JOIN vineyards_winetypes ON vineyards.id=vineyards_winetypes.vineyardId
        WHERE vineyards.isActive = 1
-      GROUP BY vineyards.id`, (error, results) => {
+      GROUP BY vineyards.id`, (error: null, results: any[][]) => {
         if (error) {
             result(null, error);
         }
@@ -57,12 +54,13 @@ Vineyard.findAll = result => {
                     url: objUrl,
                 };
             });
+            // @ts-ignore
             result(parseItems, null);
         }
     });
 };
 
-Vineyard.findById = (id, result) => {
+Vineyard.findById = (id: any, result: (arg0: any, arg1: null) => void) => {
     connection.query(`SELECT ${defaultFields} FROM vineyards
      LEFT JOIN vineyards_paths ON vineyards.id=vineyards_paths.vineyardId
        LEFT JOIN vineyards_organizations ON vineyards.id=vineyards_organizations.vineyardId
@@ -70,7 +68,7 @@ Vineyard.findById = (id, result) => {
        LEFT JOIN vineyards_photos ON vineyards.id=vineyards_photos.vineyardId
        LEFT JOIN vineyards_winetypes ON vineyards.id=vineyards_winetypes.vineyardId
        WHERE vineyards.id = ?
-      GROUP BY vineyards.id`, id, (error, results) => {
+      GROUP BY vineyards.id`, id, (error: any, results: any[]) => {
         if (error) {
             result(error, null);
         }
