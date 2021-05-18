@@ -1,16 +1,11 @@
-const connection = require('../config/db.config');
+const connectionModels = require('../config/db.config');
 
 const Paths = () => {};
 
+Paths.findAll = (result: (arg0: any, arg1: null) => void, body: any) => {
+    const defaultFields = `id, name, isActive, bounds`;
 
-// eslint-disable-next-line no-unused-vars
-Paths.findAll = (result, body) => {
-    const defaultFields = `id,
-         name,
-         isActive,
-        bounds`;
-
-    connection.query(`SET NAMES utf8; SELECT ${defaultFields} FROM paths`, (error, results) => {
+    connectionModels.query(`SET NAMES utf8; SELECT ${defaultFields} FROM paths`, (error: any, results: any[][]) => {
         if (error) {
             result(error, null);
         }

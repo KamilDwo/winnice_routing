@@ -1,6 +1,5 @@
 const mysql = require('mysql');
 
-
 const connection = mysql.createPool({
     host: 'vilsone.home.pl',
     user: '11565381_winnice',

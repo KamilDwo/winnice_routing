@@ -3,6 +3,9 @@ const speakingurl = require('speakingurl');
 const connection = require('../config/db.config');
 const listToArray = require('../helpers/listToArray.helper');
 
+interface ISQLError {
+    sqlMessage: string
+}
 
 const Vineyard = () => {};
 
@@ -20,7 +23,7 @@ const defaultFields = `vineyards.id,
     `;
 
 
-Vineyard.findAll = (result: (arg0: null, arg1: null) => void) => {
+Vineyard.findAll = (result: (arg0: any[][] | null, arg1: ISQLError | null) => void) => {
     connection.query(`SET NAMES utf8;
     SELECT ${defaultFields} FROM vineyards
      LEFT JOIN vineyards_paths ON vineyards.id=vineyards_paths.vineyardId
@@ -29,7 +32,7 @@ Vineyard.findAll = (result: (arg0: null, arg1: null) => void) => {
        LEFT JOIN vineyards_photos ON vineyards.id=vineyards_photos.vineyardId
        LEFT JOIN vineyards_winetypes ON vineyards.id=vineyards_winetypes.vineyardId
        WHERE vineyards.isActive = 1
-      GROUP BY vineyards.id`, (error: null, results: any[][]) => {
+      GROUP BY vineyards.id`, (error: ISQLError, results: any[][]) => {
         if (error) {
             result(null, error);
         }
@@ -54,7 +57,6 @@ Vineyard.findAll = (result: (arg0: null, arg1: null) => void) => {
                     url: objUrl,
                 };
             });
-            // @ts-ignore
             result(parseItems, null);
         }
     });

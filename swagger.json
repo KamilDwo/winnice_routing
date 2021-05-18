@@ -31,17 +31,27 @@
     },
     "/api/v1/vineyards/{id}": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Vineyards"
+        ],
+        "summary": "Get specific vineyard by ID",
+        "description": "Get specific vineyard by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number"
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/api/v1/news/GetNewsList": {
@@ -109,20 +119,10 @@
     },
     "/api/v1/paths": {
       "get": {
-        "tags": [
-          "Paths"
-        ],
-        "summary": "Lists all paths",
-        "description": "Lists all paths",
+        "tags": [],
+        "description": "",
         "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
+        "responses": {}
       }
     },
     "/api/backoffice/vineyards": {
