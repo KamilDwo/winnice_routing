@@ -1,6 +1,0 @@
-{
-  "ignore": ["swagger.json"],
-  "events": {
-    "restart": "npm run swagger-autogen"
-  }
-}
