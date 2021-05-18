@@ -120,12 +120,15 @@
         }
       }
     },
-    "/api/v1/paths/": {
+    "/api/v1/paths": {
       "get": {
         "tags": [],
         "description": "",
         "parameters": [],
         "responses": {
+          "200": {
+            "description": "OK"
+          },
           "500": {
             "description": "Internal Server Error"
           }
