@@ -24,7 +24,7 @@ exports.findById = (req, res) => {
     // #swagger.tags = ['Vineyards']
     // #swagger.description = 'Get specific vineyard by ID'
     // #swagger.summary = 'Get specific vineyard by ID'
-    // #swagger.parameters['id'] = { description: 'vineyard ID to get data', in: 'path' }
+    // #swagger.parameters['id'] = { in: 'path', type: 'number' }
     Vineyard.findById(req.params.id, (vineyard, err) => {
         if (err) {
             logSqlError(err.sqlMessage);

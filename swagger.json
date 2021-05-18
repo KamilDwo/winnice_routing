@@ -11,12 +11,8 @@
   "schemes": [
     "https"
   ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
+  "consumes": [],
+  "produces": "application/json",
   "paths": {
     "/api/v1/vineyards/": {
       "get": {
@@ -48,8 +44,7 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
-            "description": "vineyard ID to get data"
+            "type": "number"
           }
         ],
         "responses": {
@@ -679,9 +674,10 @@
     }
   },
   "definitions": {},
+  "explorer": true,
   "servers": [
     {
-      "url": "http://localhost:3000/api/v1"
+      "url": "https://polskiewinnice.ovh/api/v1"
     }
   ]
 }

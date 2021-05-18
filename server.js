@@ -22,6 +22,26 @@ app.use(compression());
 app.use(cors());
 app.use(morgan('combined'));
 app.use(express.static(`${__dirname}/public`));
+app.use((request, response, next) => {
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+                "script-src": ["'self'", "'unsafe-inline'", "example.com"],
+            },
+        },
+    })
+);
+app.use(
+    helmet({
+        contentSecurityPolicy: false,
+    })
+);
 
 const vineyardsRoutes = require('./routes/vineyard.routes');
 const newsRoutes = require('./routes/news.routes');
