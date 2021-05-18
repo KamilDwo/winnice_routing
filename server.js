@@ -10,6 +10,14 @@ const swaggerDocument = require('./swagger.json');
 const app = express();
 const port = 9000;
 
+const vineyardsRoutes = require('./routes/vineyard.routes');
+const newsRoutes = require('./routes/news.routes');
+const pathsRoutes = require('./routes/paths.routes');
+const backOfficeRoutes = require('./routes/backOffice.routes');
+const wineTypesRoutes = require('./routes/wineTypes.routes');
+const winesRoutes = require('./routes/wines.routes');
+const errorsRoutes = require('./routes/errors.routes');
+
 app.use(helmet());
 app.use(bodyParser.urlencoded({
     limit: '50mb',
@@ -22,24 +30,6 @@ app.use(compression());
 app.use(cors());
 app.use(morgan('combined'));
 app.use(express.static(`${__dirname}/public`));
-app.use((request, response, next) => {
-    response.header("Access-Control-Allow-Origin", "*");
-    response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
-app.use(
-    helmet({
-        contentSecurityPolicy: false,
-    })
-);
-
-const vineyardsRoutes = require('./routes/vineyard.routes');
-const newsRoutes = require('./routes/news.routes');
-const pathsRoutes = require('./routes/paths.routes');
-const backOfficeRoutes = require('./routes/backOffice.routes');
-const wineTypesRoutes = require('./routes/wineTypes.routes');
-const winesRoutes = require('./routes/wines.routes');
-const errorsRoutes = require('./routes/errors.routes');
 
 app.use('/api/v1/vineyards', vineyardsRoutes);
 app.use('/api/v1/news', newsRoutes);
