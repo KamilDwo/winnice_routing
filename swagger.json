@@ -19,12 +19,15 @@
         "tags": [
           "Vineyards"
         ],
-        "summary": "",
+        "summary": "Lists all vineyards",
         "description": "Lists all vineyards",
         "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -731,6 +734,9 @@
   },
   "definitions": {},
   "explorer": true,
+  "swaggerOptions": {
+    "url": "http://petstore.swagger.io/v2/swagger.json"
+  },
   "servers": [
     {
       "url": "https://polskiewinnice.ovh/api/v1"

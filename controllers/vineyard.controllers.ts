@@ -20,7 +20,7 @@ exports.findAll = (req: any, res: IFindAllResponse) => {
     // #swagger.description = 'Lists all vineyards'
     /* #swagger.responses[200] = {
     } */
-    // #swagger.summary = Lists all vineyards'
+    // #swagger.summary = 'Lists all vineyards'
     Vineyard.findAll((vineyard: any, err: { sqlMessage: string; }) => {
         if (err) {
             logSqlError(err.sqlMessage);
