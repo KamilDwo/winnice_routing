@@ -15,9 +15,7 @@
   "paths": {
     "/api/v1/vineyards": {
       "get": {
-        "tags": [
-          "Vineyards"
-        ],
+        "tags": ["Vineyards"],
         "summary": "Lists all vineyards",
         "description": "Lists all vineyards",
         "parameters": [],
@@ -33,9 +31,7 @@
     },
     "/api/v1/vineyards/{id}": {
       "get": {
-        "tags": [
-          "Vineyards"
-        ],
+        "tags": ["Vineyards"],
         "summary": "Get specific vineyard by ID",
         "description": "Get specific vineyard by ID",
         "parameters": [
@@ -58,7 +54,7 @@
     },
     "/api/v1/news/GetNewsList": {
       "post": {
-        "tags": [],
+        "tags": ["News"],
         "description": "",
         "parameters": [],
         "responses": {}
@@ -66,7 +62,7 @@
     },
     "/api/v1/news/categories": {
       "post": {
-        "tags": [],
+        "tags": ["News"],
         "description": "",
         "parameters": [],
         "responses": {}
