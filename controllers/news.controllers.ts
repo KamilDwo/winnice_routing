@@ -23,6 +23,11 @@ exports.findAllNews = (req: { body: any; }, res: { status: (arg0: number) => { (
 };
 
 exports.findAllCategories = (req: { body: any; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { error: any; }): void; new(): any; }; }; end: () => void; json: (arg0: any) => void; }) => {
+    // #swagger.tags = ['News']
+    // #swagger.description = 'Lists all news categories'
+    /* #swagger.responses[200] = {
+    } */
+    // #swagger.summary = 'Lists all news categories'
     // @ts-ignore
     News.findAllCategories((data, err) => {
         if (err) {
