@@ -55,9 +55,17 @@
     "/api/v1/news/GetNewsList": {
       "post": {
         "tags": ["News"],
-        "description": "",
+        "summary": "List all news",
+        "description": "List all news",
         "parameters": [],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
       }
     },
     "/api/v1/news/categories": {
