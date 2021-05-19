@@ -14,49 +14,6 @@
   "consumes": [],
   "produces": "application/json",
   "paths": {
-    "/api/v1/vineyards": {
-      "get": {
-        "tags": [
-          "Vineyards"
-        ],
-        "summary": "Lists all vineyards",
-        "description": "Lists all vineyards",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/v1/vineyards/{id}": {
-      "get": {
-        "tags": [
-          "Vineyards"
-        ],
-        "summary": "Get specific vineyard by ID",
-        "description": "Get specific vineyard by ID",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "number"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
     "/api/v1/news/GetNewsList": {
       "post": {
         "tags": [

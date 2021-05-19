@@ -2758,6 +2758,11 @@
   "resolved" "https://registry.npmjs.org/media-typer/-/media-typer-0.3.0.tgz"
   "version" "0.3.0"
 
+"memory-cache@^0.2.0":
+  "integrity" "sha1-eJCwHVLADI68nVM+H46xfjA0hxo="
+  "resolved" "https://registry.npmjs.org/memory-cache/-/memory-cache-0.2.0.tgz"
+  "version" "0.2.0"
+
 "merge-descriptors@1.0.1":
   "integrity" "sha1-sAqqVW3YtEVoFQ7J0blT8/kMu2E="
   "resolved" "https://registry.npmjs.org/merge-descriptors/-/merge-descriptors-1.0.1.tgz"
