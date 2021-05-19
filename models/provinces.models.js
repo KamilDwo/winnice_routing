@@ -9,7 +9,7 @@ Province.getProvinceById = (id, result) => {
             result(null, error);
         }
         else {
-            result(results[1], null);
+            result(results[1][0], null);
         }
     });
 };
