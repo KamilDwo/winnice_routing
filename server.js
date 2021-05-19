@@ -17,6 +17,7 @@ const backOfficeRoutes = require('./routes/backOffice.routes');
 const wineTypesRoutes = require('./routes/wineTypes.routes');
 const winesRoutes = require('./routes/wines.routes');
 const errorsRoutes = require('./routes/errors.routes');
+const provincesRoutes = require('./routes/provinces.routes');
 
 app.use(helmet());
 app.use(bodyParser.urlencoded({
@@ -38,6 +39,7 @@ app.use('/api/backoffice', backOfficeRoutes);
 app.use('/api/v1/wineTypes', wineTypesRoutes);
 app.use('/api/v1/wines', winesRoutes);
 app.use('/api/v1/errors', errorsRoutes);
+app.use('/api/v1/provinces', provincesRoutes);
 
 app.use(
     '/api-docs',
