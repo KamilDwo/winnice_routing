@@ -9,6 +9,7 @@ exports.getAllProvinces = (req, res) => {
             res.end();
         }
         else {
+            res.status(200);
             res.json(data);
         }
     });
