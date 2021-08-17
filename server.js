@@ -8,7 +8,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
 const app = express();
-const port = 9000;
+const port = 9001;
 
 const vineyardsRoutes = require('./routes/vineyard.routes');
 const newsRoutes = require('./routes/news.routes');
