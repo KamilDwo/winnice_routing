@@ -19,3 +19,4 @@ jobs:
          git config --global user.name "KamilDwo"
          git config --global user.email "kontakt@heartit.pl"
          git pull
+         KamilDwo
