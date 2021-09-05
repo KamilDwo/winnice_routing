@@ -8,6 +8,7 @@ jobs:
     - uses: actions/checkout@v2
       with:
        repository: 'KamilDwo/winnice_routing'
-       path: '/var/www/vhosts/polskiewinnice.pl/api.polskiewinnice.pl'
     - run: 
+        cd ..
+        cd var/www/vhosts/polskiewinnice.pl/api.polskiewinnice.pl
         git pull
