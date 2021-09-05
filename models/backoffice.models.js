@@ -60,7 +60,7 @@ BackOffice.getAllRequiredData = result => {
     SELECT organizations.*, COUNT(vineyards_organizations.vineyardId) AS vineyardsAmount FROM organizations LEFT JOIN vineyards_organizations ON vineyards_organizations.organizationId = organizations.id GROUP BY organizations.id;
     SELECT paths.*, COUNT(vineyards_paths.vineyardId) AS vineyardsAmount FROM paths LEFT JOIN vineyards_paths ON vineyards_paths.pathId = paths.id GROUP BY paths.id;
     SELECT meals.* FROM meals;
-    SELECT id, title FROM provinces;
+    SELECT id, name FROM provinces;
     `;
 
     connection.query(query, (error, results) => {
