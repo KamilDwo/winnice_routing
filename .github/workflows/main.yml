@@ -1,22 +1,8 @@
 name: remote ssh command
 on: [push]
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-    - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: 22
-        script: |
-         cd ..
-         cd var/www/vhosts/polskiewinnice.pl/api.polskiewinnice.pl
   auto-pull:
-    name: PullOriginBranchYY
+    name: PullOrigin
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
