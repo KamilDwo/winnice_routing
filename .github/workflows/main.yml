@@ -15,7 +15,6 @@ jobs:
         script: |
          cd ..
          cd var/www/vhosts/polskiewinnice.pl/api.polskiewinnice.pl
-         git pull
   auto-pull:
     name: PullOriginBranchYY
     runs-on: self-hosted
