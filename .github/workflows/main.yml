@@ -16,6 +16,6 @@ jobs:
         script: |
          cd ..
          cd var/www/vhosts/polskiewinnice.pl/api.polskiewinnice.pl
-         git config user.name "KamilDwo"
-         git config user.email "kontakt@heartit.pl"
+         git config --global user.name "KamilDwo"
+         git config --global user.email "kontakt@heartit.pl"
          git pull
