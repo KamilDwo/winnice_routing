@@ -17,7 +17,7 @@ jobs:
          cd var/www/vhosts/polskiewinnice.pl/api.polskiewinnice.pl
   auto-pull:
     name: PullOriginBranchYY
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - run: |
