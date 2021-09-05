@@ -1,6 +1,5 @@
+- name: SSH Remote Commands
+  uses: appleboy/ssh-action@v0.1.4
 - name: Checkout
   uses: actions/checkout@v2.3.4
-- name: SSH Setup
-  uses: MrSquaare/ssh-setup-action@v1.0.1
-
 
