@@ -16,4 +16,4 @@ jobs:
         script: |
          cd ..
          cd var/www/vhosts/polskiewinnice.pl/api.polskiewinnice.pl
-         git pull
+         git status
