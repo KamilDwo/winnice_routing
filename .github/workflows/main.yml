@@ -1,7 +1,6 @@
 name: remote ssh command
 on: [push]
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -17,3 +16,13 @@ jobs:
          cd ..
          cd var/www/vhosts/polskiewinnice.pl/api.polskiewinnice.pl
          git pull
+  auto-pull:
+    name: PullOriginBranchYY
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v2
+    - run: |
+        git config user.name KamilDwo
+        git config user.email kontakt@heartit.pl
+        git config github.token ${{ secrets.TOKEN }}
+        git pull origin master
