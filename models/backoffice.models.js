@@ -63,6 +63,7 @@ BackOffice.getAllRequiredData = result => {
     SELECT id, name FROM provinces;
     `;
 
+
     connection.query(query, (error, results) => {
         if (error) {
             result(null, error);
