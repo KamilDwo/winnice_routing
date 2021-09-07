@@ -643,7 +643,7 @@ BackOffice.getWineById = (id, result) => {
         const sql = `        
             SELECT ${defaultFields} FROM wines WHERE id = ?;
             SELECT wines_meals.mealId, meals.name FROM wines_meals LEFT JOIN meals ON wines_meals.mealId = meals.id WHERE wines_meals.wineId = ? GROUP BY wines_meals.mealId;
-            SELECT wines_provinces.provinceId, provinces.title FROM wines_provinces LEFT JOIN provinces ON provinces.id = wines_provinces.provinceId WHERE wines_provinces.wineId = ? GROUP BY wines_provinces.provinceId;
+            SELECT wines_provinces.provinceId, provinces.name FROM wines_provinces LEFT JOIN provinces ON provinces.id = wines_provinces.provinceId WHERE wines_provinces.wineId = ? GROUP BY wines_provinces.provinceId;
             SELECT wines_additional_features.featureId FROM wines_additional_features WHERE wines_additional_features.wineId = ?;
             SELECT wines_strains.strainId, winetypes.title, winetypes.colour FROM wines_strains LEFT JOIN winetypes ON winetypes.id = wines_strains.strainId WHERE wines_strains.wineId = ? GROUP BY wines_strains.strainId;
             SELECT vineyards_wines.vineyardId, vineyards.name FROM vineyards_wines LEFT JOIN vineyards ON vineyards_wines.vineyardId = vineyards.id WHERE vineyards_wines.wineId = ? GROUP BY vineyards_wines.vineyardId;
